@@ -46,6 +46,7 @@ namespace tl2_tp4_2022_loboser.Controllers
         {
             return View(Cadeteria);
         }
+        
 
         [HttpPost]
         public IActionResult ListaDeCadetes(int id){
@@ -68,6 +69,23 @@ namespace tl2_tp4_2022_loboser.Controllers
             Cadete.Nombre = Edit.Nombre;
             Cadete.Direccion = Edit.Direccion;
             Cadete.Telefono = Edit.Telefono;
+
+            return RedirectToAction("ListaDeCadetes");
+        }
+
+        [HttpGet]
+        public IActionResult GuardarCSV()
+        {
+            string[] lineas = new string[Cadeteria.Cadetes.Count()];
+            int i = 0;
+            
+            foreach (var Cadete in Cadeteria.Cadetes)
+            {
+                lineas[i] = Cadete.Id + ";" + Cadete.Nombre + ";" + Cadete.Direccion + ";" + Cadete.Telefono;
+                i++;
+            }
+
+            System.IO.File.WriteAllLines("Datos.csv", lineas);
 
             return RedirectToAction("ListaDeCadetes");
         }
