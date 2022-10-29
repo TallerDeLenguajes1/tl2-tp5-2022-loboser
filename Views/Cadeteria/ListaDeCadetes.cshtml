@@ -1,0 +1,21 @@
+@model Cadeteria
+
+@{
+    ViewData["Title"] = "Lista De Cadetes";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<h2>@Model.Nombre @Model.Telefono</h2>
+
+<table>
+@foreach (var Cadete in Model.Cadetes)
+{
+    <tr>
+    <td>@Cadete.Id</td>
+    <td>@Cadete.Nombre</td>
+    <td>@Cadete.Direccion</td>
+    <td>@Cadete.Telefono</td>
+    </tr>
+}
+</table>

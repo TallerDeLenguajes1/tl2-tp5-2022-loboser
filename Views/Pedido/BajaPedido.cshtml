@@ -1,0 +1,23 @@
+@model List<Pedido>
+
+@{
+    ViewData["Title"] = "Baja Pedido";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<table>
+@foreach (var Pedido in Model)
+{
+    <form onsubmit="alert('Formulario Enviado!')" asp-action="BajaPedido" method="post">
+    <tr>
+    <td>@Pedido.Obs</td>
+    <td>@Pedido.Cliente.Nombre</td>
+    <td>@Pedido.Cliente.Direccion</td>
+    <td>@Pedido.Cliente.DatosReferenciaDireccion</td>
+    <td><label name="Nro"><input type="number" name="Nro" value="@Pedido.Nro" readonly="readonly"></label></td>
+    <td><button type="submit">Eliminar!</button></td>
+    </tr>
+</form>
+}
+</table>

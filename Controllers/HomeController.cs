@@ -1,8 +1,8 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using tl2_tp5_2022_loboser.Models;
+using tl2_tp4_2022_loboser.Models;
 
-namespace tl2_tp5_2022_loboser.Controllers;
+namespace tl2_tp4_2022_loboser.Controllers;
 
 public class HomeController : Controller
 {
@@ -12,7 +12,7 @@ public class HomeController : Controller
     {
         _logger = logger;
     }
-
+    
     public IActionResult Index()
     {
         return View();

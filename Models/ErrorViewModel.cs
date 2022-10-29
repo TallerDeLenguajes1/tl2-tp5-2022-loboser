@@ -1,4 +1,4 @@
-namespace tl2_tp5_2022_loboser.Models;
+namespace tl2_tp4_2022_loboser.Models;
 
 public class ErrorViewModel
 {
