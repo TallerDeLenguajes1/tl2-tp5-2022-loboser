@@ -1,0 +1,19 @@
+@model Cadete
+
+@{
+    ViewData["Title"] = "EditarCadete";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<form onsubmit="alert('Formulario Enviado!')" asp-action="EditarCadete" method="post">
+    <label asp-for="Id">
+    <input asp-for="Id" size="1" value="@Model.Id" readonly="readonly"></label><br>
+    <label asp-for="Nombre">Nombre
+    <input asp-for="Nombre" value="@Model.Nombre"></label><br>
+    <label asp-for="Direccion">Direccion
+    <input asp-for="Direccion" value="@Model.Direccion"></label><br>
+    <label asp-for="Telefono">Telefono
+    <input asp-for="Telefono" value="@Model.Telefono"></label><br>
+    <button type="submit">Enviar</button>
+</form>
