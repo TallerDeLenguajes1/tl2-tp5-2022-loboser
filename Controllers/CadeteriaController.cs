@@ -23,7 +23,7 @@ namespace tl2_tp4_2022_loboser.Controllers
             return View();
         }
         static Cadeteria Cadeteria = CargarCadeteria();
-        static int Id = Cadeteria.Cadetes.Count();
+        static int Id = Cadeteria.Cadetes.Count() + 1;
 
         [HttpGet]
         public IActionResult AltaCadete()
@@ -34,8 +34,8 @@ namespace tl2_tp4_2022_loboser.Controllers
         [HttpPost]
         public IActionResult AltaCadete(Cadete Cadete)
         {
-            Id++;
             Cadete.Id = Id;
+            Id++;
             Cadeteria.Cadetes.Add(Cadete);
 
             return RedirectToAction("AltaCadete");

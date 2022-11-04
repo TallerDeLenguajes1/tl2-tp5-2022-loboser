@@ -2,14 +2,18 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
 
 namespace tl2_tp4_2022_loboser.Models
 {
     public class Pedido
     {
         private int nro;
+        [Required][StringLength(500)]
         private string obs;
         private Cliente cliente;
+
+        [Required][StringLength(20)]
         private string estado;
 
         public int Nro { get => nro; set => nro = value; }
@@ -20,6 +24,7 @@ namespace tl2_tp4_2022_loboser.Models
                 Nro = nro;
                 Obs = obs;
                 Cliente = cliente;
+                Estado = "En proceso";
         }
     }
 }

@@ -2,14 +2,19 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
 
 namespace tl2_tp4_2022_loboser.Models
 {
     public class Persona
     {
         private int id;
+        [Required][Phone]
         private string telefono;
+        [Required][StringLength(100)]
         private string nombre;
+
+        [Required][StringLength(100)]
         private string direccion;
 
         public int Id { get => id; set => id = value; }

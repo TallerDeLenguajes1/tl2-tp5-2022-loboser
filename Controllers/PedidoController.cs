@@ -48,7 +48,7 @@ namespace tl2_tp4_2022_loboser.Controllers
         }
 
         [HttpGet]
-        public IActionResult BajaPedido()
+        public IActionResult ListaDePedidos()
         {
             return View(Pedidos);
         }
@@ -57,8 +57,38 @@ namespace tl2_tp4_2022_loboser.Controllers
         public IActionResult BajaPedido(int nro)
         {
             Pedidos = Pedidos.Where(t => t.Nro != nro).ToList();
-            return RedirectToAction("BajaPedido");
+            return RedirectToAction("ListaDePedidos");
         }
+
+        [HttpGet]
+        public IActionResult EditarPedido(int nro)
+        {
+            if (Pedidos.Count()> 0)
+            {
+                return View(Pedidos.First(t => t.Nro == nro));
+            }else
+            {
+                return RedirectToAction("AltaPedido");
+            }
+        }
+
+        [HttpPost]
+        public IActionResult EditarPedido(int nro, string obs, Cliente Cliente)
+        {
+            Pedido Pedido = Pedidos.First(t => t.Nro == nro);
+
+            Pedido.Obs = obs;
+            Pedido.Cliente = Cliente;
+
+            return RedirectToAction("ListaDePedidos");
+        }
+
+        [HttpGet]
+        public IActionResult AsignarPedido(int nro)
+        {
+            return View();
+        }
+
 
             [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
