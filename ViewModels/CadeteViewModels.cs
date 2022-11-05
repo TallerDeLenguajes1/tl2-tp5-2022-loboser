@@ -33,7 +33,6 @@ namespace tl2_tp4_2022_loboser.ViewModels
     public class EditarCadeteViewModel
     {
         [Required]
-        [StringLength(40)]
         [NotNull]
         public int Id { get; set; }
 
