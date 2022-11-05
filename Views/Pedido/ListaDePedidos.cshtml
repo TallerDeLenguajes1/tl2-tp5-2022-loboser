@@ -9,7 +9,7 @@
 <div>
     @foreach (var Pedido in Model)
 {
-    <form onsubmit="alert('Formulario Enviado!')" asp-action="BajaPedido" method="post">
+    <form asp-action="BajaPedido" method="post">
         <tr>
         <td><label name="Nro"><input size="1" type="text" name="Nro" value="@Pedido.Nro" readonly="readonly"></label></td>
         <td>@Pedido.Obs</td>

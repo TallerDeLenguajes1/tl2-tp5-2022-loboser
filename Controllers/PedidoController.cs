@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using tl2_tp4_2022_loboser.Models;
+using tl2_tp4_2022_loboser.ViewModels;
 
 namespace tl2_tp4_2022_loboser.Controllers
 {
@@ -34,17 +35,23 @@ namespace tl2_tp4_2022_loboser.Controllers
         }
 
         [HttpPost]
-        public IActionResult AltaPedido(string obs, Cliente Cliente)
+        public IActionResult AltaPedido(AltaPedidoViewModel PedidoRecibido)
         {
-            Cliente.Id = idCliente;
-            var Pedido = new Pedido(nroPedidos, obs, Cliente);
-            
-            idCliente++;
-            nroPedidos++;
-            
-            Pedidos.Add(Pedido);
+            if (ModelState.IsValid)
+            {
+                PedidoRecibido.Cliente.Id = idCliente;
+                var Pedido = new Pedido(nroPedidos, PedidoRecibido.Obs, PedidoRecibido.Cliente);
+                
+                idCliente++;
+                nroPedidos++;
+                
+                Pedidos.Add(Pedido);
 
-            return RedirectToAction("AltaPedido");
+                return RedirectToAction("AltaPedido");
+            }else
+            {
+                return RedirectToAction("Error");
+            }
         }
 
         [HttpGet]
@@ -65,7 +72,8 @@ namespace tl2_tp4_2022_loboser.Controllers
         {
             if (Pedidos.Count()> 0)
             {
-                return View(Pedidos.First(t => t.Nro == nro));
+                var PedidoAEditar = Pedidos.First(t => t.Nro == nro);
+                return View(new EditarPedidoViewModel(PedidoAEditar.Nro, PedidoAEditar.Obs, PedidoAEditar.Cliente));
             }else
             {
                 return RedirectToAction("AltaPedido");
@@ -73,12 +81,12 @@ namespace tl2_tp4_2022_loboser.Controllers
         }
 
         [HttpPost]
-        public IActionResult EditarPedido(int nro, string obs, Cliente Cliente)
+        public IActionResult EditarPedido(EditarPedidoViewModel Edit)
         {
-            Pedido Pedido = Pedidos.First(t => t.Nro == nro);
+            Pedido Pedido = Pedidos.First(t => t.Nro == Edit.Nro);
 
-            Pedido.Obs = obs;
-            Pedido.Cliente = Cliente;
+            Pedido.Obs = Edit.Obs;
+            Pedido.Cliente = Edit.Cliente;
 
             return RedirectToAction("ListaDePedidos");
         }

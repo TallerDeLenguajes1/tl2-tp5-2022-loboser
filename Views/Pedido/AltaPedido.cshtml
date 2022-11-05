@@ -1,4 +1,4 @@
-@model tl2_tp4_2022_loboser.Models.Pedido
+@model tl2_tp4_2022_loboser.ViewModels.AltaPedidoViewModel
 
 
 @{
@@ -8,16 +8,18 @@
 
 <h1>@ViewData["Title"]</h1>
 
-<form onsubmit="alert('Formulario Enviado!')" asp-action="AltaPedido" method="post">
+<form asp-action="AltaPedido" method="post">
     <label asp-for="Obs">Observación
     <input asp-for="Obs"></label><br>
-    <label asp-for="Cliente.Telefono">Telefono
-    <input asp-for="Cliente.Telefono"></label><br>
     <label asp-for="Cliente.Nombre">Nombre
     <input asp-for="Cliente.Nombre"></label><br>
+    <label asp-for="Cliente.Telefono">Telefono
+    <input asp-for="Cliente.Telefono"></label><br>
     <label asp-for="Cliente.Direccion">Direccion
     <input asp-for="Cliente.Direccion"></label><br>
     <label asp-for="Cliente.DatosReferenciaDireccion">Datos de Referencia (Direccion)
     <input asp-for="Cliente.DatosReferenciaDireccion"></label><br>
     <button type="submit">Enviar</button>
 </form>
+
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

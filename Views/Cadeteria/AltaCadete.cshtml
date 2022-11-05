@@ -1,4 +1,4 @@
-@model Cadete
+@model tl2_tp4_2022_loboser.ViewModels.AltaCadeteViewModel
 
 @{
     ViewData["Title"] = "AltaCadete";
@@ -7,7 +7,7 @@
 <h1>@ViewData["Title"]</h1>
 
 <div>
-    <form onsubmit="alert('Formulario Enviado!')" asp-action="AltaCadete" method="post">
+    <form asp-action="AltaCadete" method="post">
         <label asp-for="Nombre">Nombre
         <input asp-for="Nombre"></label><br>
         <label asp-for="Direccion">Direccion
@@ -17,3 +17,7 @@
         <button type="submit">Enviar</button>
     </form>
 </div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

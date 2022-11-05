@@ -8,7 +8,8 @@ namespace tl2_tp4_2022_loboser.Models
 {
     public class Cliente : Persona
     {
-        [Required][StringLength(500)]
+        [Required]
+        [StringLength(100)]        
         private string datosReferenciaDireccion;
         public string DatosReferenciaDireccion { get => datosReferenciaDireccion; set => datosReferenciaDireccion = value; }
     }

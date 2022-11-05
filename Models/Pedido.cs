@@ -9,11 +9,8 @@ namespace tl2_tp4_2022_loboser.Models
     public class Pedido
     {
         private int nro;
-        [Required][StringLength(500)]
         private string obs;
         private Cliente cliente;
-
-        [Required][StringLength(20)]
         private string estado;
 
         public int Nro { get => nro; set => nro = value; }

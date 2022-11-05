@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using tl2_tp4_2022_loboser.Models;
+using tl2_tp4_2022_loboser.ViewModels;
 
 namespace tl2_tp4_2022_loboser.Controllers
 {
@@ -32,13 +33,24 @@ namespace tl2_tp4_2022_loboser.Controllers
         }
 
         [HttpPost]
-        public IActionResult AltaCadete(Cadete Cadete)
+        public IActionResult AltaCadete(AltaCadeteViewModel CadeteRecibido)
         {
-            Cadete.Id = Id;
-            Id++;
-            Cadeteria.Cadetes.Add(Cadete);
+            if (ModelState.IsValid)
+            {
+                Cadete Cadete = new Cadete();
 
-            return RedirectToAction("AltaCadete");
+                Cadete.Id = Id;
+                Cadete.Direccion = CadeteRecibido.Direccion;
+                Cadete.Nombre = CadeteRecibido.Nombre;
+                Cadete.Telefono = CadeteRecibido.Telefono;
+                Id++;
+                Cadeteria.Cadetes.Add(Cadete);
+
+                return RedirectToAction("AltaCadete");
+            }else
+            {
+                return RedirectToAction("Error");
+            }
         }
 
         [HttpGet]
@@ -58,11 +70,13 @@ namespace tl2_tp4_2022_loboser.Controllers
         [HttpGet]
         public IActionResult EditarCadete(int id)
         {
-            return View(Cadeteria.Cadetes.First(t => t.Id == id));
+            var Cadete = Cadeteria.Cadetes.First(t => t.Id == id);
+
+            return View(new EditarCadeteViewModel(Cadete.Id, Cadete.Nombre, Cadete.Direccion, Cadete.Telefono));
         }
 
         [HttpPost]
-        public IActionResult EditarCadete(Cadete Edit)
+        public IActionResult EditarCadete(EditarCadeteViewModel Edit)
         {
             Cadete Cadete = Cadeteria.Cadetes.First(t => t.Id == Edit.Id);
             

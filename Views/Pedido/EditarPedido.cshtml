@@ -1,4 +1,4 @@
-@model Pedido
+@model tl2_tp4_2022_loboser.ViewModels.EditarPedidoViewModel
 
 @{
     ViewData["Title"] = "EditarPedido";
@@ -7,15 +7,15 @@
 <h1>@ViewData["Title"]</h1>
 
 <div>
-    <form onsubmit="alert('Formulario Enviado!')" asp-action="EditarPedido" method="post">
+    <form asp-action="EditarPedido" method="post">
         <label asp-for="Nro">
         <input asp-for="Nro" size="1" value="@Model.Nro" readonly="readonly"></label><br>
         <label asp-for="Obs">Observación: 
         <input asp-for="Obs" value="@Model.Obs" ></label><br>
-        <label asp-for="Cliente.Telefono">Telefono: 
-        <input asp-for="Cliente.Telefono" value="@Model.Cliente.Telefono"></label><br>
         <label asp-for="Cliente.Nombre">Nombre: 
         <input asp-for="Cliente.Nombre" value="@Model.Cliente.Nombre"></label><br>
+        <label asp-for="Cliente.Telefono">Telefono: 
+        <input asp-for="Cliente.Telefono" value="@Model.Cliente.Telefono"></label><br>
         <label asp-for="Cliente.Direccion">Direccion: 
         <input asp-for="Cliente.Direccion" value="@Model.Cliente.Direccion"></label><br>
         <label asp-for="Cliente.DatosReferenciaDireccion">Datos de Referencia (Direccion): 
@@ -23,3 +23,5 @@
         <button type="submit">Guardar</button>
     </form>
 </div>
+
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

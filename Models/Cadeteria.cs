@@ -7,9 +7,7 @@ using System.ComponentModel.DataAnnotations;
 namespace tl2_tp4_2022_loboser.Models
 {
     public class Cadeteria {
-        [Required][StringLength(100)]
         private string nombre;
-        [Required][Phone]
         private string telefono;
         private List<Cadete> cadetes = new List<Cadete>();
 
