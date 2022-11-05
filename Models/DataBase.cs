@@ -51,7 +51,7 @@ namespace tl2_tp4_2022_loboser.Models
             List<Cadete> Cadetes = new List<Cadete>();
 
             SQLiteCommand Comando = Conexion.CreateCommand();
-            Comando.CommandText = "Select * From Cadete";
+            Comando.CommandText = "SELECT * FROM Cadete";
 
             SQLiteDataReader Lector = Comando.ExecuteReader();
 
@@ -79,6 +79,20 @@ namespace tl2_tp4_2022_loboser.Models
             Comando.CommandText = "INSERT INTO Cadete(nombreCadete, direccionCadete, telefonoCadete) VALUES ('" + Cadete.Nombre + "', '" + Cadete.Direccion + "' ,'" + Cadete.Telefono + "');";
             Comando.ExecuteNonQuery();
 
+            Comando.CommandText = "SELECT * FROM Cadete WHERE nombreCadete='" + Cadete.Nombre + "' AND direccionCadete='" + Cadete.Direccion + "' AND telefonoCadete='" + Cadete.Telefono + "';";
+            SQLiteDataReader Lector = Comando.ExecuteReader();
+
+            SQLiteCommand Comando2 = Conexion.CreateCommand();
+
+
+            if(Lector.Read())
+            {
+                int idCadeteria = 1;
+                int id = Convert.ToInt32(Lector["idCadete"].ToString());
+                Comando2.CommandText = "INSERT INTO CadeteCadeteria(idCadeteria, idCadete) VALUES ('" + idCadeteria + "', '" + id + "');";
+                Comando2.ExecuteNonQuery();   
+            }
+
             Conexion.Close();
         }
 
@@ -88,6 +102,8 @@ namespace tl2_tp4_2022_loboser.Models
 
             SQLiteCommand Comando = Conexion.CreateCommand();
             Comando.CommandText = "DELETE FROM Cadete WHERE idCadete='" + id + "';";
+            Comando.ExecuteNonQuery();
+            Comando.CommandText = "DELETE FROM CadeteCadeteria WHERE idCadete='" + id + "';";
             Comando.ExecuteNonQuery();
 
             Conexion.Close();
