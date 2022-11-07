@@ -6,7 +6,10 @@
     <RootNamespace>tl2_tp5_2022_loboser</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="SQLite" Version="3.13.0"/>
-    <PackageReference Include="System.Data.SQLite" Version="1.0.116"/>
+    <PackageReference Include="Microsoft.Data.Sqlite" Version="6.0.10"/>
+    <PackageReference Include="SQLitePCLRaw.bundle_e_sqlite3" Version="2.1.2" />
+    <PackageReference Include="SQLitePCLRaw.core" Version="2.1.2" />
+    <PackageReference Include="SQLitePCLRaw.lib.e_sqlite3" Version="2.1.2" />
+    <PackageReference Include="SQLitePCLRaw.provider.e_sqlite3" Version="2.1.2" />
   </ItemGroup>
 </Project>

@@ -53,17 +53,19 @@ namespace tl2_tp4_2022_loboser.Controllers
         {
             if (ModelState.IsValid)
             {
+                /*
                 Cadete Cadete = new Cadete();
 
-                //Cadete.Id = Id;
+                Cadete.Id = Id;
                 Cadete.Direccion = CadeteRecibido.Direccion;
                 Cadete.Nombre = CadeteRecibido.Nombre;
                 Cadete.Telefono = CadeteRecibido.Telefono;
 
-                DataBase.AltaCadeteDB(Cadete);
-                //Cadeteria.Cadetes.Add(Cadete);
-
-                //Id++;
+                Cadeteria.Cadetes.Add(Cadete);
+                Id++;
+                */
+                
+                DataBase.AltaCadeteDB(CadeteRecibido);
 
                 return RedirectToAction("AltaCadete");
             }else

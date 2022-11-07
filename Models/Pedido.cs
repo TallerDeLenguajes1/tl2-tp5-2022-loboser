@@ -17,6 +17,10 @@ namespace tl2_tp4_2022_loboser.Models
         public string Obs { get => obs; set => obs = value; }
         public Cliente Cliente { get => cliente; set => cliente = value; }
         public string Estado { get => estado; set => estado = value; }
+
+        public Pedido(){
+        }
+
         public Pedido(int nro, string obs, Cliente cliente){
                 Nro = nro;
                 Obs = obs;

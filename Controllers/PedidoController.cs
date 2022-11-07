@@ -19,9 +19,15 @@ namespace tl2_tp4_2022_loboser.Controllers
             _logger = logger;
         }
 
-        static List<Pedido> Pedidos = new List<Pedido>();
-        static int nroPedidos = 1;
-        static int idCliente = 1;
+        List<Pedido> Pedidos = DataBase.CargarPedidosDB();
+        //static int nroPedidos = 1;
+        //static int idCliente = 1;
+
+        [HttpGet]
+        public IActionResult ListaDePedidos()
+        {
+            return View(Pedidos);
+        }
         
         public IActionResult Index()
         {
@@ -39,13 +45,15 @@ namespace tl2_tp4_2022_loboser.Controllers
         {
             if (ModelState.IsValid)
             {
+                /*
                 PedidoRecibido.Cliente.Id = idCliente;
                 var Pedido = new Pedido(nroPedidos, PedidoRecibido.Obs, PedidoRecibido.Cliente);
                 
                 idCliente++;
                 nroPedidos++;
-                
-                Pedidos.Add(Pedido);
+                */
+
+                DataBase.AltaPedidoDB(PedidoRecibido);
 
                 return RedirectToAction("AltaPedido");
             }else
@@ -54,16 +62,12 @@ namespace tl2_tp4_2022_loboser.Controllers
             }
         }
 
-        [HttpGet]
-        public IActionResult ListaDePedidos()
-        {
-            return View(Pedidos);
-        }
-
         [HttpPost]
         public IActionResult BajaPedido(int nro)
         {
-            Pedidos = Pedidos.Where(t => t.Nro != nro).ToList();
+            //Pedidos = Pedidos.Where(t => t.Nro != nro).ToList();
+            DataBase.BajaPedidoDB(nro);
+
             return RedirectToAction("ListaDePedidos");
         }
 
@@ -83,20 +87,17 @@ namespace tl2_tp4_2022_loboser.Controllers
         [HttpPost]
         public IActionResult EditarPedido(EditarPedidoViewModel Edit)
         {
+            /*
             Pedido Pedido = Pedidos.First(t => t.Nro == Edit.Nro);
 
             Pedido.Obs = Edit.Obs;
             Pedido.Cliente = Edit.Cliente;
+            */
 
+            DataBase.EditarPedidoDB(Edit);
+            
             return RedirectToAction("ListaDePedidos");
         }
-
-        [HttpGet]
-        public IActionResult AsignarPedido(int nro)
-        {
-            return View();
-        }
-
 
             [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
