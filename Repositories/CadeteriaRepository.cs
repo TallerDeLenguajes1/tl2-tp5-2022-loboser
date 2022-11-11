@@ -30,6 +30,7 @@ namespace tl2_tp4_2022_loboser.Repositories{
 
         public Cadeteria GetCadeteria(){
             using(SqliteConnection Conexion = new SqliteConnection(_cadenaConexion)){
+                Conexion.Open();
                 using (SqliteCommand Comando = Conexion.CreateCommand())
                 {
                     Comando.CommandText = "SELECT nombreCadeteria, telefonoCadeteria FROM Cadeteria WHERE idCadeteria = 1";
@@ -51,6 +52,7 @@ namespace tl2_tp4_2022_loboser.Repositories{
 
         public List<Cadete> GetCadetes(){
             using(SqliteConnection Conexion = new SqliteConnection(_cadenaConexion)){
+                Conexion.Open();
                 using (SqliteCommand Comando = Conexion.CreateCommand())
                 {
                     Comando.CommandText = "SELECT * FROM Cadete";
