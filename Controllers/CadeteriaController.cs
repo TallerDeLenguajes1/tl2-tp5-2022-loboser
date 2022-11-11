@@ -7,37 +7,45 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using tl2_tp4_2022_loboser.Models;
 using tl2_tp4_2022_loboser.ViewModels;
+using tl2_tp4_2022_loboser.Repositories;
+
 
 namespace tl2_tp4_2022_loboser.Controllers
 {
     public class CadeteriaController : Controller
     {
         private readonly ILogger<CadeteriaController> _logger;
+        private readonly Repositories.ICadeteriaRepository cadeteriaRepository;
 
-        public CadeteriaController(ILogger<CadeteriaController> logger)
+        public CadeteriaController(ILogger<CadeteriaController> logger, ICadeteriaRepository cadeteriaRepository)
         {
-            _logger = logger;
+            this.cadeteriaRepository = cadeteriaRepository;
+            this._logger = logger;
         }
 
         public IActionResult Index()
         {
             return View();
         }
+
         //static Cadeteria Cadeteria = DataBase.CargarCadeteriaDB();
-        Cadeteria Cadeteria = DataBase.CargarCadeteriaDB();
 
         //static int Id = Cadeteria.Cadetes.Max(t => t.Id) + 1;
 
         [HttpGet]
         public IActionResult ListaDeCadetes()
         {
+            //Cadeteria Cadeteria = DataBase.CargarCadeteriaDB();
+            
+            Cadeteria Cadeteria = cadeteriaRepository.GetCadeteria();
+
             return View(Cadeteria);
         }
         
         [HttpPost]
         public IActionResult ListaDeCadetes(int id){
             //Cadeteria.Cadetes = Cadeteria.Cadetes.Where(t => t.Id != id).ToList();
-            DataBase.BajaCadeteDB(id);
+            cadeteriaRepository.BajaCadete(id);
 
             return RedirectToAction("ListaDeCadetes");
         }
@@ -65,7 +73,7 @@ namespace tl2_tp4_2022_loboser.Controllers
                 Id++;
                 */
                 
-                DataBase.AltaCadeteDB(CadeteRecibido);
+                cadeteriaRepository.AltaCadete(CadeteRecibido);
 
                 return RedirectToAction("AltaCadete");
             }else
@@ -77,6 +85,8 @@ namespace tl2_tp4_2022_loboser.Controllers
         [HttpGet]
         public IActionResult EditarCadete(int id)
         {
+            Cadeteria Cadeteria = cadeteriaRepository.GetCadeteria();
+
             var Cadete = Cadeteria.Cadetes.First(t => t.Id == id);
 
             return View(new EditarCadeteViewModel(Cadete.Id, Cadete.Nombre, Cadete.Direccion, Cadete.Telefono));
@@ -91,7 +101,7 @@ namespace tl2_tp4_2022_loboser.Controllers
             Cadete.Direccion = Edit.Direccion;
             Cadete.Telefono = Edit.Telefono;*/
         
-            DataBase.EditarCadeteDB(Edit);
+            cadeteriaRepository.EditarCadete(Edit);
 
             return RedirectToAction("ListaDeCadetes");
         }

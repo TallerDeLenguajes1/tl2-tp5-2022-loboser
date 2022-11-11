@@ -1,7 +1,11 @@
+using tl2_tp4_2022_loboser.Repositories;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+//const string _cadenaConexion = "Data Source=PedidosDB.db";
+builder.Services.AddTransient<ICadeteriaRepository, CadeteriaRepository>();
 
 var app = builder.Build();
 

@@ -26,6 +26,7 @@ namespace tl2_tp4_2022_loboser.Models
             }
             return Conexion;
         }
+        
         public static Cadeteria CargarCadeteriaDB()
         {
             SqliteConnection Conexion = CrearConexion();
@@ -118,6 +119,7 @@ namespace tl2_tp4_2022_loboser.Models
 
             Conexion.Close();
         }
+        
         public static List<Pedido> CargarPedidosDB(){
             SqliteConnection Conexion = CrearConexion();
 
