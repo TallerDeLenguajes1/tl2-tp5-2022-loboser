@@ -9,11 +9,11 @@ using tl2_tp4_2022_loboser.ViewModels;
 
 #nullable disable
 
-namespace tl2_tp4_2022_loboser.Repositories{
+namespace tl2_tp4_2022_loboser.Repositories
+{
     public interface ICadeteriaRepository
     {
         Cadeteria GetCadeteria();
-        List<Cadete> GetCadetes();
         void AltaCadete(AltaCadeteViewModel Cadete);
         void BajaCadete(int id);
         void EditarCadete(EditarCadeteViewModel Cadete);
@@ -25,7 +25,8 @@ namespace tl2_tp4_2022_loboser.Repositories{
 
         public CadeteriaRepository()
         {
-            this._cadenaConexion = "Data Source=PedidosDB.db";
+            var configuration = new ConfigurationBuilder().AddJsonFile("appsettings.Development.json").Build();
+            this._cadenaConexion = configuration.GetConnectionString("Default");
         }
 
         public Cadeteria GetCadeteria(){
@@ -44,13 +45,14 @@ namespace tl2_tp4_2022_loboser.Repositories{
                         }
                         Cadeteria.Cadetes = GetCadetes();
 
+                        Conexion.Close();
                         return Cadeteria;
                     }
                 }
             }
         }
 
-        public List<Cadete> GetCadetes(){
+        private List<Cadete> GetCadetes(){
             using(SqliteConnection Conexion = new SqliteConnection(_cadenaConexion)){
                 Conexion.Open();
                 using (SqliteCommand Comando = Conexion.CreateCommand())
@@ -72,6 +74,7 @@ namespace tl2_tp4_2022_loboser.Repositories{
                             Cadetes.Add(NuevoCadete);
                         }
 
+                        Conexion.Close();
                         return Cadetes; 
                     }
                 }
@@ -81,6 +84,7 @@ namespace tl2_tp4_2022_loboser.Repositories{
         public void AltaCadete(AltaCadeteViewModel Cadete)
         {
             using(SqliteConnection Conexion = new SqliteConnection(_cadenaConexion)){
+                Conexion.Open();
                 using (SqliteCommand Comando = Conexion.CreateCommand())
                 {
                     Comando.CommandText = "INSERT INTO Cadete(nombreCadete, direccionCadete, telefonoCadete) VALUES ('" + Cadete.Nombre + "', '" + Cadete.Direccion + "' ,'" + Cadete.Telefono + "');";
@@ -98,6 +102,8 @@ namespace tl2_tp4_2022_loboser.Repositories{
                                 Comando2.CommandText = "INSERT INTO CadeteCadeteria(idCadeteria, idCadete) VALUES ('" + idCadeteria + "', '" + id + "');";
                                 Comando2.ExecuteNonQuery();   
                             }
+
+                            Conexion.Close();
                         }  
                     }
                 }
@@ -107,22 +113,28 @@ namespace tl2_tp4_2022_loboser.Repositories{
         public void BajaCadete(int id)
         {
             using(SqliteConnection Conexion = new SqliteConnection(_cadenaConexion)){
+                Conexion.Open();
                 using (SqliteCommand Comando = Conexion.CreateCommand())
                 {
-                    Comando.CommandText = "DELETE FROM Cadete WHERE idCadete='" + id + "';";
-                    Comando.ExecuteNonQuery();
                     Comando.CommandText = "DELETE FROM CadeteCadeteria WHERE idCadete='" + id + "';";
                     Comando.ExecuteNonQuery();
+
+                    Comando.CommandText = "DELETE FROM Cadete WHERE idCadete='" + id + "';";
+                    Comando.ExecuteNonQuery();
+
+                    Conexion.Close();
                 }
             }
         }
 
         public void EditarCadete(EditarCadeteViewModel Cadete){
             using(SqliteConnection Conexion = new SqliteConnection(_cadenaConexion)){
+                Conexion.Open();
                 using (SqliteCommand Comando = Conexion.CreateCommand())
                 {
                     Comando.CommandText = "UPDATE Cadete SET nombreCadete='" + Cadete.Nombre + "', direccionCadete='" + Cadete.Direccion + "', telefonoCadete='" + Cadete.Telefono + "' WHERE idCadete='" + Cadete.Id + "';";
                     Comando.ExecuteNonQuery();
+                    Conexion.Close();
                 }
             }
         }

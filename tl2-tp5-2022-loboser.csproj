@@ -9,7 +9,7 @@
     <Content Include="PedidosDB.db">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <PackageReference Include="Microsoft.Data.Sqlite" Version="6.0.10"/>
+    <PackageReference Include="Microsoft.Data.Sqlite" Version="7.0.0"/>
     <PackageReference Include="SQLitePCLRaw.bundle_e_sqlite3" Version="2.1.2"/>
     <PackageReference Include="SQLitePCLRaw.core" Version="2.1.2"/>
     <PackageReference Include="SQLitePCLRaw.lib.e_sqlite3" Version="2.1.2"/>

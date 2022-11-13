@@ -5,27 +5,31 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Configuration;
 using tl2_tp4_2022_loboser.Models;
 using tl2_tp4_2022_loboser.ViewModels;
+using tl2_tp4_2022_loboser.Repositories;
 
 namespace tl2_tp4_2022_loboser.Controllers
 {
     public class PedidoController : Controller
     {
         private readonly ILogger<PedidoController> _logger;
+        private readonly Repositories.IPedidoRepository pedidoRepository;
 
-        public PedidoController(ILogger<PedidoController> logger)
+        public PedidoController(ILogger<PedidoController> logger, IPedidoRepository pedidoRepository)
         {
-            _logger = logger;
+            this.pedidoRepository = pedidoRepository;
+            this._logger = logger;
         }
 
-        List<Pedido> Pedidos = DataBase.CargarPedidosDB();
         //static int nroPedidos = 1;
         //static int idCliente = 1;
 
         [HttpGet]
         public IActionResult ListaDePedidos()
         {
+            List<Pedido> Pedidos = pedidoRepository.GetPedidos();
             return View(Pedidos);
         }
         
@@ -53,7 +57,7 @@ namespace tl2_tp4_2022_loboser.Controllers
                 nroPedidos++;
                 */
 
-                DataBase.AltaPedidoDB(PedidoRecibido);
+                pedidoRepository.AltaPedido(PedidoRecibido);
 
                 return RedirectToAction("AltaPedido");
             }else
@@ -66,7 +70,7 @@ namespace tl2_tp4_2022_loboser.Controllers
         public IActionResult BajaPedido(int nro)
         {
             //Pedidos = Pedidos.Where(t => t.Nro != nro).ToList();
-            DataBase.BajaPedidoDB(nro);
+            pedidoRepository.BajaPedido(nro);
 
             return RedirectToAction("ListaDePedidos");
         }
@@ -74,6 +78,8 @@ namespace tl2_tp4_2022_loboser.Controllers
         [HttpGet]
         public IActionResult EditarPedido(int nro)
         {
+            List<Pedido> Pedidos = pedidoRepository.GetPedidos();
+
             if (Pedidos.Count()> 0)
             {
                 var PedidoAEditar = Pedidos.First(t => t.Nro == nro);
@@ -94,7 +100,7 @@ namespace tl2_tp4_2022_loboser.Controllers
             Pedido.Cliente = Edit.Cliente;
             */
 
-            DataBase.EditarPedidoDB(Edit);
+            pedidoRepository.EditarPedido(Edit);
             
             return RedirectToAction("ListaDePedidos");
         }
