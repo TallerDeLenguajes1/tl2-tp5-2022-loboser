@@ -16,6 +16,7 @@
         <td>Telefono</td>
         <td></td>
         <td></td>
+        <td></td>
     </tr>
 @foreach (var Cadete in Model.Cadetes)
 {
@@ -26,7 +27,8 @@
     <td>@Cadete.Direccion</td>
     <td>@Cadete.Telefono</td>
     <td><button type="submit">Eliminar</button></td>
-    <td><a href="Cadeteria/EditarCadete?id=@Cadete.Id">Editar</a></td>
+    <td><a href="../Cadeteria/EditarCadete?id=@Cadete.Id">Editar</a></td>
+    <td><a href="../Cadeteria/VerPedidos?id=@Cadete.Id">Ver Pedidos</a></td>
     </tr>
     </form>
 }

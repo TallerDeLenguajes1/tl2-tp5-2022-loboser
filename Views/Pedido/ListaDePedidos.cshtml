@@ -1,24 +1,37 @@
 @model List<Pedido>
 
 @{
-    ViewData["Title"] = "ListaDePedidos";
+    ViewData["Title"] = "Lista De Pedidos";
 }
 
 <h1>@ViewData["Title"]</h1>
 
 <div>
-    @foreach (var Pedido in Model)
-{
-    <form asp-action="BajaPedido" method="post">
+    <table>
         <tr>
-        <td><label name="Nro"><input size="1" type="text" name="Nro" value="@Pedido.Nro" readonly="readonly"></label></td>
-        <td>@Pedido.Obs</td>
-        <td>@Pedido.Cliente.Nombre</td>
-        <td>@Pedido.Cliente.Direccion</td>
-        <td>@Pedido.Cliente.DatosReferenciaDireccion</td>
-        <td><button type="submit">Eliminar</button></td>
-        <td><a href="EditarPedido?nro=@Pedido.Nro">Editar</a></td>
-        </tr>
-    </form>
-}
+        <td>Nro</td>
+        <td>Nombre</td>
+        <td>Observacion</td>
+        <td>Direccion</td>
+        <td>Datos Referencia Direccion</td>
+        <td></td>
+        <td></td>
+        <td></td>
+    </tr>
+    @foreach (var Pedido in Model)
+    {
+        <form asp-action="BajaPedido" method="post">
+            <tr>
+            <td><label name="Nro"><input size="1" type="text" name="Nro" value="@Pedido.Nro" readonly="readonly"></label></td>
+            <td>@Pedido.Cliente.Nombre</td>
+            <td>@Pedido.Obs</td>
+            <td>@Pedido.Cliente.Direccion</td>
+            <td>@Pedido.Cliente.DatosReferenciaDireccion</td>
+            <td><button type="submit">Eliminar</button></td>
+            <td><a href="EditarPedido?nro=@Pedido.Nro">Editar</a></td>
+            <td><a href="AsignarACadete?nro=@Pedido.Nro">Asignar A Cadete</a></td>
+            </tr>
+        </form>
+    }
+    </table>
 </div>

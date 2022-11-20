@@ -1,0 +1,26 @@
+@model Cadeteria
+
+<h1>Asignar a Cadete</h1>
+
+<div>
+    <table>
+    <tr>
+        <td>Id</td>
+        <td>Nombre</td>
+        <td>Direccion</td>
+        <td>Telefono</td>
+        <td></td>
+        <td></td>
+    </tr>
+@foreach (var Cadete in Model.Cadetes)
+{
+    <tr>
+    <td>@Cadete.Nombre</td>
+    <td>@Cadete.Direccion</td>
+    <td>@Cadete.Telefono</td>
+    <td><a href="AsignarPedido?nro=@ViewBag.Nro&id=@Cadete.Id">Asignar el Pedido</a></td>
+    </tr>
+}
+</table>
+
+</div>

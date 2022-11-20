@@ -15,21 +15,20 @@ namespace tl2_tp4_2022_loboser.Controllers
     public class PedidoController : Controller
     {
         private readonly ILogger<PedidoController> _logger;
-        private readonly Repositories.IPedidoRepository pedidoRepository;
+        private readonly ICadeteriaRepository _cadeteriaRepository;
+        private readonly Repositories.IPedidoRepository _pedidoRepository;
 
-        public PedidoController(ILogger<PedidoController> logger, IPedidoRepository pedidoRepository)
+        public PedidoController(ILogger<PedidoController> logger, ICadeteriaRepository cadeteriaRepository, IPedidoRepository pedidoRepository, IClienteRepository clienteRepository)
         {
-            this.pedidoRepository = pedidoRepository;
+            this._cadeteriaRepository = cadeteriaRepository;
+            this._pedidoRepository = pedidoRepository;
             this._logger = logger;
         }
-
-        //static int nroPedidos = 1;
-        //static int idCliente = 1;
 
         [HttpGet]
         public IActionResult ListaDePedidos()
         {
-            List<Pedido> Pedidos = pedidoRepository.GetPedidos();
+            List<Pedido> Pedidos = _pedidoRepository.GetPedidos();
             return View(Pedidos);
         }
         
@@ -49,15 +48,7 @@ namespace tl2_tp4_2022_loboser.Controllers
         {
             if (ModelState.IsValid)
             {
-                /*
-                PedidoRecibido.Cliente.Id = idCliente;
-                var Pedido = new Pedido(nroPedidos, PedidoRecibido.Obs, PedidoRecibido.Cliente);
-                
-                idCliente++;
-                nroPedidos++;
-                */
-
-                pedidoRepository.AltaPedido(PedidoRecibido);
+                _pedidoRepository.AltaPedido(PedidoRecibido);
 
                 return RedirectToAction("AltaPedido");
             }else
@@ -69,8 +60,7 @@ namespace tl2_tp4_2022_loboser.Controllers
         [HttpPost]
         public IActionResult BajaPedido(int nro)
         {
-            //Pedidos = Pedidos.Where(t => t.Nro != nro).ToList();
-            pedidoRepository.BajaPedido(nro);
+            _pedidoRepository.BajaPedido(nro);
 
             return RedirectToAction("ListaDePedidos");
         }
@@ -78,7 +68,7 @@ namespace tl2_tp4_2022_loboser.Controllers
         [HttpGet]
         public IActionResult EditarPedido(int nro)
         {
-            List<Pedido> Pedidos = pedidoRepository.GetPedidos();
+            List<Pedido> Pedidos = _pedidoRepository.GetPedidos();
 
             if (Pedidos.Count()> 0)
             {
@@ -93,15 +83,23 @@ namespace tl2_tp4_2022_loboser.Controllers
         [HttpPost]
         public IActionResult EditarPedido(EditarPedidoViewModel Edit)
         {
-            /*
-            Pedido Pedido = Pedidos.First(t => t.Nro == Edit.Nro);
-
-            Pedido.Obs = Edit.Obs;
-            Pedido.Cliente = Edit.Cliente;
-            */
-
-            pedidoRepository.EditarPedido(Edit);
+            _pedidoRepository.EditarPedido(Edit);
             
+            return RedirectToAction("ListaDePedidos");
+        }
+
+        [HttpGet]
+        public IActionResult AsignarACadete(int nro)
+        {   
+            Cadeteria Cadeteria = _cadeteriaRepository.GetCadeteria();
+            ViewBag.Nro = nro;
+            return View(Cadeteria);
+        }
+
+        [HttpGet]
+        public IActionResult AsignarPedido(int nro, int id)
+        {   
+            _pedidoRepository.AsignarPedidoCadete(nro, id);
             return RedirectToAction("ListaDePedidos");
         }
 

@@ -10,21 +10,15 @@ using tl2_tp4_2022_loboser.ViewModels;
 
 namespace tl2_tp4_2022_loboser.Repositories
 {
-    public interface IPedidoRepository
-    {
-        List<Pedido> GetPedidos();
-        void AltaPedido(AltaPedidoViewModel Pedido);
-        void BajaPedido(int nro);
-        void EditarPedido(EditarPedidoViewModel Pedido);
-    }
     public class PedidoRepository : IPedidoRepository
     {
         private readonly string _cadenaConexion;
+        private readonly IClienteRepository _clienteRepository;
 
-        public PedidoRepository()
+        public PedidoRepository(IConexionRepository conexion, IClienteRepository clienteRepository)
         {
-            var configuration = new ConfigurationBuilder().AddJsonFile("appsettings.Development.json").Build();
-            this._cadenaConexion = configuration.GetConnectionString("Default");
+            this._cadenaConexion = conexion.GetConnectionString();
+            this._clienteRepository = clienteRepository;
         }
 
         public List<Pedido> GetPedidos(){
@@ -44,7 +38,7 @@ namespace tl2_tp4_2022_loboser.Repositories
                             NuevoPedido.Obs = Lector["Obs"].ToString();
                             NuevoPedido.Estado = Lector["Estado"].ToString();
 
-                            NuevoPedido.Cliente = GetCliente(Convert.ToInt32(Lector["idCliente"].ToString()));
+                            NuevoPedido.Cliente = _clienteRepository.GetCliente(Convert.ToInt32(Lector["idCliente"].ToString()));
 
                             Pedidos.Add(NuevoPedido);
                         }
@@ -55,33 +49,34 @@ namespace tl2_tp4_2022_loboser.Repositories
                 }
             }
         }
-
-        private Cliente GetCliente(int idCliente){
+        public List<Pedido> GetPedidosByCadete(int idCadete){
             using(SqliteConnection Conexion = new SqliteConnection(_cadenaConexion)){
                 Conexion.Open();
                 using (SqliteCommand Comando = Conexion.CreateCommand())
                 {
-                    Comando.CommandText = "SELECT * FROM Cliente WHERE idCliente=" + idCliente + ";";
+                    Comando.CommandText = "SELECT * FROM Pedido WHERE idCadeteAsignado='" + idCadete + "';";
                     using (SqliteDataReader Lector = Comando.ExecuteReader())
                     {
-                        Cliente Cliente = new Cliente();
-
-                        if (Lector.Read())
+                        List<Pedido> Pedidos = new List<Pedido>();
+                        while (Lector.Read())
                         {
-                            Cliente.Id = Convert.ToInt32(Lector["idCliente"].ToString());
-                            Cliente.Nombre = Lector["nombreCliente"].ToString();
-                            Cliente.Direccion = Lector["direccionCliente"].ToString();
-                            Cliente.Telefono = Lector["telefonoCliente"].ToString();
-                            Cliente.DatosReferenciaDireccion = Lector["datosReferenciaDireccion"].ToString();
+                            Pedido NuevoPedido = new Pedido();
+
+                            NuevoPedido.Nro = Convert.ToInt32(Lector["nroPedido"].ToString());
+                            NuevoPedido.Obs = Lector["Obs"].ToString();
+                            NuevoPedido.Estado = Lector["Estado"].ToString();
+
+                            NuevoPedido.Cliente = _clienteRepository.GetCliente(Convert.ToInt32(Lector["idCliente"].ToString()));
+
+                            Pedidos.Add(NuevoPedido);
                         }
 
                         Conexion.Close();
-                        return Cliente;
+                        return Pedidos;
                     }
                 }
             }
         }
-
         public void AltaPedido(AltaPedidoViewModel Pedido){
             using(SqliteConnection Conexion = new SqliteConnection(_cadenaConexion))
             {
@@ -94,8 +89,7 @@ namespace tl2_tp4_2022_loboser.Repositories
                         if (Lector.Read() == false)
                         {
                             Lector.Close();
-                            Comando.CommandText = "INSERT INTO Cliente(nombreCliente, direccionCliente, telefonoCliente, datosReferenciaDireccion) VALUES('" + Pedido.Cliente.Nombre + "', '" + Pedido.Cliente.Direccion + "', '" + Pedido.Cliente.Telefono + "', '" + Pedido.Cliente.DatosReferenciaDireccion + "');";
-                            Comando.ExecuteNonQuery();
+                            _clienteRepository.AltaCliente(Pedido.Cliente);
                         }
                     }
                 }
@@ -145,13 +139,11 @@ namespace tl2_tp4_2022_loboser.Repositories
                         if (Lector.Read() == false)
                         {
                             Lector.Close();
-                            Comando.CommandText = "INSERT INTO Cliente(nombreCliente, direccionCliente, telefonoCliente, datosReferenciaDireccion) VALUES('" + Pedido.Cliente.Nombre + "', '" + Pedido.Cliente.Direccion + "', '" + Pedido.Cliente.Telefono + "', '" + Pedido.Cliente.DatosReferenciaDireccion + "');";
-                            Comando.ExecuteNonQuery();
+                            _clienteRepository.AltaCliente(Pedido.Cliente);
                         }else
                         {
                             Lector.Close();
-                            Comando.CommandText = "UPDATE Cliente SET direccionCliente='" + Pedido.Cliente.Direccion + "', datosReferenciaDireccion='" + Pedido.Cliente.DatosReferenciaDireccion + "' WHERE telefonoCliente='" + Pedido.Cliente.Telefono + "';";
-                            Comando.ExecuteNonQuery();
+                            _clienteRepository.EditarCliente(Pedido.Cliente);
                         }
                     }
                 }
@@ -171,6 +163,27 @@ namespace tl2_tp4_2022_loboser.Repositories
                     }
                     Conexion.Close();
                 }
+            }
+        }
+        public void AsignarPedidoCadete(int nro, int id)
+        {
+            using(SqliteConnection Conexion = new SqliteConnection(_cadenaConexion))
+            {
+                Conexion.Open();
+                using (SqliteCommand Comando = Conexion.CreateCommand())
+                {
+                    Comando.CommandText = "SELECT idCadeteAsignado FROM Pedido WHERE nroPedido='" + nro + "';";
+                    using (SqliteDataReader Lector = Comando.ExecuteReader())
+                    {
+                        if (Lector.Read())
+                        {
+                            Lector.Close();
+                            Comando.CommandText = "UPDATE Pedido SET idCadeteAsignado='" + id + "' WHERE nroPedido='" + nro + "';";
+                            Comando.ExecuteNonQuery();
+                        }
+                    }
+                }
+                Conexion.Close();
             }
         }
     }

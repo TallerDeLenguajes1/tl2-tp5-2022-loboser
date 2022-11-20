@@ -1,9 +1,4 @@
-using System;
-using System.Collections.Generic;
 using Microsoft.Data.Sqlite;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using tl2_tp4_2022_loboser.Models;
 using tl2_tp4_2022_loboser.ViewModels;
 
@@ -11,22 +6,16 @@ using tl2_tp4_2022_loboser.ViewModels;
 
 namespace tl2_tp4_2022_loboser.Repositories
 {
-    public interface ICadeteriaRepository
-    {
-        Cadeteria GetCadeteria();
-        void AltaCadete(AltaCadeteViewModel Cadete);
-        void BajaCadete(int id);
-        void EditarCadete(EditarCadeteViewModel Cadete);
-    }
 
     public class CadeteriaRepository : ICadeteriaRepository
     {
         private readonly string _cadenaConexion;
+        private readonly IPedidoRepository _pedidoRepository;
 
-        public CadeteriaRepository()
+        public CadeteriaRepository(IConexionRepository conexion, IPedidoRepository pedidoRepository)
         {
-            var configuration = new ConfigurationBuilder().AddJsonFile("appsettings.Development.json").Build();
-            this._cadenaConexion = configuration.GetConnectionString("Default");
+            this._cadenaConexion = conexion.GetConnectionString();
+            this._pedidoRepository = pedidoRepository;
         }
 
         public Cadeteria GetCadeteria(){
@@ -69,7 +58,7 @@ namespace tl2_tp4_2022_loboser.Repositories
                             NuevoCadete.Nombre = Lector["nombreCadete"].ToString();
                             NuevoCadete.Direccion = Lector["direccionCadete"].ToString();
                             NuevoCadete.Telefono = Lector["telefonoCadete"].ToString();
-                            NuevoCadete.Pedidos = new List<Pedido>();
+                            NuevoCadete.Pedidos = _pedidoRepository.GetPedidosByCadete(Convert.ToInt32(Lector["idCadete"].ToString()));
 
                             Cadetes.Add(NuevoCadete);
                         }

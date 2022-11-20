@@ -1,0 +1,28 @@
+@model List<Pedido>
+@{
+    ViewData["Title"] = "Pedidos";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<div>
+    <table>
+        <tr>
+        <td>Nro</td>
+        <td>Nombre</td>
+        <td>Observacion</td>
+        <td>Direccion</td>
+        <td>Datos de Referencia</td>
+    </tr>
+    @foreach (var Pedido in Model)
+    {
+        <tr>
+        <td>@Pedido.Nro</td>
+        <td>@Pedido.Cliente.Nombre</td>
+        <td>@Pedido.Obs</td>
+        <td>@Pedido.Cliente.Direccion</td>
+        <td>@Pedido.Cliente.DatosReferenciaDireccion</td>
+        </tr>
+    }
+</table>
+</div>
