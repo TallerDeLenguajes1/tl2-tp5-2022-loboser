@@ -1,0 +1,15 @@
+﻿@model tl2_tp4_2022_loboser.ViewModels.LogeoViewModel
+
+@{
+    ViewData["Title"] = "Pagina de Logeo";
+}
+
+<div class="text-center">
+    <form asp-action="Logear" method="post">
+        <label asp-for="nombre">Nombre
+        <input asp-for="nombre"></label><br>
+        <label asp-for="pass">Contraseña
+        <input asp-for="pass" type="password"></label><br>
+        <button type="submit">Logear</button>
+    </form>
+</div>

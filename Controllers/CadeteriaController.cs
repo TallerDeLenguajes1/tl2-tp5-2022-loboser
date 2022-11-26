@@ -31,66 +31,97 @@ namespace tl2_tp4_2022_loboser.Controllers
         [HttpGet]
         public IActionResult ListaDeCadetes()
         {
-            Cadeteria Cadeteria = _cadeteriaRepository.GetCadeteria();
+            if (HttpContext.Session.GetString("rol") == "Admin")
+            {
+                Cadeteria Cadeteria = _cadeteriaRepository.GetCadeteria();
 
-            return View(Cadeteria);
+                return View(Cadeteria);
+            }else if (HttpContext.Session.GetString("rol") == "Cadete")
+            {
+                return RedirectToAction("VerPedidos", "Pedido", new{id = 0});
+            }
+            return RedirectToAction("Index", "Logeo");
         }
         
         [HttpPost]
         public IActionResult ListaDeCadetes(int id){
-            _cadeteriaRepository.BajaCadete(id);
+            if (HttpContext.Session.GetString("rol") == "Admin")
+            {
+                _cadeteriaRepository.BajaCadete(id);
 
-            return RedirectToAction("ListaDeCadetes");
-        }
-
-        [HttpGet]
-        public IActionResult VerPedidos(int id)
-        {
-            Cadeteria Cadeteria = _cadeteriaRepository.GetCadeteria();
-
-            var Cadete = Cadeteria.Cadetes.First(t => t.Id == id);
-
-            return View(Cadete.Pedidos);
+                return RedirectToAction("ListaDeCadetes");
+            }else if (HttpContext.Session.GetString("rol") == "Cadete")
+            {
+                return RedirectToAction("VerPedidos", "Pedido", new{id = 0});
+            }
+            return RedirectToAction("Index", "Logeo");
         }
 
         [HttpGet]
         public IActionResult AltaCadete()
         {
-            return View();
+            if (HttpContext.Session.GetString("rol") == "Admin")
+            {
+                return View();
+            }else if (HttpContext.Session.GetString("rol") == "Cadete")
+            {
+                return RedirectToAction("VerPedidos", "Pedido", new{id = 0});
+            }
+            return RedirectToAction("Index", "Logeo");
         }
 
         [HttpPost]
         public IActionResult AltaCadete(AltaCadeteViewModel CadeteRecibido)
         {
-            if (ModelState.IsValid)
+            if (HttpContext.Session.GetString("rol") == "Admin")
             {
-                _cadeteriaRepository.AltaCadete(CadeteRecibido);
+                if (ModelState.IsValid)
+                {
+                    _cadeteriaRepository.AltaCadete(CadeteRecibido);
 
-                return RedirectToAction("AltaCadete");
-            }else
+                    return RedirectToAction("AltaCadete");
+                }else
+                {
+                    return RedirectToAction("Error");
+                }
+            }else if (HttpContext.Session.GetString("rol") == "Cadete")
             {
-                return RedirectToAction("Error");
+                return RedirectToAction("VerPedidos", "Pedido", new{id = 0});
             }
+            return RedirectToAction("Index", "Logeo");
         }
 
         [HttpGet]
         public IActionResult EditarCadete(int id)
         {
-            Cadeteria Cadeteria = _cadeteriaRepository.GetCadeteria();
+            if (HttpContext.Session.GetString("rol") == "Admin")
+            {
+                Cadeteria Cadeteria = _cadeteriaRepository.GetCadeteria();
 
-            var Cadete = Cadeteria.Cadetes.First(t => t.Id == id);
+                var Cadete = Cadeteria.Cadetes.First(t => t.Id == id);
 
-            return View(new EditarCadeteViewModel(Cadete.Id, Cadete.Nombre, Cadete.Direccion, Cadete.Telefono));
+                return View(new EditarCadeteViewModel(Cadete.Id, Cadete.Nombre, Cadete.Direccion, Cadete.Telefono));
+            }else if (HttpContext.Session.GetString("rol") == "Cadete")
+            {
+                return RedirectToAction("VerPedidos", "Pedido", new{id = 0});
+            }
+            return RedirectToAction("Index", "Logeo");
         }
 
         [HttpPost]
         public IActionResult EditarCadete(EditarCadeteViewModel Edit)
         {
-            _cadeteriaRepository.EditarCadete(Edit);
+            if (HttpContext.Session.GetString("rol") == "Admin")
+            {
+                _cadeteriaRepository.EditarCadete(Edit);
 
-            return RedirectToAction("ListaDeCadetes");
+                return RedirectToAction("ListaDeCadetes");
+            }else if (HttpContext.Session.GetString("rol") == "Cadete")
+            {
+                return RedirectToAction("VerPedidos", "Pedido", new{id = 0});
+            }
+            return RedirectToAction("Index", "Logeo");
         }
-
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

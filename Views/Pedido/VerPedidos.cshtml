@@ -13,6 +13,8 @@
         <td>Observacion</td>
         <td>Direccion</td>
         <td>Datos de Referencia</td>
+        <td>Estado</td>
+        <td></td>
     </tr>
     @foreach (var Pedido in Model)
     {
@@ -22,6 +24,8 @@
         <td>@Pedido.Obs</td>
         <td>@Pedido.Cliente.Direccion</td>
         <td>@Pedido.Cliente.DatosReferenciaDireccion</td>
+        <td>@Pedido.Estado</td>
+        <td><a href="../../Pedido/CambiarEstado?nro=@Pedido.Nro">Cambiar Estado</a></td>
         </tr>
     }
 </table>

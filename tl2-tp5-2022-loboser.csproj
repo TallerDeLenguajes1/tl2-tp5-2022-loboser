@@ -15,5 +15,7 @@
     <PackageReference Include="SQLitePCLRaw.lib.e_sqlite3" Version="2.1.2"/>
     <PackageReference Include="SQLitePCLRaw.provider.e_sqlite3" Version="2.1.2"/>
     <PackageReference Include="System.Data.SQLite" Version="1.0.116"/>
+    <PackageReference Include="Microsoft.AspNetCore.Session" Version="2.2.0"/>
+    <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.2"/>
   </ItemGroup>
 </Project>
