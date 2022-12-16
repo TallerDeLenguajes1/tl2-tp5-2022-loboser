@@ -7,6 +7,7 @@ namespace tl2_tp4_2022_loboser.Repositories
 {
     public interface IClienteRepository
     {
+        List<Cliente> GetClientes();
         Cliente GetCliente(int id);
         void AltaCliente(Cliente cliente);
         void EditarCliente(Cliente cliente);

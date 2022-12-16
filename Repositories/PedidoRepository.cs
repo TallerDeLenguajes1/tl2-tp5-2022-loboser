@@ -32,15 +32,16 @@ namespace tl2_tp4_2022_loboser.Repositories
                         List<Pedido> Pedidos = new List<Pedido>();
                         while (Lector.Read())
                         {
-                            Pedido NuevoPedido = new Pedido();
+                            Pedido Pedido = new Pedido();
 
-                            NuevoPedido.Nro = Convert.ToInt32(Lector["nroPedido"].ToString());
-                            NuevoPedido.Obs = Lector["Obs"].ToString();
-                            NuevoPedido.Estado = Lector["Estado"].ToString();
+                            Pedido.Nro = Convert.ToInt32(Lector["nroPedido"].ToString());
+                            Pedido.Obs = Lector["Obs"].ToString();
+                            Pedido.Estado = Lector["Estado"].ToString();
+                            Pedido.IdCadeteAsignado = Convert.ToInt32(Lector["idCadeteAsignado"].ToString());
 
-                            NuevoPedido.Cliente = _clienteRepository.GetCliente(Convert.ToInt32(Lector["idCliente"].ToString()));
+                            Pedido.Cliente = _clienteRepository.GetCliente(Convert.ToInt32(Lector["idCliente"].ToString()));
 
-                            Pedidos.Add(NuevoPedido);
+                            Pedidos.Add(Pedido);
                         }
 
                         Conexion.Close();
@@ -60,15 +61,16 @@ namespace tl2_tp4_2022_loboser.Repositories
                         List<Pedido> Pedidos = new List<Pedido>();
                         while (Lector.Read())
                         {
-                            Pedido NuevoPedido = new Pedido();
+                            Pedido Pedido = new Pedido();
 
-                            NuevoPedido.Nro = Convert.ToInt32(Lector["nroPedido"].ToString());
-                            NuevoPedido.Obs = Lector["Obs"].ToString();
-                            NuevoPedido.Estado = Lector["Estado"].ToString();
+                            Pedido.Nro = Convert.ToInt32(Lector["nroPedido"].ToString());
+                            Pedido.Obs = Lector["Obs"].ToString();
+                            Pedido.Estado = Lector["Estado"].ToString();
+                            Pedido.IdCadeteAsignado = Convert.ToInt32(Lector["idCadeteAsignado"].ToString());
 
-                            NuevoPedido.Cliente = _clienteRepository.GetCliente(Convert.ToInt32(Lector["idCliente"].ToString()));
+                            Pedido.Cliente = _clienteRepository.GetCliente(Convert.ToInt32(Lector["idCliente"].ToString()));
 
-                            Pedidos.Add(NuevoPedido);
+                            Pedidos.Add(Pedido);
                         }
 
                         Conexion.Close();
@@ -77,7 +79,36 @@ namespace tl2_tp4_2022_loboser.Repositories
                 }
             }
         }
-        public void AltaPedido(AltaPedidoViewModel Pedido){
+
+        public Pedido GetPedidoByNro(int nro){
+            using(SqliteConnection Conexion = new SqliteConnection(_cadenaConexion)){
+                Conexion.Open();
+                using (SqliteCommand Comando = Conexion.CreateCommand())
+                {
+                    Comando.CommandText = "SELECT * FROM Pedido WHERE nroPedido='" + nro + "';";
+                    using (SqliteDataReader Lector = Comando.ExecuteReader())
+                    {
+                        if (Lector.Read())
+                        {
+                            Pedido Pedido = new Pedido();
+
+                            Pedido.Nro = Convert.ToInt32(Lector["nroPedido"].ToString());
+                            Pedido.Obs = Lector["Obs"].ToString();
+                            Pedido.Estado = Lector["Estado"].ToString();
+                            Pedido.IdCadeteAsignado = Convert.ToInt32(Lector["idCadeteAsignado"].ToString());
+                            
+                            Pedido.Cliente = _clienteRepository.GetCliente(Convert.ToInt32(Lector["idCliente"].ToString()));
+
+                            Conexion.Close();
+                            return Pedido;
+                        }
+
+                        return null;
+                    }
+                }
+            }
+        }
+        public void AltaPedido(Pedido Pedido){
             using(SqliteConnection Conexion = new SqliteConnection(_cadenaConexion))
             {
                 Conexion.Open();
@@ -102,7 +133,7 @@ namespace tl2_tp4_2022_loboser.Repositories
                         {
                             using (SqliteCommand Comando2 = Conexion.CreateCommand())
                             {
-                                Comando2.CommandText = "INSERT INTO Pedido(Obs, Estado, idCliente) VALUES('" + Pedido.Obs + "', 'En Proceso', '" + Convert.ToInt32(Lector["idCliente"].ToString()) + "');";
+                                Comando2.CommandText = "INSERT INTO Pedido(Obs, Estado, idCliente, idCadeteAsignado) VALUES('" + Pedido.Obs + "', 'En Proceso', '" + Convert.ToInt32(Lector["idCliente"].ToString()) + "' , '0');";
                                 Comando2.ExecuteNonQuery();
                             }
                         }
@@ -126,7 +157,7 @@ namespace tl2_tp4_2022_loboser.Repositories
             }
         }
 
-        public void EditarPedido(EditarPedidoViewModel Pedido)
+        public void EditarPedido(Pedido Pedido)
         {
             using (SqliteConnection Conexion = new SqliteConnection(_cadenaConexion))
             {
@@ -194,16 +225,8 @@ namespace tl2_tp4_2022_loboser.Repositories
                 Conexion.Open();
                 using (SqliteCommand Comando = Conexion.CreateCommand())
                 {
-                    Comando.CommandText = "SELECT idCadeteAsignado FROM Pedido WHERE nroPedido='" + nro + "';";
-                    using (SqliteDataReader Lector = Comando.ExecuteReader())
-                    {
-                        if (Lector.Read())
-                        {
-                            Lector.Close();
-                            Comando.CommandText = "UPDATE Pedido SET idCadeteAsignado='" + id + "' WHERE nroPedido='" + nro + "';";
-                            Comando.ExecuteNonQuery();
-                        }
-                    }
+                    Comando.CommandText = "UPDATE Pedido SET idCadeteAsignado='" + id + "' WHERE nroPedido='" + nro + "';";
+                    Comando.ExecuteNonQuery();
                 }
                 Conexion.Close();
             }

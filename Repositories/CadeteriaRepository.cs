@@ -41,7 +41,7 @@ namespace tl2_tp4_2022_loboser.Repositories
             }
         }
 
-        private List<Cadete> GetCadetes(){
+        public List<Cadete> GetCadetes(){
             using(SqliteConnection Conexion = new SqliteConnection(_cadenaConexion)){
                 Conexion.Open();
                 using (SqliteCommand Comando = Conexion.CreateCommand())
@@ -52,15 +52,15 @@ namespace tl2_tp4_2022_loboser.Repositories
                         List<Cadete> Cadetes = new List<Cadete>();
                         while (Lector.Read())
                         {
-                            Cadete NuevoCadete = new Cadete();
+                            Cadete Cadete = new Cadete();
 
-                            NuevoCadete.Id = Convert.ToInt32(Lector["idCadete"].ToString());
-                            NuevoCadete.Nombre = Lector["nombreCadete"].ToString();
-                            NuevoCadete.Direccion = Lector["direccionCadete"].ToString();
-                            NuevoCadete.Telefono = Lector["telefonoCadete"].ToString();
-                            NuevoCadete.Pedidos = _pedidoRepository.GetPedidosByCadete(Convert.ToInt32(Lector["idCadete"].ToString()));
+                            Cadete.Id = Convert.ToInt32(Lector["idCadete"].ToString());
+                            Cadete.Nombre = Lector["nombreCadete"].ToString();
+                            Cadete.Direccion = Lector["direccionCadete"].ToString();
+                            Cadete.Telefono = Lector["telefonoCadete"].ToString();
+                            Cadete.Pedidos = _pedidoRepository.GetPedidosByCadete(Convert.ToInt32(Lector["idCadete"].ToString()));
 
-                            Cadetes.Add(NuevoCadete);
+                            Cadetes.Add(Cadete);
                         }
 
                         Conexion.Close();
@@ -70,7 +70,35 @@ namespace tl2_tp4_2022_loboser.Repositories
             }
         }
 
-        public void AltaCadete(AltaCadeteViewModel Cadete)
+        public Cadete GetCadeteById(int id){
+            using(SqliteConnection Conexion = new SqliteConnection(_cadenaConexion)){
+                Conexion.Open();
+                using (SqliteCommand Comando = Conexion.CreateCommand())
+                {
+                    Comando.CommandText = "SELECT * FROM Cadete WHERE idCadete='" + id + "'";
+                    using (SqliteDataReader Lector = Comando.ExecuteReader())
+                    {
+                        if (Lector.Read())
+                        {
+                            Cadete Cadete = new Cadete();
+
+                            Cadete.Id = Convert.ToInt32(Lector["idCadete"].ToString());
+                            Cadete.Nombre = Lector["nombreCadete"].ToString();
+                            Cadete.Direccion = Lector["direccionCadete"].ToString();
+                            Cadete.Telefono = Lector["telefonoCadete"].ToString();
+                            Cadete.Pedidos = _pedidoRepository.GetPedidosByCadete(Convert.ToInt32(Lector["idCadete"].ToString()));
+                            
+                            Conexion.Close();
+
+                            return Cadete; 
+                        }
+                        return null;
+                    }
+                }
+            }
+        }
+
+        public void AltaCadete(Cadete Cadete)
         {
             using(SqliteConnection Conexion = new SqliteConnection(_cadenaConexion)){
                 Conexion.Open();
@@ -116,7 +144,7 @@ namespace tl2_tp4_2022_loboser.Repositories
             }
         }
 
-        public void EditarCadete(EditarCadeteViewModel Cadete){
+        public void EditarCadete(Cadete Cadete){
             using(SqliteConnection Conexion = new SqliteConnection(_cadenaConexion)){
                 Conexion.Open();
                 using (SqliteCommand Comando = Conexion.CreateCommand())

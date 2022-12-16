@@ -14,6 +14,7 @@ builder.Services.AddSession(options =>
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddSingleton<IConexionRepository, ConexionRepository>();
 builder.Services.AddTransient<ICadeteriaRepository, CadeteriaRepository>();
 builder.Services.AddTransient<IPedidoRepository, PedidoRepository>();

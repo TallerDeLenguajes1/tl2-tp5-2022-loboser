@@ -1,4 +1,4 @@
-@model Cadeteria
+@model List<tl2_tp4_2022_loboser.ViewModels.CadeteViewModel>
 
 <h1>Asignar a Cadete</h1>
 
@@ -12,7 +12,7 @@
         <td></td>
         <td></td>
     </tr>
-@foreach (var Cadete in Model.Cadetes)
+@foreach (var Cadete in Model)
 {
     <tr>
     <td>@Cadete.Nombre</td>

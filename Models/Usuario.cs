@@ -23,7 +23,13 @@ namespace tl2_tp4_2022_loboser.Models
 
         public Usuario(){
         }
-
+        public Usuario(Cadete cadete)
+        {
+            this.nombre = cadete.Nombre;
+            this.user = cadete.Nombre.ToLower().Replace(" ", string.Empty);
+            this.pass = cadete.Nombre.ToLower().Replace(" ", string.Empty);
+            this.rol = "Cadete";
+        }
         public Usuario(int idUsuario, string nombre, string user, string pass, string rol)
         {
             this.idUsuario = idUsuario;

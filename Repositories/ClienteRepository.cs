@@ -13,6 +13,36 @@ namespace tl2_tp4_2022_loboser.Repositories
             this._cadenaConexion = conexion.GetConnectionString();
         }
 
+        public List<Cliente> GetClientes(){
+            using(SqliteConnection Conexion = new SqliteConnection(_cadenaConexion)){
+                Conexion.Open();
+                using (SqliteCommand Comando = Conexion.CreateCommand())
+                {
+                    Comando.CommandText = "SELECT * FROM Cliente;";
+                    using (SqliteDataReader Lector = Comando.ExecuteReader())
+                    {
+                        List<Cliente> Clientes = new List<Cliente>();
+
+                        while(Lector.Read())
+                        {
+                            var Cliente = new Cliente();
+
+                            Cliente.Id = Convert.ToInt32(Lector["idCliente"].ToString());
+                            Cliente.Nombre = Lector["nombreCliente"].ToString();
+                            Cliente.Direccion = Lector["direccionCliente"].ToString();
+                            Cliente.Telefono = Lector["telefonoCliente"].ToString();
+                            Cliente.DatosReferenciaDireccion = Lector["datosReferenciaDireccion"].ToString();
+
+                            Clientes.Add(Cliente);
+                        }
+
+                        Conexion.Close();
+                        return Clientes;
+                    }
+                }
+            }
+        }
+
         public Cliente GetCliente(int id)
         {
             using(SqliteConnection Conexion = new SqliteConnection(_cadenaConexion)){
@@ -59,7 +89,7 @@ namespace tl2_tp4_2022_loboser.Repositories
                 Conexion.Open();
                 using (SqliteCommand Comando = Conexion.CreateCommand())
                 {
-                    Comando.CommandText = "UPDATE Cliente SET direccionCliente='" + cliente.Direccion + "', datosReferenciaDireccion='" + cliente.DatosReferenciaDireccion + "' WHERE telefonoCliente='" + cliente.Telefono + "';";
+                    Comando.CommandText = "UPDATE Cliente SET direccionCliente='" + cliente.Direccion + "', datosReferenciaDireccion='" + cliente.DatosReferenciaDireccion + "', nombreCliente='" + cliente.Nombre + "' WHERE telefonoCliente='" + cliente.Telefono + "';";
                     Comando.ExecuteNonQuery();
                 }
                 Conexion.Close();

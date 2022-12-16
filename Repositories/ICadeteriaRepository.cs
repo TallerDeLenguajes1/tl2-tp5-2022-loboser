@@ -8,8 +8,10 @@ namespace tl2_tp4_2022_loboser.Repositories
     public interface ICadeteriaRepository
     {
         Cadeteria GetCadeteria();
-        void AltaCadete(AltaCadeteViewModel Cadete);
+        List<Cadete> GetCadetes();
+        Cadete GetCadeteById(int id);
+        void AltaCadete(Cadete Cadete);
         void BajaCadete(int id);
-        void EditarCadete(EditarCadeteViewModel Cadete);
+        void EditarCadete(Cadete Cadete);
     }
 }

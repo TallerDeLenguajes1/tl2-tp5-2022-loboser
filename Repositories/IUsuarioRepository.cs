@@ -9,6 +9,7 @@ namespace tl2_tp4_2022_loboser.Repositories
 {
     public interface IUsuarioRepository
     {
-        Usuario Logear(LogeoViewModel Logeo);
+        Usuario Logear(Usuario Logeo);
+        void AltaUsuario(Usuario usuario);
     }
 }

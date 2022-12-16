@@ -19,12 +19,12 @@ namespace tl2_tp4_2022_loboser.Repositories
         {
             this._cadenaConexion = conexion.GetConnectionString();
         }
-        public Usuario Logear(LogeoViewModel Logeo){
+        public Usuario Logear(Usuario Logeo){
             using(SqliteConnection Conexion = new SqliteConnection(_cadenaConexion)){
                 Conexion.Open();
                 using (SqliteCommand Comando = Conexion.CreateCommand())
                 {
-                    Comando.CommandText = "SELECT * FROM Usuario WHERE usuarioUsuario='" + Logeo.nombre + "' AND passwordUsuario='" + Logeo.pass + "';";
+                    Comando.CommandText = "SELECT * FROM Usuario WHERE usuarioUsuario='" + Logeo.Nombre + "' AND passwordUsuario='" + Logeo.Pass + "';";
                     using (SqliteDataReader Lector = Comando.ExecuteReader())
                     {
                         if (Lector.Read())
@@ -43,6 +43,19 @@ namespace tl2_tp4_2022_loboser.Repositories
                             return null;
                         }
                     }
+                }
+            }
+        }
+
+        public void AltaUsuario(Usuario usuario)
+        {
+            using(SqliteConnection Conexion = new SqliteConnection(_cadenaConexion)){
+                Conexion.Open();
+                using (SqliteCommand Comando = Conexion.CreateCommand())
+                {
+                    Comando.CommandText = "INSERT INTO Usuario(nombreUsuario, usuarioUsuario, passwordUsuario, rolUsuario) VALUES('" + usuario.Nombre + "', '" + usuario.User + "', '" + usuario.Pass + "', '" + usuario.Rol + "');";
+                    Comando.ExecuteNonQuery();
+                    Conexion.Close();
                 }
             }
         }

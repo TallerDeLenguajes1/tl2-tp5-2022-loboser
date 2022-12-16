@@ -1,4 +1,4 @@
-﻿@model tl2_tp4_2022_loboser.ViewModels.LogeoViewModel
+﻿@model tl2_tp4_2022_loboser.ViewModels.UsuarioViewModel
 
 @{
     ViewData["Title"] = "Pagina de Logeo";
@@ -6,10 +6,10 @@
 
 <div class="text-center">
     <form asp-action="Logear" method="post">
-        <label asp-for="nombre">Nombre
-        <input asp-for="nombre"></label><br>
-        <label asp-for="pass">Contraseña
-        <input asp-for="pass" type="password"></label><br>
+        <label asp-for="Nombre">Nombre
+        <input asp-for="Nombre"></label><br>
+        <label asp-for="Pass">Contraseña
+        <input asp-for="Pass" type="password"></label><br>
         <button type="submit">Logear</button>
     </form>
 </div>

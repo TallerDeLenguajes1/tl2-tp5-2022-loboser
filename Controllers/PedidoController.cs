@@ -1,3 +1,4 @@
+using System.Net;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -9,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using tl2_tp4_2022_loboser.Models;
 using tl2_tp4_2022_loboser.ViewModels;
 using tl2_tp4_2022_loboser.Repositories;
+using AutoMapper;
 
 namespace tl2_tp4_2022_loboser.Controllers
 {
@@ -17,12 +19,14 @@ namespace tl2_tp4_2022_loboser.Controllers
         private readonly ILogger<PedidoController> _logger;
         private readonly ICadeteriaRepository _cadeteriaRepository;
         private readonly Repositories.IPedidoRepository _pedidoRepository;
+        private readonly IMapper _mapper;
 
-        public PedidoController(ILogger<PedidoController> logger, ICadeteriaRepository cadeteriaRepository, IPedidoRepository pedidoRepository, IClienteRepository clienteRepository)
+        public PedidoController(ILogger<PedidoController> logger, ICadeteriaRepository cadeteriaRepository, IPedidoRepository pedidoRepository, IClienteRepository clienteRepository, IMapper mapper)
         {
             this._cadeteriaRepository = cadeteriaRepository;
             this._pedidoRepository = pedidoRepository;
             this._logger = logger;
+            this._mapper = mapper;
         }
 
         [HttpGet]
@@ -30,7 +34,7 @@ namespace tl2_tp4_2022_loboser.Controllers
         {
             if (HttpContext.Session.GetString("rol") == "Admin")
             {
-                List<Pedido> Pedidos = _pedidoRepository.GetPedidos();
+                var Pedidos = _mapper.Map<List<PedidoViewModel>>(_pedidoRepository.GetPedidos());
                 return View(Pedidos);
             }else if (HttpContext.Session.GetString("rol") == "Cadete")
             {
@@ -85,7 +89,7 @@ namespace tl2_tp4_2022_loboser.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    _pedidoRepository.AltaPedido(PedidoRecibido);
+                    _pedidoRepository.AltaPedido(_mapper.Map<Pedido>(PedidoRecibido));
 
                     return RedirectToAction("AltaPedido");
                 }else
@@ -99,7 +103,7 @@ namespace tl2_tp4_2022_loboser.Controllers
             return RedirectToAction("Index", "Logeo");
         }
 
-        [HttpPost]
+        [HttpGet]
         public IActionResult BajaPedido(int nro)
         {
             if (HttpContext.Session.GetString("rol") == "Admin")
@@ -125,12 +129,11 @@ namespace tl2_tp4_2022_loboser.Controllers
         {
             if (HttpContext.Session.GetString("rol") == "Admin")
             {
-                List<Pedido> Pedidos = _pedidoRepository.GetPedidos();
+                var pedido = _pedidoRepository.GetPedidoByNro(nro);
 
-                if (Pedidos.Count()> 0)
+                if (pedido is not null)
                 {
-                    var PedidoAEditar = Pedidos.First(t => t.Nro == nro);
-                    return View(new EditarPedidoViewModel(PedidoAEditar.Nro, PedidoAEditar.Obs, PedidoAEditar.Cliente));
+                    return View(_mapper.Map<EditarPedidoViewModel>(pedido));
                 }else
                 {
                     return RedirectToAction("AltaPedido");
@@ -147,8 +150,13 @@ namespace tl2_tp4_2022_loboser.Controllers
         {
             if (HttpContext.Session.GetString("rol") == "Admin")
             {
-                _pedidoRepository.EditarPedido(Edit);
-            
+                if (ModelState.IsValid)
+                {
+                    _pedidoRepository.EditarPedido(_mapper.Map<Pedido>(Edit));
+                }else
+                {
+                    return RedirectToAction("Error");
+                }
                 return RedirectToAction("ListaDePedidos");
             }else if (HttpContext.Session.GetString("rol") == "Cadete")
             {
@@ -162,9 +170,10 @@ namespace tl2_tp4_2022_loboser.Controllers
         {   
             if (HttpContext.Session.GetString("rol") == "Admin")
             {
-                Cadeteria Cadeteria = _cadeteriaRepository.GetCadeteria();
+                var cadetes = _cadeteriaRepository.GetCadetes();
                 ViewBag.Nro = nro;
-                return View(Cadeteria);
+
+                return View(_mapper.Map<List<CadeteViewModel>>(cadetes));
             }else if (HttpContext.Session.GetString("rol") == "Cadete")
             {
                 return RedirectToAction("VerPedidos", "Pedido", new{id = 0});
@@ -178,6 +187,7 @@ namespace tl2_tp4_2022_loboser.Controllers
             if (HttpContext.Session.GetString("rol") == "Admin")
             {
                 _pedidoRepository.AsignarPedidoCadete(nro, id);
+                
                 return RedirectToAction("ListaDePedidos");
             }else if (HttpContext.Session.GetString("rol") == "Cadete")
             {
@@ -191,15 +201,24 @@ namespace tl2_tp4_2022_loboser.Controllers
         {
             if (HttpContext.Session.GetString("rol") == "Cadete")
             {
-                Cadeteria Cadeteria = _cadeteriaRepository.GetCadeteria();
-
-                id = Cadeteria.Cadetes.First(t => t.Nombre == HttpContext.Session.GetString("nombre")).Id;
-                var Cadete = Cadeteria.Cadetes.First(t => t.Id == id);
-
-                return View(Cadete.Pedidos);
+                var cadetes = _cadeteriaRepository.GetCadetes();
+                var cadete = cadetes.First(t => t.Nombre == HttpContext.Session.GetString("nombre"));   //Como en sesion guardo el nombre del Cadete/Usuario
+                ViewBag.Nombre = cadete.Nombre;
+                
+                return View(_mapper.Map<List<PedidoViewModel>>(cadete.Pedidos));
             }else if (HttpContext.Session.GetString("rol") == "Admin")
             {
-                return RedirectToAction("ListaDeCadetes","Cadeteria");
+                var cadete = _cadeteriaRepository.GetCadeteById(id);
+
+                if (cadete is not null)
+                {
+                    ViewBag.Nombre = cadete.Nombre;
+
+                    return View(_mapper.Map<List<PedidoViewModel>>(cadete.Pedidos));
+                }else
+                {
+                    return RedirectToAction("ListaDeCadetes", "Cadeteria");
+                }
             }
             return RedirectToAction("Index","Logeo");
         }

@@ -7,16 +7,14 @@ using tl2_tp4_2022_loboser.Models;
 
 namespace tl2_tp4_2022_loboser.ViewModels
 {
-    public class LogeoViewModel
+    public class UsuarioViewModel
     {
         [Required]
         [StringLength(40)]
-        [DisplayName("Nombre de Usuario: ")]
-        public string nombre { get; set; }
+        public string Nombre { get; set; }
 
         [Required]
         [StringLength(40)]
-        [DisplayName("Contraseña: ")]
-        public string pass { get; set; }
+        public string Pass { get; set; }
     }
 }

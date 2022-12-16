@@ -5,19 +5,6 @@ using tl2_tp4_2022_loboser.Models;
 
 namespace tl2_tp4_2022_loboser.ViewModels
 {
-    public class AltaPedidoViewModel
-    {
-        public string Obs { get; set; }
-
-        public Cliente Cliente { get; set; }
-        public AltaPedidoViewModel(){}
-        public AltaPedidoViewModel(string obs,  Cliente cliente)
-        {
-            this.Obs = obs;
-            this.Cliente = cliente;
-        }
-    }
-
     public class EditarPedidoViewModel
     {
         [Required]
@@ -25,13 +12,12 @@ namespace tl2_tp4_2022_loboser.ViewModels
         public int Nro { get; set; }
 
         [AllowNull]
-        [StringLength(40)]
-        [DisplayName("Observaciones: ")]
+        [StringLength(100)]
         public string Obs { get; set; }
-        public Cliente Cliente { get; set; }
+        public ClienteViewModel Cliente { get; set; }
 
         public EditarPedidoViewModel(){}
-        public EditarPedidoViewModel(int nro, string obs,  Cliente cliente)
+        public EditarPedidoViewModel(int nro, string obs,  ClienteViewModel cliente)
         {
             this.Nro = nro;
             this.Obs = obs;

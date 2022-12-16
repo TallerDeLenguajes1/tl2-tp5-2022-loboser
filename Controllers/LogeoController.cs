@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using tl2_tp4_2022_loboser.Models;
 using tl2_tp4_2022_loboser.ViewModels;
 using tl2_tp4_2022_loboser.Repositories;
+using AutoMapper;
 
 namespace tl2_tp4_2022_loboser.Controllers
 {
@@ -17,10 +18,13 @@ namespace tl2_tp4_2022_loboser.Controllers
     {
         private readonly ILogger<LogeoController> _logger;
         private readonly IUsuarioRepository _usuarioRepository;
-        public LogeoController(ILogger<LogeoController> logger, IUsuarioRepository usuarioRepository)
+        private readonly IMapper _mapper;
+
+        public LogeoController(ILogger<LogeoController> logger, IUsuarioRepository usuarioRepository, IMapper mapper)
         {
             this._logger = logger;
             this._usuarioRepository = usuarioRepository;
+            this._mapper = mapper;
         }
 
         public IActionResult Index()
@@ -29,21 +33,24 @@ namespace tl2_tp4_2022_loboser.Controllers
         }
 
         [HttpPost]
-        public IActionResult Logear(LogeoViewModel Logeo)
+        public IActionResult Logear(UsuarioViewModel Logeo)
         {
-            Usuario usuario = _usuarioRepository.Logear(Logeo);
-
-            if (usuario is not null)
+            if (ModelState.IsValid)
             {
-                HttpContext.Session.SetString("nombre", usuario.Nombre);
-                HttpContext.Session.SetString("rol", usuario.Rol);
-                if (usuario.Rol == "Admin")
+                Usuario usuario = _usuarioRepository.Logear(_mapper.Map<Usuario>(Logeo));
+
+                if (usuario is not null)
                 {
-                    return RedirectToAction("ListaDeCadetes", "Cadeteria");
-                    
-                }else
-                {
-                    return RedirectToAction("VerPedidos", "Pedido", new{ id = 0});
+                    HttpContext.Session.SetString("nombre", usuario.Nombre);
+                    HttpContext.Session.SetString("rol", usuario.Rol);
+                    if (usuario.Rol == "Admin")
+                    {
+                        return RedirectToAction("ListaDeCadetes", "Cadeteria");
+                        
+                    }else
+                    {
+                        return RedirectToAction("VerPedidos", "Pedido", new{ id = 0});
+                    }
                 }
             }
             return RedirectToAction("Index");

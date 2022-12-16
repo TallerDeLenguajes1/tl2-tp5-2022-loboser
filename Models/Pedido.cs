@@ -12,11 +12,13 @@ namespace tl2_tp4_2022_loboser.Models
         private string obs;
         private Cliente cliente;
         private string estado;
-
+        private int idCadeteAsignado;
+        
         public int Nro { get => nro; set => nro = value; }
         public string Obs { get => obs; set => obs = value; }
         public Cliente Cliente { get => cliente; set => cliente = value; }
         public string Estado { get => estado; set => estado = value; }
+        public int IdCadeteAsignado { get => idCadeteAsignado; set => idCadeteAsignado = value; }
 
         public Pedido(){
         }
