@@ -43,13 +43,13 @@ namespace tl2_tp4_2022_loboser.Repositories
             }
         }
 
-        public Cliente GetCliente(int id)
+        public Cliente GetClienteById(int id)
         {
             using(SqliteConnection Conexion = new SqliteConnection(_cadenaConexion)){
                 Conexion.Open();
                 using (SqliteCommand Comando = Conexion.CreateCommand())
                 {
-                    Comando.CommandText = "SELECT * FROM Cliente WHERE idCliente=" + id + ";";
+                    Comando.CommandText = "SELECT * FROM Cliente WHERE idCliente='" + id + "';";
                     using (SqliteDataReader Lector = Comando.ExecuteReader())
                     {
                         Cliente Cliente = new Cliente();
@@ -68,6 +68,34 @@ namespace tl2_tp4_2022_loboser.Repositories
                     }
                 }
             }
+        }
+        public Cliente GetClienteByTelefono(string telefono)
+        {
+            using(SqliteConnection Conexion = new SqliteConnection(_cadenaConexion)){
+                Conexion.Open();
+                using (SqliteCommand Comando = Conexion.CreateCommand())
+                {
+                    Comando.CommandText = "SELECT * FROM Cliente WHERE telefonoCliente='" + telefono + "';";
+                    using (SqliteDataReader Lector = Comando.ExecuteReader())
+                    {
+                        if (Lector.Read())
+                        {
+                            Cliente Cliente = new Cliente();
+
+                            Cliente.Id = Convert.ToInt32(Lector["idCliente"].ToString());
+                            Cliente.Nombre = Lector["nombreCliente"].ToString();
+                            Cliente.Direccion = Lector["direccionCliente"].ToString();
+                            Cliente.Telefono = Lector["telefonoCliente"].ToString();
+                            Cliente.DatosReferenciaDireccion = Lector["datosReferenciaDireccion"].ToString();
+
+                            return Cliente;
+                        }
+
+                        Conexion.Close();
+                    }
+                }
+            }
+            return null;
         }
 
         public void AltaCliente(Cliente cliente)
@@ -91,6 +119,21 @@ namespace tl2_tp4_2022_loboser.Repositories
                 {
                     Comando.CommandText = "UPDATE Cliente SET direccionCliente='" + cliente.Direccion + "', datosReferenciaDireccion='" + cliente.DatosReferenciaDireccion + "', nombreCliente='" + cliente.Nombre + "' WHERE telefonoCliente='" + cliente.Telefono + "';";
                     Comando.ExecuteNonQuery();
+                }
+                Conexion.Close();
+            }
+        }
+
+        public void BajaCliente(int id)
+        {
+            using(SqliteConnection Conexion = new SqliteConnection(_cadenaConexion)){
+                Conexion.Open();
+                using (SqliteCommand Comando = Conexion.CreateCommand())
+                {
+                    Comando.CommandText = "DELETE FROM Pedido WHERE idCliente='" + id + "';";
+                    Comando.ExecuteNonQuery();
+                    Comando.CommandText = "DELETE FROM Cliente WHERE idCliente='" + id + "';";
+                    Comando.ExecuteNonQuery();  
                 }
                 Conexion.Close();
             }

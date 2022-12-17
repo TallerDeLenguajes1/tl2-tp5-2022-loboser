@@ -1,0 +1,24 @@
+@model tl2_tp4_2022_loboser.ViewModels.EditarClienteViewModel
+@{
+    ViewData["Title"] = "EditarCliente";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<div>
+    <form asp-action="EditarCliente" method="post">
+        <label asp-for="Id">Id
+        <input asp-for="Id" value="@Model.Id" readonly="readonly"></label><br>
+        <label asp-for="Nombre">Nombre
+        <input asp-for="Nombre" value="@Model.Nombre"></label><br>
+        <label asp-for="Telefono">Telefono
+        <input asp-for="Telefono" value="@Model.Telefono"></label><br>
+        <label asp-for="Direccion">Direccion
+        <input asp-for="Direccion" value="@Model.Direccion"></label><br>
+        <label asp-for="DatosReferenciaDireccion">Datos de Referencia (Direccion)
+        <input asp-for="DatosReferenciaDireccion" value="@Model.DatosReferenciaDireccion"></label><br>
+    <button type="submit">Enviar</button>
+    </form>
+</div>
+
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

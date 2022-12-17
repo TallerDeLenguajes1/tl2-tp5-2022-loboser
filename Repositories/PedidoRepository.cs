@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using tl2_tp4_2022_loboser.Models;
 using tl2_tp4_2022_loboser.ViewModels;
 
-#nullable disable
 
 namespace tl2_tp4_2022_loboser.Repositories
 {
@@ -39,7 +38,7 @@ namespace tl2_tp4_2022_loboser.Repositories
                             Pedido.Estado = Lector["Estado"].ToString();
                             Pedido.IdCadeteAsignado = Convert.ToInt32(Lector["idCadeteAsignado"].ToString());
 
-                            Pedido.Cliente = _clienteRepository.GetCliente(Convert.ToInt32(Lector["idCliente"].ToString()));
+                            Pedido.Cliente = _clienteRepository.GetClienteById(Convert.ToInt32(Lector["idCliente"].ToString()));
 
                             Pedidos.Add(Pedido);
                         }
@@ -68,7 +67,37 @@ namespace tl2_tp4_2022_loboser.Repositories
                             Pedido.Estado = Lector["Estado"].ToString();
                             Pedido.IdCadeteAsignado = Convert.ToInt32(Lector["idCadeteAsignado"].ToString());
 
-                            Pedido.Cliente = _clienteRepository.GetCliente(Convert.ToInt32(Lector["idCliente"].ToString()));
+                            Pedido.Cliente = _clienteRepository.GetClienteById(Convert.ToInt32(Lector["idCliente"].ToString()));
+
+                            Pedidos.Add(Pedido);
+                        }
+
+                        Conexion.Close();
+                        return Pedidos;
+                    }
+                }
+            }
+        }
+
+        public List<Pedido> GetPedidosByCliente(int idCliente){
+            using(SqliteConnection Conexion = new SqliteConnection(_cadenaConexion)){
+                Conexion.Open();
+                using (SqliteCommand Comando = Conexion.CreateCommand())
+                {
+                    Comando.CommandText = "SELECT * FROM Pedido WHERE idCliente='" + idCliente + "';";
+                    using (SqliteDataReader Lector = Comando.ExecuteReader())
+                    {
+                        List<Pedido> Pedidos = new List<Pedido>();
+                        while (Lector.Read())
+                        {
+                            Pedido Pedido = new Pedido();
+
+                            Pedido.Nro = Convert.ToInt32(Lector["nroPedido"].ToString());
+                            Pedido.Obs = Lector["Obs"].ToString();
+                            Pedido.Estado = Lector["Estado"].ToString();
+                            Pedido.IdCadeteAsignado = Convert.ToInt32(Lector["idCadeteAsignado"].ToString());
+
+                            Pedido.Cliente = _clienteRepository.GetClienteById(Convert.ToInt32(Lector["idCliente"].ToString()));
 
                             Pedidos.Add(Pedido);
                         }
@@ -97,7 +126,7 @@ namespace tl2_tp4_2022_loboser.Repositories
                             Pedido.Estado = Lector["Estado"].ToString();
                             Pedido.IdCadeteAsignado = Convert.ToInt32(Lector["idCadeteAsignado"].ToString());
                             
-                            Pedido.Cliente = _clienteRepository.GetCliente(Convert.ToInt32(Lector["idCliente"].ToString()));
+                            Pedido.Cliente = _clienteRepository.GetClienteById(Convert.ToInt32(Lector["idCliente"].ToString()));
 
                             Conexion.Close();
                             return Pedido;
@@ -109,35 +138,24 @@ namespace tl2_tp4_2022_loboser.Repositories
             }
         }
         public void AltaPedido(Pedido Pedido){
+
+            var cliente = _clienteRepository.GetClienteByTelefono(Pedido.Cliente.Telefono);
+
+            if (cliente is null)
+            {
+                _clienteRepository.AltaCliente(Pedido.Cliente);
+            }
+
+            cliente = _clienteRepository.GetClienteByTelefono(Pedido.Cliente.Telefono);
+
             using(SqliteConnection Conexion = new SqliteConnection(_cadenaConexion))
             {
                 Conexion.Open();
                 using (SqliteCommand Comando = Conexion.CreateCommand())
                 {
-                    Comando.CommandText = "SELECT idCliente FROM Cliente WHERE telefonoCliente='" + Pedido.Cliente.Telefono + "';";
-                    using (SqliteDataReader Lector = Comando.ExecuteReader())
-                    {
-                        if (Lector.Read() == false)
-                        {
-                            Lector.Close();
-                            _clienteRepository.AltaCliente(Pedido.Cliente);
-                        }
-                    }
-                }
-                using (SqliteCommand Comando = Conexion.CreateCommand())
-                {
-                    Comando.CommandText = "SELECT idCliente FROM Cliente WHERE telefonoCliente='" + Pedido.Cliente.Telefono + "';";
-                    using (SqliteDataReader Lector = Comando.ExecuteReader())
-                    {
-                        if (Lector.Read())
-                        {
-                            using (SqliteCommand Comando2 = Conexion.CreateCommand())
-                            {
-                                Comando2.CommandText = "INSERT INTO Pedido(Obs, Estado, idCliente, idCadeteAsignado) VALUES('" + Pedido.Obs + "', 'En Proceso', '" + Convert.ToInt32(Lector["idCliente"].ToString()) + "' , '0');";
-                                Comando2.ExecuteNonQuery();
-                            }
-                        }
-                    }  
+                    
+                    Comando.CommandText = "INSERT INTO Pedido(Obs, Estado, idCliente, idCadeteAsignado) VALUES('" + Pedido.Obs + "', '" +  Pedido.Estado + "', '" + cliente.Id + "' , '" +  Pedido.IdCadeteAsignado + "');";
+                    Comando.ExecuteNonQuery();
                 }
                 Conexion.Close();
             }
@@ -159,39 +177,24 @@ namespace tl2_tp4_2022_loboser.Repositories
 
         public void EditarPedido(Pedido Pedido)
         {
+            var cliente = _clienteRepository.GetClienteByTelefono(Pedido.Cliente.Telefono);
+
+            if (cliente is null)
+            {
+                _clienteRepository.AltaCliente(Pedido.Cliente);
+            }else
+            {
+                _clienteRepository.EditarCliente(Pedido.Cliente);
+            }
+
+            cliente = _clienteRepository.GetClienteByTelefono(Pedido.Cliente.Telefono);
             using (SqliteConnection Conexion = new SqliteConnection(_cadenaConexion))
             {
                 Conexion.Open();
                 using (SqliteCommand Comando = Conexion.CreateCommand())
-                {
-                    Comando.CommandText = "SELECT * FROM Cliente WHERE telefonoCliente='" + Pedido.Cliente.Telefono + "';";
-                    using (SqliteDataReader Lector = Comando.ExecuteReader())
-                    {
-                        if (Lector.Read() == false)
-                        {
-                            Lector.Close();
-                            _clienteRepository.AltaCliente(Pedido.Cliente);
-                        }else
-                        {
-                            Lector.Close();
-                            _clienteRepository.EditarCliente(Pedido.Cliente);
-                        }
-                    }
-                }
-                using (SqliteCommand Comando = Conexion.CreateCommand())
                 {     
-                    Comando.CommandText = "SELECT idCliente FROM Cliente WHERE telefonoCliente='" + Pedido.Cliente.Telefono + "';";
-                    using (SqliteDataReader Lector = Comando.ExecuteReader())
-                    {
-                        if (Lector.Read())
-                        {
-                            using (SqliteCommand Comando2 = Conexion.CreateCommand())
-                            {
-                                Comando2.CommandText = "UPDATE Pedido SET Obs='" + Pedido.Obs + "', idCliente ='" + Convert.ToInt32(Lector["idCliente"].ToString()) + "' WHERE nroPedido='" + Pedido.Nro + "';";
-                                Comando2.ExecuteNonQuery();
-                            }
-                        }
-                    }
+                    Comando.CommandText = "UPDATE Pedido SET Obs='" + Pedido.Obs + "', idCliente ='" + cliente.Id + "', Estado='" + Pedido.Estado + "', idCadeteAsignado='" + Pedido.IdCadeteAsignado + "' WHERE nroPedido='" + Pedido.Nro + "';";
+                    Comando.ExecuteNonQuery();
                     Conexion.Close();
                 }
             }

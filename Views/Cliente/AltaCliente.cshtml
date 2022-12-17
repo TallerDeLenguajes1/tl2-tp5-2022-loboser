@@ -1,0 +1,22 @@
+@model tl2_tp4_2022_loboser.ViewModels.AltaClienteViewModel
+@{
+    ViewData["Title"] = "AltaCliente";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<div>
+    <form asp-action="AltaCliente" method="post">
+        <label asp-for="Nombre">Nombre
+        <input asp-for="Nombre"></label><br>
+        <label asp-for="Telefono">Telefono
+        <input asp-for="Telefono"></label><br>
+        <label asp-for="Direccion">Direccion
+        <input asp-for="Direccion"></label><br>
+        <label asp-for="DatosReferenciaDireccion">Datos de Referencia (Direccion)
+        <input asp-for="DatosReferenciaDireccion"></label><br>
+    <button type="submit">Enviar</button>
+    </form>
+</div>
+
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

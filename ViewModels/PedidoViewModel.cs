@@ -14,6 +14,7 @@ namespace tl2_tp4_2022_loboser.ViewModels
         [AllowNull]
         [StringLength(100)]
         public string Obs { get; set; }
+        
         public ClienteViewModel Cliente { get; set; }
 
         [Required]
@@ -21,7 +22,6 @@ namespace tl2_tp4_2022_loboser.ViewModels
         public string Estado { get; set; }
 
         [Required]
-        [NotNull]
         public int idCadeteAsignado { get; set; }
     }
 }

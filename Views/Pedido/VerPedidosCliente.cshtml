@@ -1,0 +1,28 @@
+@model List<tl2_tp4_2022_loboser.ViewModels.PedidoViewModel>
+@{
+    ViewData["Title"] = "VerPedidosClientes";
+}
+
+<h1>Ver Pedidos del Cliente @ViewBag.Nombre</h1>
+
+<div>
+    <table>
+        <tr>
+        <td>Nro</td>
+        <td>Observacion</td>
+        <td>Estado</td> 
+        <td>Id Cadete Asignado</td>
+        <td></td>
+    </tr>
+    @foreach (var Pedido in Model)
+    {
+        <tr>
+        <td>@Pedido.Nro</td>
+        <td>@Pedido.Obs</td>
+        <td>@Pedido.Estado</td>
+        <td>@Pedido.idCadeteAsignado</td>
+        <td><a href="../../Pedido/CambiarEstado?nro=@Pedido.Nro">Cambiar Estado</a></td>
+        </tr>
+    }
+</table>
+</div>

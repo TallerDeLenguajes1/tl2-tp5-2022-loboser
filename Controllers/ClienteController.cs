@@ -27,9 +27,102 @@ namespace tl2_tp4_2022_loboser.Controllers
 
         public IActionResult Index()                    //Lista de Clientes
         {
-            var Clientes = _clienteRepository.GetClientes();
+            if (HttpContext.Session.GetString("rol") == "Admin")
+            {
+                var Clientes = _clienteRepository.GetClientes();
 
-            return View(_mapper.Map<List<ClienteViewModel>>(Clientes));
+                return View(_mapper.Map<List<ClienteViewModel>>(Clientes));
+            }else if (HttpContext.Session.GetString("rol") == "Cadete")
+            {
+                return RedirectToAction("VerPedidos", "Pedido", new{id = 0});
+            }
+            return RedirectToAction("Index", "Logeo");  
+        }
+
+        [HttpGet]
+        public IActionResult AltaCliente()
+        {
+            if (HttpContext.Session.GetString("rol") == "Admin")
+            {
+                return View();
+            }else if (HttpContext.Session.GetString("rol") == "Cadete")
+            {
+                return RedirectToAction("VerPedidos", "Pedido", new{id = 0});
+            }
+            return RedirectToAction("Index", "Logeo"); 
+        }
+
+        [HttpPost]
+
+        public IActionResult AltaCliente(AltaClienteViewModel Cliente)
+        {
+            if (HttpContext.Session.GetString("rol") == "Admin")
+            {
+                if (ModelState.IsValid)
+                {
+                    _clienteRepository.AltaCliente(_mapper.Map<Cliente>(Cliente));
+
+                    return RedirectToAction("Index", "Cliente");
+                }else
+                {
+                    return RedirectToAction("Error");
+                }
+            }else if (HttpContext.Session.GetString("rol") == "Cadete")
+            {
+                return RedirectToAction("VerPedidos", "Pedido", new{id = 0});
+            }
+            return RedirectToAction("Index", "Logeo"); 
+        }
+
+        [HttpGet]
+        public IActionResult EditarCliente(int id)
+        {
+            if (HttpContext.Session.GetString("rol") == "Admin")
+            {
+                var cliente = _clienteRepository.GetClienteById(id);
+
+                return View(_mapper.Map<EditarClienteViewModel>(cliente));
+            }else if (HttpContext.Session.GetString("rol") == "Cadete")
+            {
+                return RedirectToAction("VerPedidos", "Pedido", new{id = 0});
+            }
+            return RedirectToAction("Index", "Logeo");
+        }
+
+        [HttpPost]
+        public IActionResult EditarCliente(EditarClienteViewModel Edit)
+        {
+            if (HttpContext.Session.GetString("rol") == "Admin")
+            {
+                if (ModelState.IsValid)
+                {
+                    _clienteRepository.EditarCliente(_mapper.Map<Cliente>(Edit));
+
+                    return RedirectToAction("Index", "Cliente");
+                }else
+                {
+                    return RedirectToAction("Error");
+                }
+            }else if (HttpContext.Session.GetString("rol") == "Cadete")
+            {
+                return RedirectToAction("VerPedidos", "Pedido", new{id = 0});
+            }
+            return RedirectToAction("Index", "Logeo");
+        }
+
+        [HttpGet]
+        public IActionResult BajaCliente(int id)
+        {
+            if (HttpContext.Session.GetString("rol") == "Admin")
+            {
+                _clienteRepository.BajaCliente(id);
+
+                return RedirectToAction("Index", "Cliente");
+            }else if (HttpContext.Session.GetString("rol") == "Cadete")
+            {
+                return RedirectToAction("VerPedidos", "Pedido", new{id = 0});
+            }
+            return RedirectToAction("Index", "Logeo");  
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

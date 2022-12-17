@@ -28,6 +28,7 @@ namespace tl2_tp4_2022_loboser.Models
                 Obs = obs;
                 Cliente = cliente;
                 Estado = "En proceso";
+                IdCadeteAsignado = 0;
         }
     }
 }

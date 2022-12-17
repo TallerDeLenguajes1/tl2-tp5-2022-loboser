@@ -19,12 +19,14 @@ namespace tl2_tp4_2022_loboser.Controllers
         private readonly ILogger<PedidoController> _logger;
         private readonly ICadeteriaRepository _cadeteriaRepository;
         private readonly Repositories.IPedidoRepository _pedidoRepository;
+        private readonly IClienteRepository _clienteRepository;
         private readonly IMapper _mapper;
 
         public PedidoController(ILogger<PedidoController> logger, ICadeteriaRepository cadeteriaRepository, IPedidoRepository pedidoRepository, IClienteRepository clienteRepository, IMapper mapper)
         {
             this._cadeteriaRepository = cadeteriaRepository;
             this._pedidoRepository = pedidoRepository;
+            this._clienteRepository = clienteRepository;
             this._logger = logger;
             this._mapper = mapper;
         }
@@ -50,14 +52,21 @@ namespace tl2_tp4_2022_loboser.Controllers
         {
             if (HttpContext.Session.GetString("rol") == "Admin")
             {
-                _pedidoRepository.CambiarEstado(nro);
-                return RedirectToAction("VerPedidos", "Pedido", new{ id = 0});
+                var pedido = _pedidoRepository.GetPedidoByNro(nro);
+
+                pedido.Estado = (pedido.Estado == "En Proceso")?"Entregado":"En Proceso";
+
+                _pedidoRepository.EditarPedido(pedido);
+                return RedirectToAction("VerPedidos", "Pedido", new{ id = pedido.IdCadeteAsignado});
             }else if (HttpContext.Session.GetString("rol") == "Cadete")
             {
                 Cadete cadete = _cadeteriaRepository.GetCadeteria().Cadetes.First(t=> t.Nombre == HttpContext.Session.GetString("nombre"));
                 if (cadete.Pedidos.Where(t => t.Nro == nro).ToList().Count > 0)
                 {
-                    _pedidoRepository.CambiarEstado(nro);
+                    var pedido = _pedidoRepository.GetPedidoByNro(nro);
+                    pedido.Estado = (pedido.Estado == "En Proceso")?"Entregado":"En Proceso";
+
+                    _pedidoRepository.EditarPedido(pedido);
                 }
                 return RedirectToAction("VerPedidos", "Pedido", new{ id = 0});
             }
@@ -89,7 +98,9 @@ namespace tl2_tp4_2022_loboser.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    _pedidoRepository.AltaPedido(_mapper.Map<Pedido>(PedidoRecibido));
+                    var pedido = _mapper.Map<Pedido>(PedidoRecibido);
+                    pedido.Estado = "En Proceso";
+                    _pedidoRepository.AltaPedido(pedido);
 
                     return RedirectToAction("AltaPedido");
                 }else
@@ -219,6 +230,30 @@ namespace tl2_tp4_2022_loboser.Controllers
                 {
                     return RedirectToAction("ListaDeCadetes", "Cadeteria");
                 }
+            }
+            return RedirectToAction("Index","Logeo");
+        }
+
+        [HttpGet]
+        public IActionResult VerPedidosCliente(int id)
+        {
+            if (HttpContext.Session.GetString("rol") == "Admin")
+            {
+                var pedidos = _pedidoRepository.GetPedidosByCliente(id);
+
+                if (pedidos.Count()>0)
+                {
+                    var cliente = _clienteRepository.GetClienteById(id);
+                    ViewBag.Nombre = cliente.Nombre;
+
+                    return View(_mapper.Map<List<PedidoViewModel>>(pedidos));
+                }else
+                {
+                    return RedirectToAction("ListaDeCadetes", "Cadeteria");
+                }
+            }else if (HttpContext.Session.GetString("rol") == "Cadete")
+            {
+                return RedirectToAction("VerPedidos", "Pedido", new{id = 0});
             }
             return RedirectToAction("Index","Logeo");
         }

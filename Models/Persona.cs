@@ -12,14 +12,8 @@ namespace tl2_tp4_2022_loboser.Models
     {
         
         private int id;
-        [Required]
-        [StringLength(40)]
         private string telefono;
-        [Required]
-        [StringLength(40)]
         private string nombre;
-        [Required]
-        [StringLength(40)]
         private string direccion;
 
         public int Id { get => id; set => id = value; }

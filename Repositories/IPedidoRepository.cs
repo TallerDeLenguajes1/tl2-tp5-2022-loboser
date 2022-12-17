@@ -9,6 +9,7 @@ namespace tl2_tp4_2022_loboser.Repositories
     {
         List<Pedido> GetPedidos();
         List<Pedido> GetPedidosByCadete(int idCadete);
+        List<Pedido> GetPedidosByCliente(int idCliente);
         Pedido GetPedidoByNro(int nro);
         void AltaPedido(Pedido Pedido);
         void BajaPedido(int nro);

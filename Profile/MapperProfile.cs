@@ -14,6 +14,8 @@ namespace tl2_tp4_2022_loboser.Profiles{
             CreateMap<Pedido, AltaPedidoViewModel>().ReverseMap();
             CreateMap<Pedido, EditarPedidoViewModel>().ReverseMap();
             CreateMap<Cliente, ClienteViewModel>().ReverseMap();
+            CreateMap<Cliente, EditarClienteViewModel>().ReverseMap();
+            CreateMap<Cliente, AltaClienteViewModel>().ReverseMap();
             CreateMap<Usuario, UsuarioViewModel>().ReverseMap();
         }
     }
