@@ -199,40 +199,5 @@ namespace tl2_tp4_2022_loboser.Repositories
                 }
             }
         }
-        public void CambiarEstado(int nro)
-        {
-            using (SqliteConnection Conexion = new SqliteConnection(_cadenaConexion))
-            {
-                Conexion.Open();
-                using(SqliteCommand Comando = Conexion.CreateCommand()){
-                    Comando.CommandText = "SELECT Estado FROM Pedido WHERE nroPedido='" + nro + "';";
-                    string estado;
-                    using (SqliteDataReader Lector = Comando.ExecuteReader())
-                    {
-                        if(Lector.Read())
-                        {
-                            estado = (Lector["Estado"].ToString() == "En Proceso")?"Entregado":"En Proceso";
-                            Lector.Close();
-                            Comando.CommandText = "UPDATE Pedido SET Estado='" + estado + "' WHERE nroPedido='" + nro + "'";
-                            Comando.ExecuteNonQuery();
-                        }
-                    }
-                }
-                Conexion.Close();
-            }
-        }
-        public void AsignarPedidoCadete(int nro, int id)
-        {
-            using(SqliteConnection Conexion = new SqliteConnection(_cadenaConexion))
-            {
-                Conexion.Open();
-                using (SqliteCommand Comando = Conexion.CreateCommand())
-                {
-                    Comando.CommandText = "UPDATE Pedido SET idCadeteAsignado='" + id + "' WHERE nroPedido='" + nro + "';";
-                    Comando.ExecuteNonQuery();
-                }
-                Conexion.Close();
-            }
-        }
     }
 }

@@ -1,0 +1,29 @@
+@model List<tl2_tp4_2022_loboser.ViewModels.ClienteViewModel>
+@{
+    ViewData["Title"] = "AsignarACliente";
+}
+
+<h1>Asignar a Cliente</h1>
+
+<div>
+    <table>
+    <tr>
+        <td>Id</td>
+        <td>Nombre</td>
+        <td>Direccion</td>
+        <td>Telefono</td>
+        <td></td>
+    </tr>
+    @foreach (var Cliente in Model)
+    {
+        <tr>
+        <td>@Cliente.Id</td>
+        <td>@Cliente.Nombre</td>
+        <td>@Cliente.Direccion</td>
+        <td>@Cliente.Telefono</td>
+        <td><a href="AsignarPedidoACliente?nro=@ViewBag.Nro&id=@Cliente.Id">Asignar el Pedido</a></td>
+        </tr>
+    }
+    </table>
+    <a href="AsignarPedidoACliente?nro=@ViewBag.Nro&id=0"> Desasignar Pedido</a>
+</div>

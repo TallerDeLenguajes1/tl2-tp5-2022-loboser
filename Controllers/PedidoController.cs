@@ -191,14 +191,51 @@ namespace tl2_tp4_2022_loboser.Controllers
             }
             return RedirectToAction("Index", "Logeo");
         }
-
+        
         [HttpGet]
-        public IActionResult AsignarPedido(int nro, int id)
+        public IActionResult AsignarPedidoACadete(int nro, int id)
         {   
             if (HttpContext.Session.GetString("rol") == "Admin")
             {
-                _pedidoRepository.AsignarPedidoCadete(nro, id);
+                var pedido = _pedidoRepository.GetPedidoByNro(nro);
+                pedido.IdCadeteAsignado = id;
+
+                _pedidoRepository.EditarPedido(pedido);
                 
+                return RedirectToAction("ListaDePedidos");
+            }else if (HttpContext.Session.GetString("rol") == "Cadete")
+            {
+                return RedirectToAction("VerPedidos", "Pedido", new{id = 0});
+            }
+            return RedirectToAction("Index", "Logeo");
+        }
+
+        [HttpGet]
+        public IActionResult AsignarACliente(int nro)
+        {   
+            if (HttpContext.Session.GetString("rol") == "Admin")
+            {
+                var clientes = _clienteRepository.GetClientes();
+                ViewBag.Nro = nro;
+
+                return View(_mapper.Map<List<ClienteViewModel>>(clientes));
+            }else if (HttpContext.Session.GetString("rol") == "Cadete")
+            {
+                return RedirectToAction("VerPedidos", "Pedido", new{id = 0});
+            }
+            return RedirectToAction("Index", "Logeo");
+        }
+
+        [HttpGet]
+        public IActionResult AsignarPedidoACliente(int nro, int id)
+        {   
+            if (HttpContext.Session.GetString("rol") == "Admin")
+            {
+                var pedido = _pedidoRepository.GetPedidoByNro(nro);
+                pedido.Cliente = _clienteRepository.GetClienteById(id);
+
+                _pedidoRepository.EditarPedido(pedido);
+
                 return RedirectToAction("ListaDePedidos");
             }else if (HttpContext.Session.GetString("rol") == "Cadete")
             {

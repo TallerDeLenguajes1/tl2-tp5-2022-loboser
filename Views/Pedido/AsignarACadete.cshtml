@@ -1,4 +1,7 @@
 @model List<tl2_tp4_2022_loboser.ViewModels.CadeteViewModel>
+@{
+    ViewData["Title"] = "AsignarACliente";
+}
 
 <h1>Asignar a Cadete</h1>
 
@@ -10,17 +13,17 @@
         <td>Direccion</td>
         <td>Telefono</td>
         <td></td>
-        <td></td>
     </tr>
-@foreach (var Cadete in Model)
-{
-    <tr>
-    <td>@Cadete.Nombre</td>
-    <td>@Cadete.Direccion</td>
-    <td>@Cadete.Telefono</td>
-    <td><a href="AsignarPedido?nro=@ViewBag.Nro&id=@Cadete.Id">Asignar el Pedido</a></td>
-    </tr>
-}
-</table>
-<a href="AsignarPedido?nro=@ViewBag.Nro&id=0"> Desasignar Pedido</a>
+    @foreach (var Cadete in Model)
+    {
+        <tr>
+        <td>@Cadete.Id</td>
+        <td>@Cadete.Nombre</td>
+        <td>@Cadete.Direccion</td>
+        <td>@Cadete.Telefono</td>
+        <td><a href="AsignarPedidoACadete?nro=@ViewBag.Nro&id=@Cadete.Id">Asignar el Pedido</a></td>
+        </tr>
+    }
+    </table>
+    <a href="AsignarPedidoACadete?nro=@ViewBag.Nro&id=0"> Desasignar Pedido</a>
 </div>
