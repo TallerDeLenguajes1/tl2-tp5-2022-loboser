@@ -11,11 +11,13 @@ namespace tl2_tp4_2022_loboser.Repositories
     {
         private readonly string _cadenaConexion;
         private readonly IPedidoRepository _pedidoRepository;
+        private readonly IUsuarioRepository _usuarioRepository;
 
-        public CadeteriaRepository(IConexionRepository conexion, IPedidoRepository pedidoRepository)
+        public CadeteriaRepository(IConexionRepository conexion, IPedidoRepository pedidoRepository, IUsuarioRepository usuarioRepository)
         {
             this._cadenaConexion = conexion.GetConnectionString();
             this._pedidoRepository = pedidoRepository;
+            this._usuarioRepository = usuarioRepository;
         }
 
         public Cadeteria GetCadeteria(){
@@ -23,14 +25,14 @@ namespace tl2_tp4_2022_loboser.Repositories
                 Conexion.Open();
                 using (SqliteCommand Comando = Conexion.CreateCommand())
                 {
-                    Comando.CommandText = "SELECT nombreCadeteria, telefonoCadeteria FROM Cadeteria WHERE idCadeteria = 1";
+                    Comando.CommandText = "SELECT nombreCadeteria, telefonoCadeteria FROM Cadeteria WHERE idCadeteria='1';";
                     using (SqliteDataReader Lector = Comando.ExecuteReader())
                     {
                         Cadeteria Cadeteria = new Cadeteria();
                         while (Lector.Read())
                         {
                             Cadeteria.Nombre = Lector["nombreCadeteria"].ToString();
-                            Cadeteria.Telefono = Lector["nombreCadeteria"].ToString();
+                            Cadeteria.Telefono = Lector["telefonoCadeteria"].ToString();
                         }
                         Cadeteria.Cadetes = GetCadetes();
 
@@ -40,13 +42,12 @@ namespace tl2_tp4_2022_loboser.Repositories
                 }
             }
         }
-
         public List<Cadete> GetCadetes(){
             using(SqliteConnection Conexion = new SqliteConnection(_cadenaConexion)){
                 Conexion.Open();
                 using (SqliteCommand Comando = Conexion.CreateCommand())
                 {
-                    Comando.CommandText = "SELECT * FROM Cadete";
+                    Comando.CommandText = "SELECT * FROM Cadete INNER JOIN CadeteCadeteria ON Cadete.idCadete = CadeteCadeteria.idCadete WHERE CadeteCadeteria.idCadeteria='1';";
                     using (SqliteDataReader Lector = Comando.ExecuteReader())
                     {
                         List<Cadete> Cadetes = new List<Cadete>();
@@ -78,9 +79,9 @@ namespace tl2_tp4_2022_loboser.Repositories
                     Comando.CommandText = "SELECT * FROM Cadete WHERE idCadete='" + id + "'";
                     using (SqliteDataReader Lector = Comando.ExecuteReader())
                     {
+                        Cadete Cadete = new Cadete();
                         if (Lector.Read())
                         {
-                            Cadete Cadete = new Cadete();
 
                             Cadete.Id = Convert.ToInt32(Lector["idCadete"].ToString());
                             Cadete.Nombre = Lector["nombreCadete"].ToString();
@@ -90,9 +91,8 @@ namespace tl2_tp4_2022_loboser.Repositories
                             
                             Conexion.Close();
 
-                            return Cadete; 
                         }
-                        return null;
+                        return Cadete; 
                     }
                 }
             }
@@ -107,7 +107,7 @@ namespace tl2_tp4_2022_loboser.Repositories
                     Comando.CommandText = "INSERT INTO Cadete(nombreCadete, direccionCadete, telefonoCadete) VALUES ('" + Cadete.Nombre + "', '" + Cadete.Direccion + "' ,'" + Cadete.Telefono + "');";
                     Comando.ExecuteNonQuery();
 
-                    Comando.CommandText = "SELECT * FROM Cadete WHERE nombreCadete='" + Cadete.Nombre + "' AND direccionCadete='" + Cadete.Direccion + "' AND telefonoCadete='" + Cadete.Telefono + "';";
+                    Comando.CommandText = "SELECT * FROM Cadete WHERE nombreCadete='" + Cadete.Nombre + "' AND telefonoCadete='" + Cadete.Telefono + "';";
                     using (SqliteDataReader Lector = Comando.ExecuteReader())
                     {
                         using (SqliteCommand Comando2 = Conexion.CreateCommand())
@@ -133,6 +133,8 @@ namespace tl2_tp4_2022_loboser.Repositories
                 Conexion.Open();
                 using (SqliteCommand Comando = Conexion.CreateCommand())
                 {
+                    _usuarioRepository.BajaUsuario(new Usuario(this.GetCadeteById(id)));
+
                     Comando.CommandText = "DELETE FROM CadeteCadeteria WHERE idCadete='" + id + "';";
                     Comando.ExecuteNonQuery();
 

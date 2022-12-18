@@ -11,14 +11,8 @@
 <form asp-action="AltaPedido" method="post">
     <label asp-for="Obs">Observación
     <input asp-for="Obs"></label><br>
-    <label asp-for="ClienteNombre">Nombre
-    <input asp-for="ClienteNombre"></label><br>
-    <label asp-for="ClienteTelefono">Telefono
-    <input asp-for="ClienteTelefono"></label><br>
-    <label asp-for="ClienteDireccion">Direccion
-    <input asp-for="ClienteDireccion"></label><br>
-    <label asp-for="ClienteDatosReferenciaDireccion">Datos de Referencia (Direccion)
-    <input asp-for="ClienteDatosReferenciaDireccion"></label><br>
+    <label asp-for="Estado">Estado
+    <input asp-for="Estado" value="En Proceso" readonly="readonly"></label><br>
     <button type="submit">Enviar</button>
 </form>
 

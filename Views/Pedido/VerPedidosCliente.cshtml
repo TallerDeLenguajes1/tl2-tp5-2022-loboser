@@ -11,7 +11,7 @@
         <td>Nro</td>
         <td>Observacion</td>
         <td>Estado</td> 
-        <td>Id Cadete Asignado</td>
+        <td>Id cadete asignado</td>
         <td></td>
     </tr>
     @foreach (var Pedido in Model)
@@ -20,8 +20,8 @@
         <td>@Pedido.Nro</td>
         <td>@Pedido.Obs</td>
         <td>@Pedido.Estado</td>
-        <td>@Pedido.idCadeteAsignado</td>
-        <td><a href="../../Pedido/CambiarEstado?nro=@Pedido.Nro">Cambiar Estado</a></td>
+        <td>@Pedido.IdCadeteAsignado</td>
+        <td><a href="../../Pedido/CambiarEstado?nro=@Pedido.Nro">Cambiar estado</a></td>
         </tr>
     }
 </table>

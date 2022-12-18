@@ -47,13 +47,26 @@ namespace tl2_tp4_2022_loboser.Repositories
             }
         }
 
-        public void AltaUsuario(Usuario usuario)
+        public void AltaUsuario(Usuario Usuario)
         {
             using(SqliteConnection Conexion = new SqliteConnection(_cadenaConexion)){
                 Conexion.Open();
                 using (SqliteCommand Comando = Conexion.CreateCommand())
                 {
-                    Comando.CommandText = "INSERT INTO Usuario(nombreUsuario, usuarioUsuario, passwordUsuario, rolUsuario) VALUES('" + usuario.Nombre + "', '" + usuario.User + "', '" + usuario.Pass + "', '" + usuario.Rol + "');";
+                    Comando.CommandText = "INSERT INTO Usuario(nombreUsuario, usuarioUsuario, passwordUsuario, rolUsuario) VALUES('" + Usuario.Nombre + "', '" + Usuario.User + "', '" + Usuario.Pass + "', '" + Usuario.Rol + "');";
+                    Comando.ExecuteNonQuery();
+                    Conexion.Close();
+                }
+            }
+        }
+
+        public void BajaUsuario(Usuario Usuario)
+        {
+            using(SqliteConnection Conexion = new SqliteConnection(_cadenaConexion)){
+                Conexion.Open();
+                using (SqliteCommand Comando = Conexion.CreateCommand())
+                {
+                    Comando.CommandText = "DELETE FROM Usuario WHERE usuarioUsuario='" + Usuario.User + "';";
                     Comando.ExecuteNonQuery();
                     Conexion.Close();
                 }

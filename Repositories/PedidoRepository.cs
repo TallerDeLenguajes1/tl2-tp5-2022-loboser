@@ -131,30 +131,19 @@ namespace tl2_tp4_2022_loboser.Repositories
                             Conexion.Close();
                             return Pedido;
                         }
-
                         return null;
                     }
                 }
             }
         }
         public void AltaPedido(Pedido Pedido){
-
-            var cliente = _clienteRepository.GetClienteByTelefono(Pedido.Cliente.Telefono);
-
-            if (cliente is null)
-            {
-                _clienteRepository.AltaCliente(Pedido.Cliente);
-            }
-
-            cliente = _clienteRepository.GetClienteByTelefono(Pedido.Cliente.Telefono);
-
             using(SqliteConnection Conexion = new SqliteConnection(_cadenaConexion))
             {
                 Conexion.Open();
                 using (SqliteCommand Comando = Conexion.CreateCommand())
                 {
                     
-                    Comando.CommandText = "INSERT INTO Pedido(Obs, Estado, idCliente, idCadeteAsignado) VALUES('" + Pedido.Obs + "', '" +  Pedido.Estado + "', '" + cliente.Id + "' , '" +  Pedido.IdCadeteAsignado + "');";
+                    Comando.CommandText = "INSERT INTO Pedido(Obs, Estado, idCliente, idCadeteAsignado) VALUES('" + Pedido.Obs + "', '" +  Pedido.Estado + "', '0' , '0');";
                     Comando.ExecuteNonQuery();
                 }
                 Conexion.Close();
@@ -177,23 +166,12 @@ namespace tl2_tp4_2022_loboser.Repositories
 
         public void EditarPedido(Pedido Pedido)
         {
-            var cliente = _clienteRepository.GetClienteByTelefono(Pedido.Cliente.Telefono);
-
-            if (cliente is null)
-            {
-                _clienteRepository.AltaCliente(Pedido.Cliente);
-            }else
-            {
-                _clienteRepository.EditarCliente(Pedido.Cliente);
-            }
-
-            cliente = _clienteRepository.GetClienteByTelefono(Pedido.Cliente.Telefono);
             using (SqliteConnection Conexion = new SqliteConnection(_cadenaConexion))
             {
                 Conexion.Open();
                 using (SqliteCommand Comando = Conexion.CreateCommand())
                 {     
-                    Comando.CommandText = "UPDATE Pedido SET Obs='" + Pedido.Obs + "', idCliente ='" + cliente.Id + "', Estado='" + Pedido.Estado + "', idCadeteAsignado='" + Pedido.IdCadeteAsignado + "' WHERE nroPedido='" + Pedido.Nro + "';";
+                    Comando.CommandText = "UPDATE Pedido SET Obs='" + Pedido.Obs + "', idCliente ='" + Pedido.Cliente.Id + "', Estado='" + Pedido.Estado + "', idCadeteAsignado='" + Pedido.IdCadeteAsignado + "' WHERE nroPedido='" + Pedido.Nro + "';";
                     Comando.ExecuteNonQuery();
                     Conexion.Close();
                 }

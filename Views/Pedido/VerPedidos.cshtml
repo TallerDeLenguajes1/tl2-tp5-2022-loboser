@@ -12,7 +12,7 @@
         <td>Nombre</td>
         <td>Observacion</td>
         <td>Direccion</td>
-        <td>Datos de Referencia</td>
+        <td>Datos de referencia</td>
         <td>Estado</td>
         <td></td>
     </tr>
@@ -20,12 +20,12 @@
     {
         <tr>
         <td>@Pedido.Nro</td>
-        <td>@Pedido.Cliente.Nombre</td>
         <td>@Pedido.Obs</td>
-        <td>@Pedido.Cliente.Direccion</td>
-        <td>@Pedido.Cliente.DatosReferenciaDireccion</td>
+        <td>@Pedido.ClienteNombre</td>
+        <td>@Pedido.ClienteDireccion</td>
+        <td>@Pedido.ClienteDatosReferenciaDireccion</td>
         <td>@Pedido.Estado</td>
-        <td><a href="../../Pedido/CambiarEstado?nro=@Pedido.Nro">Cambiar Estado</a></td>
+        <td><a href="../../Pedido/CambiarEstado?nro=@Pedido.Nro">Cambiar estado</a></td>
         </tr>
     }
 </table>

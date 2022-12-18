@@ -8,22 +8,12 @@
 
 <div>
     <form asp-action="EditarPedido" method="post">
-        <label asp-for="Nro">
+        <label asp-for="Nro">Nro de Pedido: 
         <input asp-for="Nro" size="1" value="@Model.Nro" readonly="readonly"></label><br>
         <label asp-for="Estado">Estado: 
         <input asp-for="Estado" value="@Model.Estado" readonly="readonly"></label><br>
-        <label asp-for="idCadeteAsignado">Id Cadete Asignado: 
-        <input asp-for="idCadeteAsignado" value="@Model.idCadeteAsignado" readonly="readonly"></label><br>
         <label asp-for="Obs">Observación: 
         <input asp-for="Obs" value="@Model.Obs" ></label><br>
-        <label asp-for="ClienteNombre">Nombre: 
-        <input asp-for="ClienteNombre" value="@Model.ClienteNombre"></label><br>
-        <label asp-for="ClienteTelefono">Telefono: 
-        <input asp-for="ClienteTelefono" value="@Model.ClienteTelefono"></label><br>
-        <label asp-for="ClienteDireccion">Direccion: 
-        <input asp-for="ClienteDireccion" value="@Model.ClienteDireccion"></label><br>
-        <label asp-for="ClienteDatosReferenciaDireccion">Datos de Referencia (Direccion): 
-        <input asp-for="ClienteDatosReferenciaDireccion" value="@Model.ClienteDatosReferenciaDireccion"></label><br>
         <button type="submit">Guardar</button>
     </form>
 </div>

@@ -39,8 +39,10 @@ namespace tl2_tp4_2022_loboser.Controllers
         {
             if (HttpContext.Session.GetString("rol") == "Admin")
             {
-                List<Cadete> Cadetes = _cadeteriaRepository.GetCadetes();
-                var CadetesVM = _mapper.Map<List<CadeteViewModel>>(Cadetes);
+                var Cadeteria = _cadeteriaRepository.GetCadeteria();
+                ViewBag.NombreCadeteria = Cadeteria.Nombre;
+                ViewBag.TelefonoCadeteria = Cadeteria.Telefono;
+                var CadetesVM = _mapper.Map<List<CadeteViewModel>>(Cadeteria.Cadetes);
 
                 return View(CadetesVM);
             }else if (HttpContext.Session.GetString("rol") == "Cadete")
@@ -73,10 +75,10 @@ namespace tl2_tp4_2022_loboser.Controllers
                     var cadete = _mapper.Map<Cadete>(CadeteRecibido);
                     var usuario = new Usuario(cadete);
 
-                    _cadeteriaRepository.AltaCadete(cadete);
                     _usuarioRepository.AltaUsuario(usuario);
+                    _cadeteriaRepository.AltaCadete(cadete);
 
-                    return RedirectToAction("AltaCadete");
+                    return RedirectToAction("ListaDeCadetes", "Cadeteria");
                 }else
                 {
                     return RedirectToAction("Error");

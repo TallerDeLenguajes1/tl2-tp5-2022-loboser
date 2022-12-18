@@ -11,10 +11,11 @@
     <table>
         <tr>
         <td>Nro</td>
-        <td>Nombre Del Cliente</td>
+        <td>Nombre del cliente</td>
         <td>Observacion</td>
         <td>Direccion</td>
-        <td>Datos Referencia Direccion</td>
+        <td>Datos referencia direccion</td>
+        <td>Nombre del cadete asignado</td>
         <td></td>
         <td></td>
         <td></td>
@@ -22,18 +23,19 @@
     </tr>
     @foreach (var Pedido in Model)
     {
-        if (Pedido.idCadeteAsignado != 0)
+        if (Pedido.IdCadeteAsignado != 0)
         {
             <tr>
             <td>@Pedido.Nro</td>
-            <td>@Pedido.Cliente.Nombre</td>
             <td>@Pedido.Obs</td>
-            <td>@Pedido.Cliente.Direccion</td>
-            <td>@Pedido.Cliente.DatosReferenciaDireccion</td>
+            <td>@Pedido.ClienteNombre</td>
+            <td>@Pedido.ClienteDireccion</td>
+            <td>@Pedido.ClienteDatosReferenciaDireccion</td>
+            <td>@Pedido.NombreCadeteAsignado</td>
             <td><a href="BajaPedido?nro=@Pedido.Nro">Eliminar</a></td>
             <td><a href="EditarPedido?nro=@Pedido.Nro">Editar</a></td>
-            <td><a href="AsignarACadete?nro=@Pedido.Nro">Asignar A Cadete</a></td>
-            <td><a href="AsignarACliente?nro=@Pedido.Nro">Asignar A Cliente</a></td>
+            <td><a href="AsignarACliente?nro=@Pedido.Nro">Asignar a cliente</a></td>
+            <td><a href="AsignarACadete?nro=@Pedido.Nro">Asignar a cadete</a></td>
             </tr>
         }
     }
@@ -45,10 +47,11 @@
     <table>
         <tr>
         <td>Nro</td>
-        <td>Nombre Del Cliente</td>
+        <td>Nombre del cliente</td>
         <td>Observacion</td>
         <td>Direccion</td>
-        <td>Datos Referencia Direccion</td>
+        <td>Datos referencia direccion</td>
+        <td>Nombre del cadete asignado</td>
         <td></td>
         <td></td>
         <td></td>
@@ -56,18 +59,19 @@
     </tr>
     @foreach (var Pedido in Model)
     {
-        if (Pedido.idCadeteAsignado == 0)
+        if (Pedido.IdCadeteAsignado == 0)
         {
             <tr>
             <td>@Pedido.Nro</td>
-            <td>@Pedido.Cliente.Nombre</td>
             <td>@Pedido.Obs</td>
-            <td>@Pedido.Cliente.Direccion</td>
-            <td>@Pedido.Cliente.DatosReferenciaDireccion</td>
+            <td>@Pedido.ClienteNombre</td>
+            <td>@Pedido.ClienteDireccion</td>
+            <td>@Pedido.ClienteDatosReferenciaDireccion</td>
+            <td>@Pedido.NombreCadeteAsignado</td>
             <td><a href="BajaPedido?nro=@Pedido.Nro">Eliminar</a></td>
             <td><a href="EditarPedido?nro=@Pedido.Nro">Editar</a></td>
-            <td><a href="AsignarACadete?nro=@Pedido.Nro">Asignar A Cadete</a></td>
-            <td><a href="AsignarACliente?nro=@Pedido.Nro">Asignar A Cliente</a></td>
+            <td><a href="AsignarACliente?nro=@Pedido.Nro">Asignar a cliente</a></td>
+            <td><a href="AsignarACadete?nro=@Pedido.Nro">Asignar a cadete</a></td>
             </tr>
         }
     }

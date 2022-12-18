@@ -14,14 +14,29 @@ namespace tl2_tp4_2022_loboser.ViewModels
         [AllowNull]
         [StringLength(100)]
         public string Obs { get; set; }
-        
-        public ClienteViewModel Cliente { get; set; }
+
+        [Required]
+        [StringLength(100)]
+        public string ClienteNombre { get; set; }
+
+        [Required]
+        [StringLength(100)]
+        public string ClienteDireccion { get; set; }
+
+        [Required]
+        [StringLength(100)]
+        public string ClienteDatosReferenciaDireccion { get; set; }
 
         [Required]
         [StringLength(10)]
         public string Estado { get; set; }
 
         [Required]
-        public int idCadeteAsignado { get; set; }
+        [AllowNull]
+        public int IdCadeteAsignado { get; set; }
+    
+        [Required]
+        [StringLength(100)]
+        public String NombreCadeteAsignado { get; set; }
     }
 }
