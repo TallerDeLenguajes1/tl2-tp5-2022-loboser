@@ -37,7 +37,11 @@ namespace tl2_tp4_2022_loboser.Controllers
             if (HttpContext.Session.GetString("rol") == "Admin")
             {
                 var Pedidos = _mapper.Map<List<PedidoViewModel>>(_pedidoRepository.GetPedidos());
-                Pedidos.ForEach(t => t.NombreCadeteAsignado = _cadeteriaRepository.GetCadeteById(t.IdCadeteAsignado).Nombre);
+                
+                if (Pedidos.Count()>0)
+                {
+                    Pedidos.ForEach(t => t.NombreCadeteAsignado = _cadeteriaRepository.GetCadeteById(t.IdCadeteAsignado).Nombre);
+                }
 
                 return View(Pedidos);
             }else if (HttpContext.Session.GetString("rol") == "Cadete")
@@ -50,22 +54,33 @@ namespace tl2_tp4_2022_loboser.Controllers
         }
 
         [HttpGet]
-        public IActionResult CambiarEstado(int nro)
+        public IActionResult CambiarEstado(int nro, string aux)
         {
             if (HttpContext.Session.GetString("rol") == "Admin")
             {
                 var pedido = _pedidoRepository.GetPedidoByNro(nro);
+                if (pedido.Estado != null)
+                {
+                    pedido.Estado = (pedido.Estado == "En Proceso")?"Entregado":"En Proceso";
+                    _pedidoRepository.EditarPedido(pedido);
 
-                pedido.Estado = (pedido.Estado == "En Proceso")?"Entregado":"En Proceso";
-
-                _pedidoRepository.EditarPedido(pedido);
-                return RedirectToAction("VerPedidos", "Pedido", new{ id = pedido.IdCadeteAsignado});
-            }else if (HttpContext.Session.GetString("rol") == "Cadete")
+                    if (pedido.IdCadeteAsignado != 0 && aux == "Cadete")
+                    {
+                        return RedirectToAction("VerPedidos", "Pedido", new{ id = pedido.IdCadeteAsignado});
+                    }
+                    else if (pedido.Cliente.Id != 0 && aux == "Cliente")
+                    {
+                        return RedirectToAction("VerPedidosCliente", "Pedido", new{ id = pedido.Cliente.Id});
+                    }
+                    return RedirectToAction("ListaDePedidos");
+                }   
+            }
+            else if (HttpContext.Session.GetString("rol") == "Cadete")
             {
                 Cadete cadete = _cadeteriaRepository.GetCadetes().First(t=> t.Nombre == HttpContext.Session.GetString("nombre"));
                 if (cadete.Pedidos.Where(t => t.Nro == nro).ToList().Count > 0)
                 {
-                    var pedido = _pedidoRepository.GetPedidoByNro(nro);
+                    var pedido = cadete.Pedidos.First(t => t.Nro == nro);
                     pedido.Estado = (pedido.Estado == "En Proceso")?"Entregado":"En Proceso";
 
                     _pedidoRepository.EditarPedido(pedido);

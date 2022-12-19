@@ -15,6 +15,10 @@ namespace tl2_tp4_2022_loboser.ViewModels
         [StringLength(100)]
         public string Obs { get; set; }
 
+        [AllowNull]
+        [StringLength(100)]
+        public int ClienteId { get; set; }
+
         [Required]
         [StringLength(100)]
         public string ClienteNombre { get; set; }

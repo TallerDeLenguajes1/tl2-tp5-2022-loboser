@@ -37,9 +37,9 @@ namespace tl2_tp4_2022_loboser.Controllers
         {
             if (ModelState.IsValid)
             {
-                Usuario usuario = _usuarioRepository.Logear(_mapper.Map<Usuario>(Logeo));
+                Usuario usuario = _usuarioRepository.GetUsuario(_mapper.Map<Usuario>(Logeo));
 
-                if (usuario is not null)
+                if (usuario.User is not null)
                 {
                     HttpContext.Session.SetString("nombre", usuario.Nombre);
                     HttpContext.Session.SetString("rol", usuario.Rol);

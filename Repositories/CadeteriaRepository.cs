@@ -82,17 +82,14 @@ namespace tl2_tp4_2022_loboser.Repositories
                         Cadete Cadete = new Cadete();
                         if (Lector.Read())
                         {
-
                             Cadete.Id = Convert.ToInt32(Lector["idCadete"].ToString());
                             Cadete.Nombre = Lector["nombreCadete"].ToString();
                             Cadete.Direccion = Lector["direccionCadete"].ToString();
                             Cadete.Telefono = Lector["telefonoCadete"].ToString();
                             Cadete.Pedidos = _pedidoRepository.GetPedidosByCadete(Convert.ToInt32(Lector["idCadete"].ToString()));
-                            
-                            Conexion.Close();
-
                         }
-                        return Cadete; 
+                        Conexion.Close();
+                        return Cadete;
                     }
                 }
             }
@@ -119,7 +116,6 @@ namespace tl2_tp4_2022_loboser.Repositories
                                 Comando2.CommandText = "INSERT INTO CadeteCadeteria(idCadeteria, idCadete) VALUES ('" + idCadeteria + "', '" + id + "');";
                                 Comando2.ExecuteNonQuery();   
                             }
-
                             Conexion.Close();
                         }  
                     }

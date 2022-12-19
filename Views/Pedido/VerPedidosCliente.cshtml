@@ -5,13 +5,13 @@
 
 <h1>Ver Pedidos del Cliente @ViewBag.Nombre</h1>
 
-<div>
-    <table>
+<div align="center" style="text-align:center">
+    <table align="center">
         <tr>
         <td>Nro</td>
         <td>Observacion</td>
+        <td>Nombre Cadete Asignado</td>
         <td>Estado</td> 
-        <td>Id cadete asignado</td>
         <td></td>
     </tr>
     @foreach (var Pedido in Model)
@@ -19,10 +19,10 @@
         <tr>
         <td>@Pedido.Nro</td>
         <td>@Pedido.Obs</td>
+        <td>@Pedido.NombreCadeteAsignado</td>
         <td>@Pedido.Estado</td>
-        <td>@Pedido.IdCadeteAsignado</td>
-        <td><a href="../../Pedido/CambiarEstado?nro=@Pedido.Nro">Cambiar estado</a></td>
+        <td><a href="../../Pedido/CambiarEstado?nro=@Pedido.Nro&aux=Cliente">Cambiar estado</a></td>
         </tr>
     }
-</table>
+    </table>
 </div>

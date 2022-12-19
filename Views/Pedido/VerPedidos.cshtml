@@ -5,8 +5,8 @@
 
 <h1>@ViewData["Title"] de @ViewBag.Nombre</h1>
 
-<div>
-    <table>
+<div align="center" style="text-align:center">
+    <table align="center">
         <tr>
         <td>Nro</td>
         <td>Nombre</td>
@@ -25,8 +25,8 @@
         <td>@Pedido.ClienteDireccion</td>
         <td>@Pedido.ClienteDatosReferenciaDireccion</td>
         <td>@Pedido.Estado</td>
-        <td><a href="../../Pedido/CambiarEstado?nro=@Pedido.Nro">Cambiar estado</a></td>
+        <td><a href="../../Pedido/CambiarEstado?nro=@Pedido.Nro&aux=Cadete">Cambiar estado</a></td>
         </tr>
     }
-</table>
+    </table>
 </div>

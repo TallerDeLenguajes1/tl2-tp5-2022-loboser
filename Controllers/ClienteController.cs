@@ -30,7 +30,7 @@ namespace tl2_tp4_2022_loboser.Controllers
             if (HttpContext.Session.GetString("rol") == "Admin")
             {
                 var Clientes = _clienteRepository.GetClientes();
-
+                
                 return View(_mapper.Map<List<ClienteViewModel>>(Clientes));
             }else if (HttpContext.Session.GetString("rol") == "Cadete")
             {
@@ -60,7 +60,10 @@ namespace tl2_tp4_2022_loboser.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    _clienteRepository.AltaCliente(_mapper.Map<Cliente>(Cliente));
+                    if (_clienteRepository.GetClienteByTelefono(Cliente.Telefono).Nombre == null)
+                    {
+                        _clienteRepository.AltaCliente(_mapper.Map<Cliente>(Cliente));
+                    }
 
                     return RedirectToAction("Index", "Cliente");
                 }else
@@ -81,7 +84,11 @@ namespace tl2_tp4_2022_loboser.Controllers
             {
                 var cliente = _clienteRepository.GetClienteById(id);
 
-                return View(_mapper.Map<EditarClienteViewModel>(cliente));
+                if (cliente.Nombre != null)
+                {
+                    return View(_mapper.Map<EditarClienteViewModel>(cliente));
+                }
+                return RedirectToAction("Index");
             }else if (HttpContext.Session.GetString("rol") == "Cadete")
             {
                 return RedirectToAction("VerPedidos", "Pedido", new{id = 0});
@@ -96,9 +103,12 @@ namespace tl2_tp4_2022_loboser.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    _clienteRepository.EditarCliente(_mapper.Map<Cliente>(Edit));
+                    if (_clienteRepository.GetClienteById(Edit.Id).Nombre != null)
+                    {
+                        _clienteRepository.EditarCliente(_mapper.Map<Cliente>(Edit));
 
-                    return RedirectToAction("Index", "Cliente");
+                    }
+                    return RedirectToAction("Index");
                 }else
                 {
                     return RedirectToAction("Error");
@@ -115,9 +125,11 @@ namespace tl2_tp4_2022_loboser.Controllers
         {
             if (HttpContext.Session.GetString("rol") == "Admin")
             {
-                _clienteRepository.BajaCliente(id);
-
-                return RedirectToAction("Index", "Cliente");
+                if (_clienteRepository.GetClienteById(id).Nombre != null)
+                {
+                    _clienteRepository.BajaCliente(id);
+                }
+                return RedirectToAction("Index");
             }else if (HttpContext.Session.GetString("rol") == "Cadete")
             {
                 return RedirectToAction("VerPedidos", "Pedido", new{id = 0});

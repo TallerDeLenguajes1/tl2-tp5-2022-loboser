@@ -117,9 +117,9 @@ namespace tl2_tp4_2022_loboser.Repositories
                     Comando.CommandText = "SELECT * FROM Pedido WHERE nroPedido='" + nro + "';";
                     using (SqliteDataReader Lector = Comando.ExecuteReader())
                     {
+                        Pedido Pedido = new Pedido();
                         if (Lector.Read())
                         {
-                            Pedido Pedido = new Pedido();
 
                             Pedido.Nro = Convert.ToInt32(Lector["nroPedido"].ToString());
                             Pedido.Obs = Lector["Obs"].ToString();
@@ -127,11 +127,9 @@ namespace tl2_tp4_2022_loboser.Repositories
                             Pedido.IdCadeteAsignado = Convert.ToInt32(Lector["idCadeteAsignado"].ToString());
                             
                             Pedido.Cliente = _clienteRepository.GetClienteById(Convert.ToInt32(Lector["idCliente"].ToString()));
-
-                            Conexion.Close();
-                            return Pedido;
                         }
-                        return null;
+                        Conexion.Close();
+                        return Pedido;
                     }
                 }
             }

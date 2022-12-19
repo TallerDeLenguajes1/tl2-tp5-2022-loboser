@@ -19,7 +19,7 @@ namespace tl2_tp4_2022_loboser.Repositories
         {
             this._cadenaConexion = conexion.GetConnectionString();
         }
-        public Usuario Logear(Usuario Logeo){
+        public Usuario GetUsuario(Usuario Logeo){
             using(SqliteConnection Conexion = new SqliteConnection(_cadenaConexion)){
                 Conexion.Open();
                 using (SqliteCommand Comando = Conexion.CreateCommand())
@@ -27,21 +27,45 @@ namespace tl2_tp4_2022_loboser.Repositories
                     Comando.CommandText = "SELECT * FROM Usuario WHERE usuarioUsuario='" + Logeo.Nombre + "' AND passwordUsuario='" + Logeo.Pass + "';";
                     using (SqliteDataReader Lector = Comando.ExecuteReader())
                     {
+                        Usuario usuario = new Usuario();
                         if (Lector.Read())
                         {
-                            Usuario usuario = new Usuario();
                             usuario.IdUsuario = Convert.ToInt32(Lector["idUsuario"].ToString());
                             usuario.Nombre = Lector["nombreUsuario"].ToString();
                             usuario.User = Lector["usuarioUsuario"].ToString();
                             usuario.Pass = Lector["passwordUsuario"].ToString();
                             usuario.Rol = Lector["rolUsuario"].ToString();
+                        }
+                        Conexion.Close();
+                        return usuario;
+                    }
+                }
+            }
+        }
+
+        public Usuario GetUsuarioLikeUser(string User)
+        {
+            using(SqliteConnection Conexion = new SqliteConnection(_cadenaConexion)){
+                Conexion.Open();
+                using (SqliteCommand Comando = Conexion.CreateCommand())
+                {
+                    Comando.CommandText = "SELECT * FROM Usuario WHERE usuarioUsuario LIKE '" + User + "';";
+                    using (SqliteDataReader Lector = Comando.ExecuteReader())
+                    {
+                        if (Lector.Read())
+                        {
+                            var usuario = new Usuario();
+
+                            usuario.IdUsuario = Convert.ToInt32(Lector["idUsuario"].ToString());
+                            usuario.Nombre = Lector["nombreUsuario"].ToString();
+                            usuario.User = Lector["usuarioUsuario"].ToString();
+                            usuario.Pass = Lector["passwordUsuario"].ToString();
+                            usuario.Rol = Lector["rolUsuario"].ToString();
+                            
                             Conexion.Close();
                             return usuario;
-                        }else
-                        {
-                            Conexion.Close();
-                            return null;
                         }
+                        return null;
                     }
                 }
             }
