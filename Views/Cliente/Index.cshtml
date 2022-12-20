@@ -4,31 +4,39 @@
     ViewData["Title"] = "Lista De Clientes";
 }
 
-<div align="center" style="text-align:center">
-    <h1>@ViewData["Title"]</h1>
-    <table align="center">
-        <tr>
-        <td>Id</td>
-        <td>Nombre</td>
-        <td>Telefono</td>
-        <td>Direccion</td>
-        <td>Datos Referencia Direccion</td>
-        <td></td>
-        <td></td>
-        <td></td>
-    </tr>
-    @foreach (var Cliente in Model)
-    {
-        <tr>
-        <td>@Cliente.Id</td>
-        <td>@Cliente.Nombre</td>
-        <td>@Cliente.Telefono</td>
-        <td>@Cliente.Direccion</td>
-        <td>@Cliente.DatosReferenciaDireccion</td>
-        <td><a href="BajaCliente?id=@Cliente.Id">Eliminar</a></td>
-        <td><a href="EditarCliente?id=@Cliente.Id">Editar</a></td>
-        <td><a href="../Pedido/VerPedidosCliente?id=@Cliente.Id">Ver Pedidos</a></td>
-        </tr>
-    }
-    </table>
-</div>
+<body>
+    <header>
+    <h1>@ViewData["Title"] </h1>
+    </header>
+    <main>
+        <table class="table table-bordered table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>Id</th>
+                    <th>Nombre</th>
+                    <th>Telefono</th>
+                    <th>Direccion</th>
+                    <th>Datos Referencia Direccion</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var Cliente in Model)
+            {
+                <tr>
+                    <td>@Cliente.Id</td>
+                    <td>@Cliente.Nombre</td>
+                    <td>@Cliente.Telefono</td>
+                    <td>@Cliente.Direccion</td>
+                    <td>@Cliente.DatosReferenciaDireccion</td>
+                    <td>
+                        <a class="btn btn-primary btn-sm" asp-controller="Cliente" asp-action="EditarCadete" asp-route-id="@Cliente.Id">Editar</a>
+                        <a class="btn btn-primary btn-sm" asp-controller="Pedido" asp-action="VerPedidosCliente" asp-route-id="@Cliente.Id">Ver Pedidos</a>
+                        <a class="btn btn-danger btn-sm" asp-controller="Cliente" asp-action="BajaCliente" asp-route-id="@Cliente.Id">Eliminar</a>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </main>
+</body>

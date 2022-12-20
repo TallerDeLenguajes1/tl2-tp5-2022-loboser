@@ -78,9 +78,9 @@ namespace tl2_tp4_2022_loboser.Repositories
                     Comando.CommandText = "SELECT * FROM Cliente WHERE telefonoCliente='" + telefono + "';";
                     using (SqliteDataReader Lector = Comando.ExecuteReader())
                     {
+                        Cliente Cliente = new Cliente();
                         if (Lector.Read())
                         {
-                            Cliente Cliente = new Cliente();
 
                             Cliente.Id = Convert.ToInt32(Lector["idCliente"].ToString());
                             Cliente.Nombre = Lector["nombreCliente"].ToString();
@@ -88,14 +88,13 @@ namespace tl2_tp4_2022_loboser.Repositories
                             Cliente.Telefono = Lector["telefonoCliente"].ToString();
                             Cliente.DatosReferenciaDireccion = Lector["datosReferenciaDireccion"].ToString();
 
-                            return Cliente;
                         }
 
                         Conexion.Close();
+                        return Cliente;
                     }
                 }
             }
-            return null;
         }
 
         public void AltaCliente(Cliente cliente)

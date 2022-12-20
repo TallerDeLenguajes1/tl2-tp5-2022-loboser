@@ -1,15 +1,35 @@
 ﻿@model tl2_tp4_2022_loboser.ViewModels.UsuarioViewModel
 
 @{
-    ViewData["Title"] = "Pagina de Logeo";
+    ViewData["Title"] = "Logeo";
 }
 
-<div class="text-center">
-    <form asp-action="Logear" method="post">
-        <label asp-for="Nombre">Nombre
-        <input asp-for="Nombre"></label><br>
-        <label asp-for="Pass">Contraseña
-        <input asp-for="Pass" type="password"></label><br>
-        <button type="submit">Logear</button>
+<body>
+    <header>
+        <h1>@ViewData["Title"]</h1>
+    </header>
+    <main>
+    <form asp-controller="Logeo" asp-action="Logear" method="post">
+        <div class="row mb-3">
+            <label class="col-sm-3 col-form-label" asp-for="Nombre">Nombre:</label>
+            <div class="col-sm-6">
+                <input class="form-control" type="text" asp-for="Nombre" placeholder="Nombre">
+            </div>
+        </div>
+        <div class="row mb-3">
+            <label class="col-sm-3 col-form-label" asp-for="Pass">Contraseña:</label>
+            <div class="col-sm-6">
+                <input class="form-control" type="password" asp-for="Pass" placeholder="Contraseña">
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="offset-sm-3 col-sm-3 d-grid">
+                <input class="btn btn-primary" type="submit" value="Enviar">
+            </div>
+            <div class="col-sm-3 d-grid">
+                <input class="btn btn-primary" type="reset" value="Borrar">
+            </div>
+        </div>
     </form>
-</div>
+    </main>
+</body>

@@ -43,6 +43,6 @@ app.UseSession();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Cadeteria}/{action=ListaDeCadetes}/{id?}");
+    pattern: "{controller=Cadeteria}/{action=Index}/{id?}");
 
 app.Run();

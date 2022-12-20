@@ -1,8 +1,185 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model List<tl2_tp4_2022_loboser.ViewModels.PedidoViewModel>
+
+@{
+    ViewData["Title"] = "Lista De Pedidos";
+    List<tl2_tp4_2022_loboser.ViewModels.PedidoViewModel> asignado = Model.Where(t => t.IdCadeteAsignado != 0 && t.ClienteId != 0).ToList();
+    List<tl2_tp4_2022_loboser.ViewModels.PedidoViewModel> sinCadete = Model.Where(t => t.IdCadeteAsignado == 0 && t.ClienteId != 0).ToList();
+    List<tl2_tp4_2022_loboser.ViewModels.PedidoViewModel> sinCliente = Model.Where(t => t.IdCadeteAsignado != 0 && t.ClienteId == 0).ToList();
+    List<tl2_tp4_2022_loboser.ViewModels.PedidoViewModel> sinAsignar = Model.Where(t => t.IdCadeteAsignado == 0 && t.ClienteId == 0).ToList();
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<body>
+    <header>
+        <h1>@ViewData["Title"]</h1>
+    </header>
+    <main>
+        @if (asignado.Count()>0)
+        {
+            <section>
+                <article>
+                    <h2>Pedidos Asignados</h2>
+                    <table class="table table-bordered table-hover">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Nro</th>
+                                <th>Observacion</th>
+                                <th>Nombre del cliente</th>
+                                <th>Direccion</th>
+                                <th>Datos referencia direccion</th>
+                                <th>Nombre del cadete asignado</th>
+                                <th>Estado</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var Pedido in asignado)
+                            {
+                                @if (Pedido.IdCadeteAsignado != 0 && Pedido.ClienteId != 0)
+                                {
+                                    <tr>
+                                        <td>@Pedido.Nro</td>
+                                        <td>@Pedido.Obs</td>
+                                        <td>@Pedido.ClienteNombre</td>
+                                        <td>@Pedido.ClienteDireccion</td>
+                                        <td>@Pedido.ClienteDatosReferenciaDireccion</td>
+                                        <td>@Pedido.NombreCadeteAsignado</td>
+                                        <td>@Pedido.Estado</td>
+                                        <td>
+                                            <a class="btn btn-primary btn-sm" asp-controller="Pedido" asp-action="AsignarACliente" asp-route-nro="@Pedido.Nro">Asignar Cliente</a>
+                                            <a class="btn btn-primary btn-sm" asp-controller="Pedido" asp-action="AsignarACadete" asp-route-nro="@Pedido.Nro">Asignar Cadete</a>
+                                            <a class="btn btn-primary btn-sm" asp-controller="Pedido" asp-action="CambiarEstado" asp-route-nro="@Pedido.Nro">Cambiar Estado</a>
+                                            <a class="btn btn-primary btn-sm" asp-controller="Pedido" asp-action="EditarPedido" asp-route-nro="@Pedido.Nro">Editar Pedido</a>
+                                            <a class="btn btn-danger btn-sm" asp-controller="Pedido" asp-action="BajaPedido" asp-route-nro="@Pedido.Nro">Eliminar</a>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </article>
+            </section>
+        }
+        @if (sinCadete.Count()>0)
+        {
+            <section>
+                <article>
+                    <h2>Pedidos Asignados solo a Clientes</h2>
+                    <table class="table table-bordered table-hover">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Nro</th>
+                                <th>Observacion</th>
+                                <th>Nombre del cliente</th>
+                                <th>Direccion</th>
+                                <th>Datos referencia direccion</th>
+                                <th>Estado</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var Pedido in sinCadete)
+                            {
+                                if (Pedido.IdCadeteAsignado == 0 && Pedido.ClienteId != 0)
+                                {
+                                    <tr>
+                                        <td>@Pedido.Nro</td>
+                                        <td>@Pedido.Obs</td>
+                                        <td>@Pedido.ClienteNombre</td>
+                                        <td>@Pedido.ClienteDireccion</td>
+                                        <td>@Pedido.ClienteDatosReferenciaDireccion</td>
+                                        <td>@Pedido.Estado</td>
+                                        <td>
+                                            <a class="btn btn-primary btn-sm" asp-controller="Pedido" asp-action="AsignarACliente" asp-route-nro="@Pedido.Nro">Asignar Cliente</a>
+                                            <a class="btn btn-primary btn-sm" asp-controller="Pedido" asp-action="AsignarACadete" asp-route-nro="@Pedido.Nro">Asignar Cadete</a>
+                                            <a class="btn btn-primary btn-sm" asp-controller="Pedido" asp-action="CambiarEstado" asp-route-nro="@Pedido.Nro">Cambiar Estado</a>
+                                            <a class="btn btn-primary btn-sm" asp-controller="Pedido" asp-action="EditarPedido" asp-route-nro="@Pedido.Nro">Editar Pedido</a>
+                                            <a class="btn btn-danger btn-sm" asp-controller="Pedido" asp-action="BajaPedido" asp-route-nro="@Pedido.Nro">Eliminar</a>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </article>
+            </section>
+        }
+        @if (sinCliente.Count()>0)
+        {
+            <section>
+                <article>
+                    <h2>Pedidos Asignados solo a Cadetes</h2>
+                    <table class="table table-bordered table-hover">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Nro</th>
+                                <th>Observacion</th>
+                                <th>Nombre del cadete asignado</th>
+                                <th>Estado</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var Pedido in sinCliente)
+                            {
+                                if (Pedido.IdCadeteAsignado != 0 && Pedido.ClienteId == 0)
+                                {
+                                    <tr>
+                                        <td>@Pedido.Nro</td>
+                                        <td>@Pedido.Obs</td>
+                                        <td>@Pedido.NombreCadeteAsignado</td>
+                                        <td>@Pedido.Estado</td>
+                                        <td>
+                                            <a class="btn btn-primary btn-sm" asp-controller="Pedido" asp-action="AsignarACliente" asp-route-nro="@Pedido.Nro">Asignar Cliente</a>
+                                            <a class="btn btn-primary btn-sm" asp-controller="Pedido" asp-action="AsignarACadete" asp-route-nro="@Pedido.Nro">Asignar Cadete</a>
+                                            <a class="btn btn-primary btn-sm" asp-controller="Pedido" asp-action="CambiarEstado" asp-route-nro="@Pedido.Nro">Cambiar Estado</a>
+                                            <a class="btn btn-primary btn-sm" asp-controller="Pedido" asp-action="EditarPedido" asp-route-nro="@Pedido.Nro">Editar Pedido</a>
+                                            <a class="btn btn-danger btn-sm" asp-controller="Pedido" asp-action="BajaPedido" asp-route-nro="@Pedido.Nro">Eliminar</a>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </article>
+            </section>
+        }
+        @if (sinAsignar.Count()>0)
+        {
+            <section>
+                <article>
+                    <h2>Pedidos sin Asignar</h2>
+                    <table class="table table-bordered table-hover">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Nro</th>
+                                <th>Observacion</th>
+                                <th>Estado</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var Pedido in sinAsignar)
+                            {
+                                if (Pedido.IdCadeteAsignado == 0 && Pedido.ClienteId == 0)
+                                {
+                                    <tr>
+                                        <td>@Pedido.Nro</td>
+                                        <td>@Pedido.Obs</td>
+                                        <td>@Pedido.Estado</td>
+                                        <td>
+                                            <a class="btn btn-primary btn-sm" asp-controller="Pedido" asp-action="AsignarACliente" asp-route-nro="@Pedido.Nro">Asignar Cliente</a>
+                                            <a class="btn btn-primary btn-sm" asp-controller="Pedido" asp-action="AsignarACadete" asp-route-nro="@Pedido.Nro">Asignar Cadete</a>
+                                            <a class="btn btn-primary btn-sm" asp-controller="Pedido" asp-action="CambiarEstado" asp-route-nro="@Pedido.Nro">Cambiar Estado</a>
+                                            <a class="btn btn-primary btn-sm" asp-controller="Pedido" asp-action="EditarPedido" asp-route-nro="@Pedido.Nro">Editar Pedido</a>
+                                            <a class="btn btn-danger btn-sm" asp-controller="Pedido" asp-action="BajaPedido" asp-route-nro="@Pedido.Nro">Eliminar</a>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </article>
+            </section>
+        }
+    </main>
+</body>

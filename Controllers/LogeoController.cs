@@ -32,6 +32,12 @@ namespace tl2_tp4_2022_loboser.Controllers
             return View();
         }
 
+        [HttpGet]
+        public IActionResult Logear(){          //Deslogeo
+            HttpContext.Session.Clear();
+            return RedirectToAction("Index");
+        }
+
         [HttpPost]
         public IActionResult Logear(UsuarioViewModel Logeo)
         {
@@ -45,7 +51,7 @@ namespace tl2_tp4_2022_loboser.Controllers
                     HttpContext.Session.SetString("rol", usuario.Rol);
                     if (usuario.Rol == "Admin")
                     {
-                        return RedirectToAction("ListaDeCadetes", "Cadeteria");
+                        return RedirectToAction("Index", "Cadeteria");
                         
                     }else
                     {
@@ -53,12 +59,6 @@ namespace tl2_tp4_2022_loboser.Controllers
                     }
                 }
             }
-            return RedirectToAction("Index");
-        }
-
-        [HttpGet]
-        public IActionResult Logear(){
-            HttpContext.Session.Clear();
             return RedirectToAction("Index");
         }
 

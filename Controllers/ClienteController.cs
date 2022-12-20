@@ -106,7 +106,6 @@ namespace tl2_tp4_2022_loboser.Controllers
                     if (_clienteRepository.GetClienteById(Edit.Id).Nombre != null)
                     {
                         _clienteRepository.EditarCliente(_mapper.Map<Cliente>(Edit));
-
                     }
                     return RedirectToAction("Index");
                 }else

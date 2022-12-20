@@ -4,18 +4,24 @@
     ViewData["Title"] = "EditarPedido";
 }
 
-<h1>@ViewData["Title"]</h1>
+<body>
+    <header>
+        <h1>@ViewData["Title"]</h1>
+    </header>
+    <main>
+        <form asp-controller="Pedido" asp-action="EditarPedido" method="post">
+            <input type="hidden" asp-for="Nro" value="@Model.Nro">
+            <input type="hidden" asp-for="Estado" value="@Model.Estado">
 
-<div>
-    <form asp-action="EditarPedido" method="post">
-        <label asp-for="Nro">Nro de Pedido: 
-        <input asp-for="Nro" size="1" value="@Model.Nro" readonly="readonly"></label><br>
-        <label asp-for="Estado">Estado: 
-        <input asp-for="Estado" value="@Model.Estado" readonly="readonly"></label><br>
-        <label asp-for="Obs">Observación: 
-        <input asp-for="Obs" value="@Model.Obs" ></label><br>
-        <button type="submit">Guardar</button>
-    </form>
-</div>
+            <div class="row mb-3">
+                    <label class="col-sm-3 col-form-label" asp-for="Obs">Observación:</label>
+                    <div class="col-sm-6">
+                        <input class="form-control" type="text" asp-for="Obs" value="@Model.Obs" placeholder="Observación">
+                    </div>
+                </div>
+            <button type="submit">Guardar</button>
+        </form>
+    </main>
+</body>
 
 @section Scripts { <partial name="_ValidationScriptsPartial" /> }

@@ -1,22 +1,47 @@
 @model tl2_tp4_2022_loboser.ViewModels.EditarCadeteViewModel
 
 @{
-    ViewData["Title"] = "EditarCadete";
+    ViewData["Title"] = "Editar Cadete";
 }
 
-<h1>@ViewData["Title"]</h1>
 
-<form asp-action="EditarCadete" method="post">
-    <label asp-for="Id">
-    <input asp-for="Id" value="@Model.Id" readonly="readonly"></label><br>
-    <label asp-for="Nombre">Nombre
-    <input asp-for="Nombre" value="@Model.Nombre"></label><br>
-    <label asp-for="Direccion">Direccion
-    <input asp-for="Direccion" value="@Model.Direccion"></label><br>
-    <label asp-for="Telefono">Telefono
-    <input asp-for="Telefono" value="@Model.Telefono"></label><br>
-    <button type="submit">Guardar</button>
-</form>
+<body>
+    <header>
+        <h1>@ViewData["Title"]</h1>
+    </header>
+    <main>
+        <form asp-controller="Cadeteria" asp-action="EditarCadete" method="post">
+            <input type="hidden" asp-for="Id" value="@Model.Id">
+            
+            <div class="row mb-3">
+                <label class="col-sm-3 col-form-label" asp-for="Nombre">Nombre:</label>
+                <div class="col-sm-6">
+                    <input class="form-control" type="text" asp-for="Nombre" value="@Model.Nombre" placeholder="Nombre">
+                </div>
+            </div>
+            <div class="row mb-3">
+                <label class="col-sm-3 col-form-label" asp-for="Direccion">Dirección:</label>
+                <div class="col-sm-6">
+                    <input class="form-control" type="text" asp-for="Direccion" value="@Model.Direccion" placeholder="Dirección">
+                </div>
+            </div>
+            <div class="row mb-3">
+                <label class="col-sm-3 col-form-label" asp-for="Telefono">Teléfono:</label>
+                <div class="col-sm-6">
+                    <input class="form-control" type="tel" asp-for="Telefono" value="@Model.Telefono" placeholder="Teléfono">
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="offset-sm-3 col-sm-3 d-grid">
+                    <input class="btn btn-primary" type="submit" value="Enviar">
+                </div>
+                <div class="col-sm-3 d-grid">
+                    <input class="btn btn-primary" type="reset" value="Borrar">
+                </div>
+            </div>
+        </form>
+    </main>
+</body>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

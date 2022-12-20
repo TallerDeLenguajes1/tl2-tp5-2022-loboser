@@ -6,14 +6,28 @@
 }
 
 
-<h1>@ViewData["Title"]</h1>
-
-<form asp-action="AltaPedido" method="post">
-    <label asp-for="Obs">Observación
-    <input asp-for="Obs"></label><br>
-    <label asp-for="Estado">Estado
-    <input asp-for="Estado" value="En Proceso" readonly="readonly"></label><br>
-    <button type="submit">Enviar</button>
-</form>
+<body>
+    <header>
+        <h1>@ViewData["Title"]</h1>
+    </header>
+    <main>
+        <form asp-controller="Pedido" asp-action="AltaPedido" method="post">
+            <div class="row mb-3">
+                <label class="col-sm-3 col-form-label" asp-for="Obs">Observación:</label>
+                <div class="col-sm-6">
+                    <input class="form-control" type="text" asp-for="Obs" placeholder="Observación">
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="offset-sm-3 col-sm-3 d-grid">
+                    <input class="btn btn-primary" type="submit" value="Enviar">
+                </div>
+                <div class="col-sm-3 d-grid">
+                    <input class="btn btn-danger" type="reset" value="Borrar">
+                </div>
+            </div>
+        </form>
+    </main>
+</body>
 
 @section Scripts { <partial name="_ValidationScriptsPartial" /> }

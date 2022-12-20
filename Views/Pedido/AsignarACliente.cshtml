@@ -1,31 +1,40 @@
 @model List<tl2_tp4_2022_loboser.ViewModels.ClienteViewModel>
 @{
-    ViewData["Title"] = "AsignarACliente";
+    ViewData["Title"] = "Asignar A Cliente";
 }
 
-<h1>Asignar a Cliente</h1>
-
-<div align="center" style="text-align:center">
-    <table align="center">
-    <tr>
-        <td>Id</td>
-        <td>Nombre</td>
-        <td>Telefono</td>
-        <td>Direccion</td>
-        <td>Datos de referencia</td>
-        <td></td>
-    </tr>
-    @foreach (var Cliente in Model)
-    {
-        <tr>
-        <td>@Cliente.Id</td>
-        <td>@Cliente.Nombre</td>
-        <td>@Cliente.Telefono</td>
-        <td>@Cliente.Direccion</td>
-        <td>@Cliente.DatosReferenciaDireccion</td>
-        <td><a href="AsignarPedidoACliente?nro=@ViewBag.Nro&id=@Cliente.Id">Asignar el Pedido</a></td>
-        </tr>
-    }
-    </table>
-    <a href="AsignarPedidoACliente?nro=@ViewBag.Nro&id=0">Desasignar Pedido</a>
-</div>
+<body>
+    <header>
+        <h1>@ViewData["Title"] </h1>
+    </header>
+    <main>
+        <table class="table table-bordered table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>Id</th>
+                    <th>Nombre</th>
+                    <th>Telefono</th>
+                    <th>Direccion</th>
+                    <th>Datos de referencia</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var Cliente in Model)
+                {
+                    <tr>
+                    <td>@Cliente.Id</td>
+                    <td>@Cliente.Nombre</td>
+                    <td>@Cliente.Telefono</td>
+                    <td>@Cliente.Direccion</td>
+                    <td>@Cliente.DatosReferenciaDireccion</td>
+                    <td>
+                        <a class="btn btn-primary btn-sm" asp-controller="Pedido" asp-action="AsignarPedidoACliente" asp-route-nro="@ViewBag.Nro" asp-route-id="@Cliente.Id">Asignar el Pedido</a>
+                    </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <a class="btn btn-danger btn-sm" asp-controller="Pedido" asp-action="AsignarPedidoACliente" asp-route-nro="@ViewBag.Nro" asp-route-id="0">Desasignar el Pedido</a>
+    </main>
+</body>

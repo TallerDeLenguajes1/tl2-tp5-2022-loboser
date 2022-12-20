@@ -32,7 +32,7 @@ namespace tl2_tp4_2022_loboser.Controllers
         }
 
         [HttpGet]
-        public IActionResult ListaDePedidos()
+        public IActionResult Index()
         {
             if (HttpContext.Session.GetString("rol") == "Admin")
             {
@@ -72,7 +72,7 @@ namespace tl2_tp4_2022_loboser.Controllers
                     {
                         return RedirectToAction("VerPedidosCliente", "Pedido", new{ id = pedido.Cliente.Id});
                     }
-                    return RedirectToAction("ListaDePedidos");
+                    return RedirectToAction("Index", "Pedido");
                 }   
             }
             else if (HttpContext.Session.GetString("rol") == "Cadete")
@@ -88,11 +88,6 @@ namespace tl2_tp4_2022_loboser.Controllers
                 return RedirectToAction("VerPedidos", "Pedido", new{ id = 0});
             }
             return RedirectToAction("Index", "Logeo");
-        }
-        
-        public IActionResult Index()
-        {
-            return View();
         }
         
         [HttpGet]
@@ -119,7 +114,7 @@ namespace tl2_tp4_2022_loboser.Controllers
                     pedido.Estado = "En Proceso";
                     _pedidoRepository.AltaPedido(pedido);
 
-                    return RedirectToAction("ListaDePedidos");
+                    return RedirectToAction("Index", "Pedido");
                 }else
                 {
                     return RedirectToAction("Error");
@@ -140,7 +135,7 @@ namespace tl2_tp4_2022_loboser.Controllers
                 {
                     _pedidoRepository.BajaPedido(nro);
 
-                    return RedirectToAction("ListaDePedidos");
+                    return RedirectToAction("Index", "Pedido");
                 }else
                 {
                     return RedirectToAction("Error");
@@ -174,7 +169,7 @@ namespace tl2_tp4_2022_loboser.Controllers
         }
 
         [HttpPost]
-        public IActionResult EditarPedido(EditarPedidoViewModel Edit)
+        public IActionResult EditarPedido(EditarPedidoViewModel Edit, string aux)
         {
             if (HttpContext.Session.GetString("rol") == "Admin")
             {
@@ -191,7 +186,7 @@ namespace tl2_tp4_2022_loboser.Controllers
                 {
                     return RedirectToAction("Error");
                 }
-                return RedirectToAction("ListaDePedidos");
+                return RedirectToAction("Index", "Pedido");
             }else if (HttpContext.Session.GetString("rol") == "Cadete")
             {
                 return RedirectToAction("VerPedidos", "Pedido", new{id = 0});
@@ -225,7 +220,7 @@ namespace tl2_tp4_2022_loboser.Controllers
 
                 _pedidoRepository.EditarPedido(pedido);
                 
-                return RedirectToAction("ListaDePedidos");
+                return RedirectToAction("Index", "Pedido");
             }else if (HttpContext.Session.GetString("rol") == "Cadete")
             {
                 return RedirectToAction("VerPedidos", "Pedido", new{id = 0});
@@ -259,7 +254,7 @@ namespace tl2_tp4_2022_loboser.Controllers
 
                 _pedidoRepository.EditarPedido(pedido);
 
-                return RedirectToAction("ListaDePedidos");
+                return RedirectToAction("Index", "Pedido");
             }else if (HttpContext.Session.GetString("rol") == "Cadete")
             {
                 return RedirectToAction("VerPedidos", "Pedido", new{id = 0});
@@ -288,7 +283,7 @@ namespace tl2_tp4_2022_loboser.Controllers
                     return View(_mapper.Map<List<PedidoViewModel>>(cadete.Pedidos));
                 }else
                 {
-                    return RedirectToAction("ListaDeCadetes", "Cadeteria");
+                    return RedirectToAction("Index", "Cadeteria");
                 }
             }
             return RedirectToAction("Index","Logeo");

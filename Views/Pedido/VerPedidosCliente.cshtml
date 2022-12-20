@@ -1,28 +1,39 @@
 @model List<tl2_tp4_2022_loboser.ViewModels.PedidoViewModel>
 @{
-    ViewData["Title"] = "VerPedidosClientes";
+    ViewData["Title"] = "Ver Pedidos del Cliente";
 }
 
-<h1>Ver Pedidos del Cliente @ViewBag.Nombre</h1>
-
-<div align="center" style="text-align:center">
-    <table align="center">
-        <tr>
-        <td>Nro</td>
-        <td>Observacion</td>
-        <td>Nombre Cadete Asignado</td>
-        <td>Estado</td> 
-        <td></td>
-    </tr>
-    @foreach (var Pedido in Model)
-    {
-        <tr>
-        <td>@Pedido.Nro</td>
-        <td>@Pedido.Obs</td>
-        <td>@Pedido.NombreCadeteAsignado</td>
-        <td>@Pedido.Estado</td>
-        <td><a href="../../Pedido/CambiarEstado?nro=@Pedido.Nro&aux=Cliente">Cambiar estado</a></td>
-        </tr>
-    }
-    </table>
-</div>
+<body>
+    <header>
+        <h1>@ViewData["Title"] @ViewBag.Nombre</h1>
+    </header>
+    <main>
+        <table class="table table-bordered table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>Nro</th>
+                    <th>Observacion</th>
+                    <th>Nombre Cadete Asignado</th>
+                    <th>Estado</th> 
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var Pedido in Model)
+                {
+                    <tr>
+                        <td>@Pedido.Nro</td>
+                        <td>@Pedido.Obs</td>
+                        <td>@Pedido.NombreCadeteAsignado</td>
+                        <td>@Pedido.Estado</td>
+                        <td>
+                            <a class="btn btn-primary btn-sm" asp-controller="Pedido" asp-action="CambiarEstado" asp-route-nro="@Pedido.Nro" asp-route-aux="Cadete">Cambiar Estado</a>
+                            <a class="btn btn-primary btn-sm" asp-controller="Pedido" asp-action="EditarPedido" asp-route-nro="@Pedido.Nro">Editar Pedido</a>
+                            <a class="btn btn-danger btn-sm" asp-controller="Pedido" asp-action="BajaPedido" asp-route-nro="@Pedido.Nro">Eliminar</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </main>
+</body>

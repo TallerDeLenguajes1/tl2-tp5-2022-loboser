@@ -1,29 +1,38 @@
 @model List<tl2_tp4_2022_loboser.ViewModels.CadeteViewModel>
 @{
-    ViewData["Title"] = "AsignarACliente";
+    ViewData["Title"] = "Asignar A Cadete";
 }
 
-<h1>Asignar a Cadete</h1>
-
-<div align="center" style="text-align:center">
-    <table align="center">
-    <tr>
-        <td>Id</td>
-        <td>Nombre</td>
-        <td>Direccion</td>
-        <td>Telefono</td>
-        <td></td>
-    </tr>
-    @foreach (var Cadete in Model)
-    {
-        <tr>
-        <td>@Cadete.Id</td>
-        <td>@Cadete.Nombre</td>
-        <td>@Cadete.Direccion</td>
-        <td>@Cadete.Telefono</td>
-        <td><a href="AsignarPedidoACadete?nro=@ViewBag.Nro&id=@Cadete.Id">Asignar el Pedido</a></td>
-        </tr>
-    }
+<body>
+    <header>
+        <h1>@ViewData["Title"] </h1>
+    </header>
+    <main>
+    <table class="table table-bordered table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Direccion</th>
+                <th>Telefono</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var Cadete in Model)
+            {
+                <tr>
+                    <td>@Cadete.Id</td>
+                    <td>@Cadete.Nombre</td>
+                    <td>@Cadete.Direccion</td>
+                    <td>@Cadete.Telefono</td>
+                    <td>
+                        <a class="btn btn-primary btn-sm" asp-controller="Pedido" asp-action="AsignarPedidoACadete" asp-route-nro="@ViewBag.Nro" asp-route-id="@Cadete.Id">Asignar el Pedido</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
     </table>
-    <a href="AsignarPedidoACadete?nro=@ViewBag.Nro&id=0"> Desasignar Pedido</a>
-</div>
+    <a class="btn btn-danger btn-sm" asp-controller="Pedido" asp-action="AsignarPedidoACadete" asp-route-nro="@ViewBag.Nro" asp-route-id="0">Desasignar el Pedido</a>
+    </main>
+</body>

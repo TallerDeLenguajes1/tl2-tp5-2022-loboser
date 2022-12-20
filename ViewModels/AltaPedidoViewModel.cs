@@ -10,17 +10,10 @@ namespace tl2_tp4_2022_loboser.ViewModels
         [AllowNull]
         [StringLength(100)]
         public string Obs { get; set; }
-
-        [Required]
-        [StringLength(10)]
-        public string Estado { get; set; }
-
         public AltaPedidoViewModel(){}
-
-        public AltaPedidoViewModel(string obs, string estado) 
+        public AltaPedidoViewModel(string obs) 
         {
             this.Obs = obs;
-            this.Estado = estado;
         }
     }
 }

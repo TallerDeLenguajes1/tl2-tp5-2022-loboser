@@ -3,20 +3,46 @@
     ViewData["Title"] = "Alta Cliente";
 }
 
-<h1>@ViewData["Title"]</h1>
-
-<div>
-    <form asp-action="AltaCliente" method="post">
-        <label asp-for="Nombre">Nombre
-        <input asp-for="Nombre"></label><br>
-        <label asp-for="Telefono">Telefono
-        <input asp-for="Telefono"></label><br>
-        <label asp-for="Direccion">Direccion
-        <input asp-for="Direccion"></label><br>
-        <label asp-for="DatosReferenciaDireccion">Datos de Referencia (Direccion)
-        <input asp-for="DatosReferenciaDireccion"></label><br>
-    <button type="submit">Enviar</button>
-    </form>
-</div>
+<body>
+    <header>
+        <h1>@ViewData["Title"]</h1>
+    </header>
+    <main>
+        <form asp-controller="Cliente" asp-action="AltaCliente" method="post">
+            <div class="row mb-3">
+                <label class="col-sm-3 col-form-label" asp-for="Nombre">Nombre:</label>
+                <div class="col-sm-6">
+                    <input class="form-control" type="text" asp-for="Nombre" placeholder="Nombre">
+                </div>
+            </div>
+            <div class="row mb-3">
+                <label class="col-sm-3 col-form-label" asp-for="Direccion">Dirección:</label>
+                <div class="col-sm-6">
+                    <input class="form-control" type="text" asp-for="Direccion" placeholder="Dirección">
+                </div>
+            </div>
+            <div class="row mb-3">
+                <label class="col-sm-3 col-form-label" asp-for="Telefono">Teléfono:</label>
+                <div class="col-sm-6">
+                    <input class="form-control" type="tel" asp-for="Telefono" placeholder="Teléfono">
+                </div>
+            </div>
+            <div class="row mb-3">
+                <label class="col-sm-3 col-form-label" asp-for="DatosReferenciaDireccion">Datos de Referencia (Dirección):</label>
+                <div class="col-sm-6">
+                    <input class="form-control" type="text" asp-for="DatosReferenciaDireccion" placeholder="Datos de Referencia Dirección">
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="offset-sm-3 col-sm-3 d-grid">
+                    <input class="btn btn-primary" type="submit" value="Enviar">
+                </div>
+                <div class="col-sm-3 d-grid">
+                    <input class="btn btn-danger" type="reset" value="Borrar">
+                </div>
+            </div>
+        </form>
+    </main>
+</body>
 
 @section Scripts { <partial name="_ValidationScriptsPartial" /> }
