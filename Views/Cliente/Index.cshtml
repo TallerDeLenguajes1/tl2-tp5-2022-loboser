@@ -14,9 +14,9 @@
                 <tr>
                     <th>Id</th>
                     <th>Nombre</th>
-                    <th>Telefono</th>
                     <th>Direccion</th>
                     <th>Datos Referencia Direccion</th>
+                    <th>Telefono</th>
                     <th></th>
                 </tr>
             </thead>
@@ -26,11 +26,11 @@
                 <tr>
                     <td>@Cliente.Id</td>
                     <td>@Cliente.Nombre</td>
-                    <td>@Cliente.Telefono</td>
                     <td>@Cliente.Direccion</td>
                     <td>@Cliente.DatosReferenciaDireccion</td>
+                    <td>@Cliente.Telefono</td>
                     <td>
-                        <a class="btn btn-primary btn-sm" asp-controller="Cliente" asp-action="EditarCadete" asp-route-id="@Cliente.Id">Editar</a>
+                        <a class="btn btn-primary btn-sm" asp-controller="Cliente" asp-action="EditarCliente" asp-route-id="@Cliente.Id">Editar</a>
                         <a class="btn btn-primary btn-sm" asp-controller="Pedido" asp-action="VerPedidosCliente" asp-route-id="@Cliente.Id">Ver Pedidos</a>
                         <a class="btn btn-danger btn-sm" asp-controller="Cliente" asp-action="BajaCliente" asp-route-id="@Cliente.Id">Eliminar</a>
                     </td>

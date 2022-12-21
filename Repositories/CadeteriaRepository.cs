@@ -23,35 +23,36 @@ namespace tl2_tp4_2022_loboser.Repositories
             this._logger = logger;
         }
 
-        public Cadeteria GetCadeteria(){
-            Cadeteria Cadeteria = new Cadeteria();
-            try
-            {
-                using(SqliteConnection Conexion = new SqliteConnection(_cadenaConexion))
-                {
-                    Conexion.Open();
-                    using (SqliteCommand Comando = Conexion.CreateCommand())
-                    {
-                        Comando.CommandText = "SELECT nombreCadeteria, telefonoCadeteria FROM Cadeteria WHERE idCadeteria='1';";
-                        using (SqliteDataReader Lector = Comando.ExecuteReader())
-                        {
-                            while (Lector.Read())
-                            {
-                                Cadeteria.Nombre = Lector["nombreCadeteria"].ToString();
-                                Cadeteria.Telefono = Lector["telefonoCadeteria"].ToString();
-                            }
-                            Cadeteria.Cadetes = GetCadetes();
+        // public Cadeteria GetCadeteria(){
+        //     Cadeteria Cadeteria = new Cadeteria();
+        //     try
+        //     {
+        //         using(SqliteConnection Conexion = new SqliteConnection(_cadenaConexion))
+        //         {
+        //             Conexion.Open();
+        //             using (SqliteCommand Comando = Conexion.CreateCommand())
+        //             {
+        //                 Comando.CommandText = "SELECT nombreCadeteria, telefonoCadeteria FROM Cadeteria WHERE idCadeteria='1';";
+        //                 using (SqliteDataReader Lector = Comando.ExecuteReader())
+        //                 {
+        //                     while (Lector.Read())
+        //                     {
+        //                         Cadeteria.Nombre = Lector["nombreCadeteria"].ToString();
+        //                         Cadeteria.Telefono = Lector["telefonoCadeteria"].ToString();
+        //                     }
+        //                     Cadeteria.Cadetes = GetCadetes();
 
-                            Conexion.Close();
-                        }
-                    }
-                }
-            }catch(System.Exception ex)
-            {
-                _logger.LogDebug("Error intentando OBTENER Cadeteria ({error})", ex.Message);
-            }
-            return Cadeteria;
-        }
+        //                     Conexion.Close();
+        //                     _logger.LogTrace("Obtención de Cadeteteria exitosa!");
+        //                 }
+        //             }
+        //         }
+        //     }catch(System.Exception ex)
+        //     {
+        //         _logger.LogDebug("Error intentando OBTENER Cadeteria ({error})", ex.Message);
+        //     }
+        //     return Cadeteria;
+        // }
         public List<Cadete> GetCadetes(){
             List<Cadete> Cadetes = new List<Cadete>();
             try
@@ -61,7 +62,7 @@ namespace tl2_tp4_2022_loboser.Repositories
                     Conexion.Open();
                     using (SqliteCommand Comando = Conexion.CreateCommand())
                     {
-                        Comando.CommandText = "SELECT * FROM Cadete INNER JOIN CadeteCadeteria ON Cadete.idCadete = CadeteCadeteria.idCadete WHERE CadeteCadeteria.idCadeteria='1';";
+                        Comando.CommandText = "SELECT * FROM Cadete;";
                         using (SqliteDataReader Lector = Comando.ExecuteReader())
                         {
                             while (Lector.Read())
@@ -76,8 +77,8 @@ namespace tl2_tp4_2022_loboser.Repositories
 
                                 Cadetes.Add(Cadete);
                             }
-
                             Conexion.Close();
+                            _logger.LogTrace("Obtención de Lista de Cadete exitosa!");
                         }
                     }
                 }
@@ -108,6 +109,7 @@ namespace tl2_tp4_2022_loboser.Repositories
                                 Cadete.Direccion = Lector["direccionCadete"].ToString();
                                 Cadete.Telefono = Lector["telefonoCadete"].ToString();
                                 Cadete.Pedidos = _pedidoRepository.GetPedidosByCadete(Convert.ToInt32(Lector["idCadete"].ToString()));
+                                _logger.LogTrace("Obtención de Cadete de id = {id} exitosa!", id);
                             }
                             Conexion.Close();
                         }
@@ -132,22 +134,8 @@ namespace tl2_tp4_2022_loboser.Repositories
                     {
                         Comando.CommandText = "INSERT INTO Cadete(nombreCadete, direccionCadete, telefonoCadete) VALUES ('" + Cadete.Nombre + "', '" + Cadete.Direccion + "' ,'" + Cadete.Telefono + "');";
                         Comando.ExecuteNonQuery();
-
-                        Comando.CommandText = "SELECT * FROM Cadete WHERE nombreCadete='" + Cadete.Nombre + "' AND telefonoCadete='" + Cadete.Telefono + "';";
-                        using (SqliteDataReader Lector = Comando.ExecuteReader())
-                        {
-                            using (SqliteCommand Comando2 = Conexion.CreateCommand())
-                            {
-                                if(Lector.Read())
-                                {
-                                    int idCadeteria = 1;
-                                    int id = Convert.ToInt32(Lector["idCadete"].ToString());
-                                    Comando2.CommandText = "INSERT INTO CadeteCadeteria(idCadeteria, idCadete) VALUES ('" + idCadeteria + "', '" + id + "');";
-                                    Comando2.ExecuteNonQuery();   
-                                }
-                                Conexion.Close();
-                            }  
-                        }
+                        _logger.LogTrace("Alta de Cadete {nombre} exitosa!", Cadete.Nombre);
+                        Conexion.Close();
                     }
                 }
             }
@@ -167,11 +155,10 @@ namespace tl2_tp4_2022_loboser.Repositories
                     {
                         _usuarioRepository.BajaUsuario(new Usuario(this.GetCadeteById(id)));
 
-                        Comando.CommandText = "DELETE FROM CadeteCadeteria WHERE idCadete='" + id + "';";
-                        Comando.ExecuteNonQuery();
-
                         Comando.CommandText = "DELETE FROM Cadete WHERE idCadete='" + id + "';";
                         Comando.ExecuteNonQuery();
+                        
+                        _logger.LogTrace("Baja de Cadete de id = {id} exitosa!", id);
 
                         Conexion.Close();
                     }
@@ -192,6 +179,7 @@ namespace tl2_tp4_2022_loboser.Repositories
                     {
                         Comando.CommandText = "UPDATE Cadete SET nombreCadete='" + Cadete.Nombre + "', direccionCadete='" + Cadete.Direccion + "', telefonoCadete='" + Cadete.Telefono + "' WHERE idCadete='" + Cadete.Id + "';";
                         Comando.ExecuteNonQuery();
+                        _logger.LogTrace("Edición de Cadete {Nombre} exitosa!", Cadete.Nombre);
                         Conexion.Close();
                     }
                 }

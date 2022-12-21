@@ -13,7 +13,6 @@ using AutoMapper;
 
 namespace tl2_tp4_2022_loboser.Controllers
 {
-    // [Route("[controller]")]
     public class LogeoController : Controller
     {
         private readonly ILogger<LogeoController> _logger;
@@ -32,12 +31,6 @@ namespace tl2_tp4_2022_loboser.Controllers
             return View();
         }
 
-        [HttpGet]
-        public IActionResult Logear(){          //Deslogeo
-            HttpContext.Session.Clear();
-            return RedirectToAction("Index");
-        }
-
         [HttpPost]
         public IActionResult Logear(UsuarioViewModel Logeo)
         {
@@ -45,7 +38,7 @@ namespace tl2_tp4_2022_loboser.Controllers
             {
                 Usuario usuario = _usuarioRepository.GetUsuario(_mapper.Map<Usuario>(Logeo));
 
-                if (usuario.User is not null)
+                if (usuario.User != null)
                 {
                     HttpContext.Session.SetString("nombre", usuario.Nombre);
                     HttpContext.Session.SetString("rol", usuario.Rol);
@@ -62,10 +55,23 @@ namespace tl2_tp4_2022_loboser.Controllers
             return RedirectToAction("Index");
         }
 
+        [HttpGet]
+        public IActionResult Deslogeo()
+        {
+            if(HttpContext.Session.GetString("nombre") != null){
+
+                var nombre = HttpContext.Session.GetString("nombre");
+                HttpContext.Session.Clear();
+                _logger.LogTrace("Deslogeo de {Usuer} exitoso!", nombre);
+            }
+            return RedirectToAction("Index");
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
             return View("Error!");
         }
+        
     }
 }

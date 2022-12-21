@@ -41,8 +41,8 @@ namespace tl2_tp4_2022_loboser.Repositories
 
                                 Clientes.Add(Cliente);
                             }
-
                             Conexion.Close();
+                            _logger.LogTrace("Obtención de Lista de Clientes exitosa!");
                         }
                     }
                 }
@@ -150,7 +150,7 @@ namespace tl2_tp4_2022_loboser.Repositories
                     Conexion.Open();
                     using (SqliteCommand Comando = Conexion.CreateCommand())
                     {
-                        Comando.CommandText = "UPDATE Cliente SET direccionCliente='" + cliente.Direccion + "', datosReferenciaDireccion='" + cliente.DatosReferenciaDireccion + "', nombreCliente='" + cliente.Nombre + "' WHERE telefonoCliente='" + cliente.Telefono + "';";
+                        Comando.CommandText = "UPDATE Cliente SET direccionCliente='" + cliente.Direccion + "', datosReferenciaDireccion='" + cliente.DatosReferenciaDireccion + "', nombreCliente='" + cliente.Nombre + "', telefonoCliente='" + cliente.Telefono + "' WHERE idCliente='" + cliente.Id + "';";
                         Comando.ExecuteNonQuery();
                     }
                     Conexion.Close();
@@ -171,7 +171,7 @@ namespace tl2_tp4_2022_loboser.Repositories
                     Conexion.Open();
                     using (SqliteCommand Comando = Conexion.CreateCommand())
                     {
-                        Comando.CommandText = "DELETE FROM Pedido WHERE idCliente='" + id + "';";
+                        Comando.CommandText = "UPDATE Pedido SET idCliente='0' WHERE idCliente='" + id + "';";
                         Comando.ExecuteNonQuery();
                         Comando.CommandText = "DELETE FROM Cliente WHERE idCliente='" + id + "';";
                         Comando.ExecuteNonQuery();  

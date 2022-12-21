@@ -12,6 +12,9 @@
         <form asp-controller="Pedido" asp-action="EditarPedido" method="post">
             <input type="hidden" asp-for="Nro" value="@Model.Nro">
             <input type="hidden" asp-for="Estado" value="@Model.Estado">
+            <input type="hidden" asp-for="ClienteId" value="@Model.ClienteId">
+            <input type="hidden" asp-for="IdCadeteAsignado" value="@Model.IdCadeteAsignado">
+            @Html.HiddenFor(m=>m.Aux, new { Value = "@ViewBag.Aux"})
 
             <div class="row mb-3">
                     <label class="col-sm-3 col-form-label" asp-for="Obs">Observación:</label>

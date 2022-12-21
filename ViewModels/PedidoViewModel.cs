@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using tl2_tp4_2022_loboser.Models;
 
+#nullable disable
 namespace tl2_tp4_2022_loboser.ViewModels
 {
     public class PedidoViewModel
@@ -11,12 +12,11 @@ namespace tl2_tp4_2022_loboser.ViewModels
         [NotNull]
         public int Nro { get; set; }
 
-        [AllowNull]
+        [Required]
         [StringLength(100)]
         public string Obs { get; set; }
 
-        [AllowNull]
-        [StringLength(100)]
+        [Required]
         public int ClienteId { get; set; }
 
         [Required]
@@ -36,7 +36,6 @@ namespace tl2_tp4_2022_loboser.ViewModels
         public string Estado { get; set; }
 
         [Required]
-        [AllowNull]
         public int IdCadeteAsignado { get; set; }
     
         [Required]

@@ -7,7 +7,7 @@ namespace tl2_tp4_2022_loboser.ViewModels
 {
     public class AltaPedidoViewModel
     {
-        [AllowNull]
+        [Required]
         [StringLength(100)]
         public string Obs { get; set; }
         public AltaPedidoViewModel(){}

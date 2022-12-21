@@ -12,6 +12,7 @@ namespace tl2_tp4_2022_loboser.Repositories
         Usuario GetUsuario(Usuario Logeo);
         Usuario GetUsuarioLikeUser(string User);
         void AltaUsuario(Usuario Usuario);
+        void EditarUsuario(Usuario Usuario);
         void BajaUsuario(Usuario Usuario);
     }
 }

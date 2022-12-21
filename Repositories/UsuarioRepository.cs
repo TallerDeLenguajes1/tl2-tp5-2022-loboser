@@ -39,9 +39,9 @@ namespace tl2_tp4_2022_loboser.Repositories
                                 usuario.User = Lector["usuarioUsuario"].ToString();
                                 usuario.Pass = Lector["passwordUsuario"].ToString();
                                 usuario.Rol = Lector["rolUsuario"].ToString();
+                                _logger.LogTrace("Logeo Exitoso del {rol} {Nombre}",usuario.Rol, usuario.Nombre);
                             }
                             Conexion.Close();
-                            _logger.LogTrace("Logeo Exitoso {Nombre} {Password}", Logeo.Nombre, Logeo.Pass);
                         }
                     }
                 }
@@ -74,10 +74,9 @@ namespace tl2_tp4_2022_loboser.Repositories
                                 usuario.User = Lector["usuarioUsuario"].ToString();
                                 usuario.Pass = Lector["passwordUsuario"].ToString();
                                 usuario.Rol = Lector["rolUsuario"].ToString();
-                                
+                                _logger.LogTrace("Obtencion de Usuario {Nombre} exitosa!", User);
                             }
                             Conexion.Close();
-                            _logger.LogTrace("Obtencion de Usuario {Nombre} exitosa!", User);
                         }
                     }
                 }
@@ -93,16 +92,38 @@ namespace tl2_tp4_2022_loboser.Repositories
         {
             try
             {
-                using(SqliteConnection Conexion = new SqliteConnection(_cadenaConexion)){
-                Conexion.Open();
-                using (SqliteCommand Comando = Conexion.CreateCommand())
+                using(SqliteConnection Conexion = new SqliteConnection(_cadenaConexion))
                 {
-                    Comando.CommandText = "INSERT INTO Usuario(nombreUsuario, usuarioUsuario, passwordUsuario, rolUsuario) VALUES('" + Usuario.Nombre + "', '" + Usuario.User + "', '" + Usuario.Pass + "', '" + Usuario.Rol + "');";
-                    Comando.ExecuteNonQuery();
-                    Conexion.Close();
-                    _logger.LogTrace("Subida de Usuario {User} exitosa!", Usuario.User);
+                    Conexion.Open();
+                    using (SqliteCommand Comando = Conexion.CreateCommand())
+                    {
+                        Comando.CommandText = "INSERT INTO Usuario(nombreUsuario, usuarioUsuario, passwordUsuario, rolUsuario) VALUES('" + Usuario.Nombre + "', '" + Usuario.User + "', '" + Usuario.Pass + "', '" + Usuario.Rol + "');";
+                        Comando.ExecuteNonQuery();
+                        Conexion.Close();
+                        _logger.LogTrace("Subida de Usuario {User} exitosa!", Usuario.User);
+                    }
                 }
             }
+            catch (System.Exception ex)
+            {
+                _logger.LogDebug("Error intentando SUBIR a el Usuario {Nombre} - {Usuario} - {Rol} ({error})", Usuario.Nombre, Usuario.User, Usuario.Rol, ex.Message);
+            }
+        }
+        public void EditarUsuario(Usuario Usuario)
+        {
+            try
+            {
+                using(SqliteConnection Conexion = new SqliteConnection(_cadenaConexion))
+                {
+                    Conexion.Open();
+                    using (SqliteCommand Comando = Conexion.CreateCommand())
+                    {
+                        Comando.CommandText = "UPDATE Usuario SET nombreUsuario='" + Usuario.Nombre + "', usuarioUsuario='" + Usuario.User + "', passwordUsuario='" + Usuario.Pass + "', rolUsuario='" + Usuario.Rol + "' WHERE idUsuario='" + Usuario.IdUsuario + "';";
+                        Comando.ExecuteNonQuery();
+                        Conexion.Close();
+                        _logger.LogTrace("Subida de Usuario {User} exitosa!", Usuario.User);
+                    }
+                }
             }
             catch (System.Exception ex)
             {

@@ -9,7 +9,7 @@
     </header>
     <main>
         <form asp-controller="Cliente" asp-action="EditarCliente" method="post">
-            <input type="hidden" name="Id" value="@Model.Id">
+            <input type="hidden" asp-for="Id" value="@Model.Id">
 
             <div class="row mb-3">
                 <label class="col-sm-3 col-form-label" asp-for="Nombre">Nombre:</label>
@@ -18,19 +18,19 @@
                 </div>
             </div>
             <div class="row mb-3">
-                <label class="col-sm-3 col-form-label" asp-for="Direccion">Nombre:</label>
+                <label class="col-sm-3 col-form-label" asp-for="Direccion">Direccion:</label>
                 <div class="col-sm-6">
                     <input class="form-control" type="text" asp-for="Direccion" value="@Model.Direccion" placeholder="Dirección">
                 </div>
             </div>
             <div class="row mb-3">
-                <label class="col-sm-3 col-form-label" asp-for="Telefono">Nombre:</label>
+                <label class="col-sm-3 col-form-label" asp-for="Telefono">Telefono:</label>
                 <div class="col-sm-6">
                     <input class="form-control" type="tel" asp-for="Telefono" value="@Model.Telefono" placeholder="Teléfono">
                 </div>
             </div>
             <div class="row mb-3">
-                <label class="col-sm-3 col-form-label" asp-for="DatosReferenciaDireccion">Nombre:</label>
+                <label class="col-sm-3 col-form-label" asp-for="DatosReferenciaDireccion">Datos de Referencia (Direccion):</label>
                 <div class="col-sm-6">
                     <input class="form-control" type="text" asp-for="DatosReferenciaDireccion" value="@Model.DatosReferenciaDireccion" placeholder="Datos de Referencia Dirección">
                 </div>

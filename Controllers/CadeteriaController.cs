@@ -27,15 +27,14 @@ namespace tl2_tp4_2022_loboser.Controllers
             this._mapper = mapper;
         }
 
-        //static int idAux;
         [HttpGet]
         public IActionResult Index()
         {
             if (HttpContext.Session.GetString("rol") == "Admin")
             {
+                var Cadeteria = new Cadeteria(_cadeteriaRepository.GetCadetes());
                 var CadetesVM = new List<CadeteViewModel>();
 
-                var Cadeteria = _cadeteriaRepository.GetCadeteria();
                 ViewBag.NombreCadeteria = Cadeteria.Nombre;
                 ViewBag.TelefonoCadeteria = Cadeteria.Telefono;
 
@@ -45,11 +44,9 @@ namespace tl2_tp4_2022_loboser.Controllers
                 } 
 
                 return View(CadetesVM);
-            }else if (HttpContext.Session.GetString("rol") == "Cadete")
-            {
-                return RedirectToAction("VerPedidos", "Pedido", new{id = 0});
             }
-            return RedirectToAction("Index", "Logeo");
+            return RedirectToAction("VerPedidos", "Pedido", new{id = 0});
+            
         }
 
 
@@ -59,11 +56,9 @@ namespace tl2_tp4_2022_loboser.Controllers
             if (HttpContext.Session.GetString("rol") == "Admin")
             {
                 return View();
-            }else if (HttpContext.Session.GetString("rol") == "Cadete")
-            {
-                return RedirectToAction("VerPedidos", "Pedido", new{id = 0});
             }
-            return RedirectToAction("Index", "Logeo");
+            return RedirectToAction("VerPedidos", "Pedido", new{id = 0});
+            
         }
 
         [HttpPost]
@@ -83,15 +78,9 @@ namespace tl2_tp4_2022_loboser.Controllers
                     }
 
                     return RedirectToAction("Index", "Cadeteria");
-                }else
-                {
-                    return RedirectToAction("Error");
                 }
-            }else if (HttpContext.Session.GetString("rol") == "Cadete")
-            {
-                return RedirectToAction("VerPedidos", "Pedido", new{id = 0});
             }
-            return RedirectToAction("Index", "Logeo");
+            return RedirectToAction("VerPedidos", "Pedido", new{id = 0});
         }
 
         [HttpGet]
@@ -99,7 +88,6 @@ namespace tl2_tp4_2022_loboser.Controllers
         {
             if (HttpContext.Session.GetString("rol") == "Admin")
             {
-                //idAux = id;
                 var Cadete = _cadeteriaRepository.GetCadeteById(id);
 
                 if (Cadete.Nombre != null)
@@ -107,11 +95,8 @@ namespace tl2_tp4_2022_loboser.Controllers
                     return View(_mapper.Map<EditarCadeteViewModel>(Cadete));
                 }
                 return RedirectToAction("Index", "Cadeteria");
-            }else if (HttpContext.Session.GetString("rol") == "Cadete")
-            {
-                return RedirectToAction("VerPedidos", "Pedido", new{id = 0});
             }
-            return RedirectToAction("Index", "Logeo");
+            return RedirectToAction("VerPedidos", "Pedido", new{id = 0});
         }
 
         [HttpPost]
@@ -123,22 +108,22 @@ namespace tl2_tp4_2022_loboser.Controllers
                 {
                     var cadete = _mapper.Map<Cadete>(Edit);
 
-                    //cadete.Id = idAux;
+                    var oldCadete = _cadeteriaRepository.GetCadeteById(Edit.Id);
+                    var oldUsuario = _usuarioRepository.GetUsuarioLikeUser(oldCadete.Nombre.ToLower().Replace(" ", string.Empty));
 
-                    if (_cadeteriaRepository.GetCadeteById(cadete.Id).Nombre != null)
+                    if (oldUsuario.IdUsuario != 0 && _cadeteriaRepository.GetCadeteById(cadete.Id).Nombre != null)
                     {
+                        var usuario = new Usuario(cadete);
+                        usuario.IdUsuario = oldUsuario.IdUsuario;
+
+                        _usuarioRepository.EditarUsuario(usuario);
                         _cadeteriaRepository.EditarCadete(cadete);
                     }
+                    
                     return RedirectToAction("Index", "Cadeteria");
-                }else
-                {
-                    return RedirectToAction("Error");
                 }
-            }else if (HttpContext.Session.GetString("rol") == "Cadete")
-            {
-                return RedirectToAction("VerPedidos", "Pedido", new{id = 0});
             }
-            return RedirectToAction("Index", "Logeo");
+            return RedirectToAction("VerPedidos", "Pedido", new{id = 0});
         }
 
         [HttpGet]
@@ -151,11 +136,8 @@ namespace tl2_tp4_2022_loboser.Controllers
                 }
 
                 return RedirectToAction("Index", "Cadeteria");
-            }else if (HttpContext.Session.GetString("rol") == "Cadete")
-            {
-                return RedirectToAction("VerPedidos", "Pedido", new{id = 0});
             }
-            return RedirectToAction("Index", "Logeo");
+            return RedirectToAction("VerPedidos", "Pedido", new{id = 0});
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

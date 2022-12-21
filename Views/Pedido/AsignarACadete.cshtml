@@ -27,12 +27,12 @@
                     <td>@Cadete.Direccion</td>
                     <td>@Cadete.Telefono</td>
                     <td>
-                        <a class="btn btn-primary btn-sm" asp-controller="Pedido" asp-action="AsignarPedidoACadete" asp-route-nro="@ViewBag.Nro" asp-route-id="@Cadete.Id">Asignar el Pedido</a>
+                        <a class="btn btn-primary btn-sm" asp-controller="Pedido" asp-action="AsignarPedidoACadete" asp-route-nro="@ViewBag.Nro" asp-route-id="@Cadete.Id" asp-route-aux="@ViewBag.Aux">Asignar el Pedido</a>
                     </td>
                 </tr>
             }
         </tbody>
     </table>
-    <a class="btn btn-danger btn-sm" asp-controller="Pedido" asp-action="AsignarPedidoACadete" asp-route-nro="@ViewBag.Nro" asp-route-id="0">Desasignar el Pedido</a>
+    <a class="btn btn-danger btn-sm" asp-controller="Pedido" asp-action="AsignarPedidoACadete" asp-route-nro="@ViewBag.Nro" asp-route-id="0" asp-route-aux="@ViewBag.Aux">Desasignar el Pedido</a>
     </main>
 </body>

@@ -28,6 +28,7 @@ namespace tl2_tp4_2022_loboser.ViewModels
         public EditarClienteViewModel(){}
         public EditarClienteViewModel(int id, string nombre, string direccion, string telefono, string datosReferenciaDireccion)
         {
+            this.Id = id;
             this.Nombre = nombre;
             this.Direccion = direccion;
             this.Telefono = telefono;

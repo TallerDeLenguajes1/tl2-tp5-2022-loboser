@@ -30,9 +30,11 @@
                 <td>@Pedido.ClienteDatosReferenciaDireccion</td>
                 <td>@Pedido.Estado</td>
                 <td>
+                    <a class="btn btn-primary btn-sm" asp-controller="Pedido" asp-action="AsignarACliente" asp-route-nro="@Pedido.Nro" asp-route-aux="Cadete">Asignar Cliente</a>
                     <a class="btn btn-primary btn-sm" asp-controller="Pedido" asp-action="CambiarEstado" asp-route-nro="@Pedido.Nro" asp-route-aux="Cadete">Cambiar Estado</a>
-                    <a class="btn btn-primary btn-sm" asp-controller="Pedido" asp-action="EditarPedido" asp-route-nro="@Pedido.Nro">Editar Pedido</a>
-                    <a class="btn btn-danger btn-sm" asp-controller="Pedido" asp-action="BajaPedido" asp-route-nro="@Pedido.Nro">Eliminar</a>
+                    <a class="btn btn-primary btn-sm" asp-controller="Pedido" asp-action="EditarPedido" asp-route-nro="@Pedido.Nro" asp-route-aux="Cadete">Editar Pedido</a>
+                    <a class="btn btn-danger btn-sm" asp-controller="Pedido" asp-action="AsignarPedidoACadete" asp-route-nro="@Pedido.Nro" asp-route-id="0" asp-route-aux="Cadete">Desasignar</a>
+                    <a class="btn btn-danger btn-sm" asp-controller="Pedido" asp-action="BajaPedido" asp-route-nro="@Pedido.Nro" asp-route-aux="Cadete">Eliminar</a>
                 </td>
             </tr>
         }

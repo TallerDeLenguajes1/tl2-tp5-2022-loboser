@@ -159,9 +159,9 @@ namespace tl2_tp4_2022_loboser.Repositories
                                 Pedido.IdCadeteAsignado = Convert.ToInt32(Lector["idCadeteAsignado"].ToString());
                                 
                                 Pedido.Cliente = _clienteRepository.GetClienteById(Convert.ToInt32(Lector["idCliente"].ToString()));
+                                _logger.LogTrace("Obtención del Pedido de Nro = {nro} exitosa!", nro);
                             }
                             Conexion.Close();
-                            _logger.LogTrace("Obtención del Pedido de Nro = {nro} exitosa!", nro);
                         }
                     }
                 }
@@ -183,9 +183,9 @@ namespace tl2_tp4_2022_loboser.Repositories
                         
                         Comando.CommandText = "INSERT INTO Pedido(Obs, Estado, idCliente, idCadeteAsignado) VALUES('" + Pedido.Obs + "', '" +  Pedido.Estado + "', '0' , '0');";
                         Comando.ExecuteNonQuery();
+                        _logger.LogTrace("Alta de Pedido {obs} - {estado} de exitosa!", Pedido.Obs, Pedido.Estado);
                     }
                     Conexion.Close();
-                    _logger.LogTrace("Alta de Pedido {obs} - {estado} de exitosa!", Pedido.Obs, Pedido.Estado);
                 }
             }
             catch (System.Exception ex)
@@ -228,9 +228,9 @@ namespace tl2_tp4_2022_loboser.Repositories
                     {     
                         Comando.CommandText = "UPDATE Pedido SET Obs='" + Pedido.Obs + "', idCliente ='" + Pedido.Cliente.Id + "', Estado='" + Pedido.Estado + "', idCadeteAsignado='" + Pedido.IdCadeteAsignado + "' WHERE nroPedido='" + Pedido.Nro + "';";
                         Comando.ExecuteNonQuery();
+                        _logger.LogTrace("Edicion del Pedido de Nro = {nro} exitoso!", Pedido.Nro);
                     }
                     Conexion.Close();
-                    _logger.LogTrace("Edicion del Pedido de Nro = {nro} exitoso!", Pedido.Nro);
                 }
             }
             catch (System.Exception ex)

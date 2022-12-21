@@ -32,11 +32,8 @@ namespace tl2_tp4_2022_loboser.Controllers
                 var Clientes = _clienteRepository.GetClientes();
                 
                 return View(_mapper.Map<List<ClienteViewModel>>(Clientes));
-            }else if (HttpContext.Session.GetString("rol") == "Cadete")
-            {
-                return RedirectToAction("VerPedidos", "Pedido", new{id = 0});
             }
-            return RedirectToAction("Index", "Logeo");  
+            return RedirectToAction("VerPedidos", "Pedido", new{id = 0}); 
         }
 
         [HttpGet]
@@ -45,11 +42,8 @@ namespace tl2_tp4_2022_loboser.Controllers
             if (HttpContext.Session.GetString("rol") == "Admin")
             {
                 return View();
-            }else if (HttpContext.Session.GetString("rol") == "Cadete")
-            {
-                return RedirectToAction("VerPedidos", "Pedido", new{id = 0});
             }
-            return RedirectToAction("Index", "Logeo"); 
+            return RedirectToAction("VerPedidos", "Pedido", new{id = 0});
         }
 
         [HttpPost]
@@ -66,15 +60,9 @@ namespace tl2_tp4_2022_loboser.Controllers
                     }
 
                     return RedirectToAction("Index", "Cliente");
-                }else
-                {
-                    return RedirectToAction("Error");
                 }
-            }else if (HttpContext.Session.GetString("rol") == "Cadete")
-            {
-                return RedirectToAction("VerPedidos", "Pedido", new{id = 0});
             }
-            return RedirectToAction("Index", "Logeo"); 
+            return RedirectToAction("VerPedidos", "Pedido", new{id = 0});
         }
 
         [HttpGet]
@@ -89,11 +77,8 @@ namespace tl2_tp4_2022_loboser.Controllers
                     return View(_mapper.Map<EditarClienteViewModel>(cliente));
                 }
                 return RedirectToAction("Index");
-            }else if (HttpContext.Session.GetString("rol") == "Cadete")
-            {
-                return RedirectToAction("VerPedidos", "Pedido", new{id = 0});
             }
-            return RedirectToAction("Index", "Logeo");
+            return RedirectToAction("VerPedidos", "Pedido", new{id = 0});
         }
 
         [HttpPost]
@@ -108,15 +93,9 @@ namespace tl2_tp4_2022_loboser.Controllers
                         _clienteRepository.EditarCliente(_mapper.Map<Cliente>(Edit));
                     }
                     return RedirectToAction("Index");
-                }else
-                {
-                    return RedirectToAction("Error");
                 }
-            }else if (HttpContext.Session.GetString("rol") == "Cadete")
-            {
-                return RedirectToAction("VerPedidos", "Pedido", new{id = 0});
             }
-            return RedirectToAction("Index", "Logeo");
+            return RedirectToAction("VerPedidos", "Pedido", new{id = 0});
         }
 
         [HttpGet]
@@ -129,11 +108,8 @@ namespace tl2_tp4_2022_loboser.Controllers
                     _clienteRepository.BajaCliente(id);
                 }
                 return RedirectToAction("Index");
-            }else if (HttpContext.Session.GetString("rol") == "Cadete")
-            {
-                return RedirectToAction("VerPedidos", "Pedido", new{id = 0});
             }
-            return RedirectToAction("Index", "Logeo");  
+            return RedirectToAction("VerPedidos", "Pedido", new{id = 0});
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
