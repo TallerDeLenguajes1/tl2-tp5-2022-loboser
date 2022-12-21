@@ -1,5 +1,6 @@
 using tl2_tp4_2022_loboser.Models;
 using Microsoft.Data.Sqlite;
+using NLog;
 
 #nullable disable
 
@@ -8,133 +9,179 @@ namespace tl2_tp4_2022_loboser.Repositories
     public class ClienteRepository : IClienteRepository
     {
         private readonly string _cadenaConexion;
-        public ClienteRepository(IConexionRepository conexion)
+        private readonly ILogger<ClienteRepository> _logger;
+
+        public ClienteRepository(IConexionRepository conexion, ILogger<ClienteRepository> logger)
         {
             this._cadenaConexion = conexion.GetConnectionString();
+            this._logger = logger;
         }
 
         public List<Cliente> GetClientes(){
-            using(SqliteConnection Conexion = new SqliteConnection(_cadenaConexion)){
-                Conexion.Open();
-                using (SqliteCommand Comando = Conexion.CreateCommand())
+            List<Cliente> Clientes = new List<Cliente>();
+            try
+            {
+                using(SqliteConnection Conexion = new SqliteConnection(_cadenaConexion))
                 {
-                    Comando.CommandText = "SELECT * FROM Cliente;";
-                    using (SqliteDataReader Lector = Comando.ExecuteReader())
+                    Conexion.Open();
+                    using (SqliteCommand Comando = Conexion.CreateCommand())
                     {
-                        List<Cliente> Clientes = new List<Cliente>();
-
-                        while(Lector.Read())
+                        Comando.CommandText = "SELECT * FROM Cliente;";
+                        using (SqliteDataReader Lector = Comando.ExecuteReader())
                         {
-                            var Cliente = new Cliente();
+                            while(Lector.Read())
+                            {
+                                var Cliente = new Cliente();
 
-                            Cliente.Id = Convert.ToInt32(Lector["idCliente"].ToString());
-                            Cliente.Nombre = Lector["nombreCliente"].ToString();
-                            Cliente.Direccion = Lector["direccionCliente"].ToString();
-                            Cliente.Telefono = Lector["telefonoCliente"].ToString();
-                            Cliente.DatosReferenciaDireccion = Lector["datosReferenciaDireccion"].ToString();
+                                Cliente.Id = Convert.ToInt32(Lector["idCliente"].ToString());
+                                Cliente.Nombre = Lector["nombreCliente"].ToString();
+                                Cliente.Direccion = Lector["direccionCliente"].ToString();
+                                Cliente.Telefono = Lector["telefonoCliente"].ToString();
+                                Cliente.DatosReferenciaDireccion = Lector["datosReferenciaDireccion"].ToString();
 
-                            Clientes.Add(Cliente);
+                                Clientes.Add(Cliente);
+                            }
+
+                            Conexion.Close();
                         }
-
-                        Conexion.Close();
-                        return Clientes;
                     }
                 }
             }
+            catch (System.Exception ex)
+            {
+                _logger.LogDebug("Error intentando OBTENER Lista de Clientes ({error})", ex.Message);
+            }
+            return Clientes;
         }
 
         public Cliente GetClienteById(int id)
         {
-            using(SqliteConnection Conexion = new SqliteConnection(_cadenaConexion)){
-                Conexion.Open();
-                using (SqliteCommand Comando = Conexion.CreateCommand())
+            Cliente Cliente = new Cliente();
+            try
+            {
+                using(SqliteConnection Conexion = new SqliteConnection(_cadenaConexion))
                 {
-                    Comando.CommandText = "SELECT * FROM Cliente WHERE idCliente='" + id + "';";
-                    using (SqliteDataReader Lector = Comando.ExecuteReader())
+                    Conexion.Open();
+                    using (SqliteCommand Comando = Conexion.CreateCommand())
                     {
-                        Cliente Cliente = new Cliente();
-
-                        if (Lector.Read())
+                        Comando.CommandText = "SELECT * FROM Cliente WHERE idCliente='" + id + "';";
+                        using (SqliteDataReader Lector = Comando.ExecuteReader())
                         {
-                            Cliente.Id = Convert.ToInt32(Lector["idCliente"].ToString());
-                            Cliente.Nombre = Lector["nombreCliente"].ToString();
-                            Cliente.Direccion = Lector["direccionCliente"].ToString();
-                            Cliente.Telefono = Lector["telefonoCliente"].ToString();
-                            Cliente.DatosReferenciaDireccion = Lector["datosReferenciaDireccion"].ToString();
-                        }
+                            if (Lector.Read())
+                            {
+                                Cliente.Id = Convert.ToInt32(Lector["idCliente"].ToString());
+                                Cliente.Nombre = Lector["nombreCliente"].ToString();
+                                Cliente.Direccion = Lector["direccionCliente"].ToString();
+                                Cliente.Telefono = Lector["telefonoCliente"].ToString();
+                                Cliente.DatosReferenciaDireccion = Lector["datosReferenciaDireccion"].ToString();
+                            }
 
-                        Conexion.Close();
-                        return Cliente;
+                            Conexion.Close();
+                        }
                     }
-                }
+                }   
             }
+            catch (System.Exception ex)
+            {
+                _logger.LogDebug("Error intentando OBTENER Cliente de Id = {id} ({error})", id, ex.Message);
+            }
+            return Cliente;
         }
         public Cliente GetClienteByTelefono(string telefono)
         {
-            using(SqliteConnection Conexion = new SqliteConnection(_cadenaConexion)){
-                Conexion.Open();
-                using (SqliteCommand Comando = Conexion.CreateCommand())
+            Cliente Cliente = new Cliente();
+            try
+            {
+                using(SqliteConnection Conexion = new SqliteConnection(_cadenaConexion))
                 {
-                    Comando.CommandText = "SELECT * FROM Cliente WHERE telefonoCliente='" + telefono + "';";
-                    using (SqliteDataReader Lector = Comando.ExecuteReader())
+                    Conexion.Open();
+                    using (SqliteCommand Comando = Conexion.CreateCommand())
                     {
-                        Cliente Cliente = new Cliente();
-                        if (Lector.Read())
+                        Comando.CommandText = "SELECT * FROM Cliente WHERE telefonoCliente='" + telefono + "';";
+                        using (SqliteDataReader Lector = Comando.ExecuteReader())
                         {
+                            if (Lector.Read())
+                            {
+                                Cliente.Id = Convert.ToInt32(Lector["idCliente"].ToString());
+                                Cliente.Nombre = Lector["nombreCliente"].ToString();
+                                Cliente.Direccion = Lector["direccionCliente"].ToString();
+                                Cliente.Telefono = Lector["telefonoCliente"].ToString();
+                                Cliente.DatosReferenciaDireccion = Lector["datosReferenciaDireccion"].ToString();
+                            }
 
-                            Cliente.Id = Convert.ToInt32(Lector["idCliente"].ToString());
-                            Cliente.Nombre = Lector["nombreCliente"].ToString();
-                            Cliente.Direccion = Lector["direccionCliente"].ToString();
-                            Cliente.Telefono = Lector["telefonoCliente"].ToString();
-                            Cliente.DatosReferenciaDireccion = Lector["datosReferenciaDireccion"].ToString();
-
+                            Conexion.Close();
                         }
-
-                        Conexion.Close();
-                        return Cliente;
                     }
-                }
+                }  
             }
+            catch (System.Exception ex)
+            {
+                _logger.LogDebug("Error intentando OBTENER Cliente de Telefono = {telefono} ({error})", Cliente.Telefono, ex.Message);
+            }
+            return Cliente;
         }
 
         public void AltaCliente(Cliente cliente)
         {
-            using(SqliteConnection Conexion = new SqliteConnection(_cadenaConexion)){
-                Conexion.Open();
-                using (SqliteCommand Comando = Conexion.CreateCommand())
+            try
+            {
+                using(SqliteConnection Conexion = new SqliteConnection(_cadenaConexion))
                 {
-                    Comando.CommandText = "INSERT INTO Cliente(nombreCliente, direccionCliente, telefonoCliente, datosReferenciaDireccion) VALUES('" + cliente.Nombre + "', '" + cliente.Direccion + "', '" + cliente.Telefono + "', '" + cliente.DatosReferenciaDireccion + "');";
-                    Comando.ExecuteNonQuery();
+                    Conexion.Open();
+                    using (SqliteCommand Comando = Conexion.CreateCommand())
+                    {
+                        Comando.CommandText = "INSERT INTO Cliente(nombreCliente, direccionCliente, telefonoCliente, datosReferenciaDireccion) VALUES('" + cliente.Nombre + "', '" + cliente.Direccion + "', '" + cliente.Telefono + "', '" + cliente.DatosReferenciaDireccion + "');";
+                        Comando.ExecuteNonQuery();
+                    }
+                    Conexion.Close();
                 }
-                Conexion.Close();
+            }
+            catch (System.Exception ex)
+            {    
+                _logger.LogDebug("Error intentando SUBIR Cliente de con los datos {nombre} - {direccion} - {telefono} - {datosReferencia} ({error})", cliente.Nombre, cliente.Direccion, cliente.Telefono, cliente.DatosReferenciaDireccion, ex.Message);
             }
         }
 
         public void EditarCliente(Cliente cliente)
         {
-            using(SqliteConnection Conexion = new SqliteConnection(_cadenaConexion)){
-                Conexion.Open();
-                using (SqliteCommand Comando = Conexion.CreateCommand())
-                {
-                    Comando.CommandText = "UPDATE Cliente SET direccionCliente='" + cliente.Direccion + "', datosReferenciaDireccion='" + cliente.DatosReferenciaDireccion + "', nombreCliente='" + cliente.Nombre + "' WHERE telefonoCliente='" + cliente.Telefono + "';";
-                    Comando.ExecuteNonQuery();
+            try
+            {
+                using(SqliteConnection Conexion = new SqliteConnection(_cadenaConexion)){
+                    Conexion.Open();
+                    using (SqliteCommand Comando = Conexion.CreateCommand())
+                    {
+                        Comando.CommandText = "UPDATE Cliente SET direccionCliente='" + cliente.Direccion + "', datosReferenciaDireccion='" + cliente.DatosReferenciaDireccion + "', nombreCliente='" + cliente.Nombre + "' WHERE telefonoCliente='" + cliente.Telefono + "';";
+                        Comando.ExecuteNonQuery();
+                    }
+                    Conexion.Close();
                 }
-                Conexion.Close();
+            }
+            catch (System.Exception ex)
+            {
+                _logger.LogDebug("Error intentando EDITAR al Cliente de Id = {id}, con los datos {nombre} - {direccion} - {telefono} - {datosReferencia} ({error})",cliente.Id, cliente.Nombre, cliente.Direccion, cliente.Telefono, cliente.DatosReferenciaDireccion, ex.Message);
             }
         }
 
         public void BajaCliente(int id)
         {
-            using(SqliteConnection Conexion = new SqliteConnection(_cadenaConexion)){
-                Conexion.Open();
-                using (SqliteCommand Comando = Conexion.CreateCommand())
+            try
+            {
+                using(SqliteConnection Conexion = new SqliteConnection(_cadenaConexion))
                 {
-                    Comando.CommandText = "DELETE FROM Pedido WHERE idCliente='" + id + "';";
-                    Comando.ExecuteNonQuery();
-                    Comando.CommandText = "DELETE FROM Cliente WHERE idCliente='" + id + "';";
-                    Comando.ExecuteNonQuery();  
+                    Conexion.Open();
+                    using (SqliteCommand Comando = Conexion.CreateCommand())
+                    {
+                        Comando.CommandText = "DELETE FROM Pedido WHERE idCliente='" + id + "';";
+                        Comando.ExecuteNonQuery();
+                        Comando.CommandText = "DELETE FROM Cliente WHERE idCliente='" + id + "';";
+                        Comando.ExecuteNonQuery();  
+                    }
+                    Conexion.Close();
                 }
-                Conexion.Close();
+            }
+            catch (System.Exception ex)
+            {
+                _logger.LogDebug("Error intentando de dar de BAJA al Cliente de Id = {id} ({error})", id, ex.Message);
             }
         }
     }

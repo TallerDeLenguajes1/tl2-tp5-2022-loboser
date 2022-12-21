@@ -2,6 +2,17 @@ using tl2_tp4_2022_loboser.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
+
+// Add services to the container.
+builder.Services.AddLogging();
+builder.Services.AddControllersWithViews();
+builder.Services.AddAutoMapper(typeof(Program));
+builder.Services.AddSingleton<IConexionRepository, ConexionRepository>();
+builder.Services.AddTransient<ICadeteriaRepository, CadeteriaRepository>();
+builder.Services.AddTransient<IPedidoRepository, PedidoRepository>();
+builder.Services.AddTransient<IClienteRepository, ClienteRepository>();
+builder.Services.AddTransient<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddDistributedMemoryCache();
 
 builder.Services.AddSession(options =>
@@ -11,16 +22,6 @@ builder.Services.AddSession(options =>
     options.Cookie.Name = ".Cadeteria.Session";
     options.Cookie.IsEssential = true;
 });
-
-// Add services to the container.
-builder.Services.AddControllersWithViews();
-builder.Services.AddAutoMapper(typeof(Program));
-builder.Services.AddSingleton<IConexionRepository, ConexionRepository>();
-builder.Services.AddTransient<ICadeteriaRepository, CadeteriaRepository>();
-builder.Services.AddTransient<IPedidoRepository, PedidoRepository>();
-builder.Services.AddTransient<IClienteRepository, ClienteRepository>();
-builder.Services.AddTransient<IUsuarioRepository, UsuarioRepository>();
-
 
 var app = builder.Build();
 
