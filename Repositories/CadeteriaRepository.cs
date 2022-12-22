@@ -23,36 +23,6 @@ namespace tl2_tp4_2022_loboser.Repositories
             this._logger = logger;
         }
 
-        // public Cadeteria GetCadeteria(){
-        //     Cadeteria Cadeteria = new Cadeteria();
-        //     try
-        //     {
-        //         using(SqliteConnection Conexion = new SqliteConnection(_cadenaConexion))
-        //         {
-        //             Conexion.Open();
-        //             using (SqliteCommand Comando = Conexion.CreateCommand())
-        //             {
-        //                 Comando.CommandText = "SELECT nombreCadeteria, telefonoCadeteria FROM Cadeteria WHERE idCadeteria='1';";
-        //                 using (SqliteDataReader Lector = Comando.ExecuteReader())
-        //                 {
-        //                     while (Lector.Read())
-        //                     {
-        //                         Cadeteria.Nombre = Lector["nombreCadeteria"].ToString();
-        //                         Cadeteria.Telefono = Lector["telefonoCadeteria"].ToString();
-        //                     }
-        //                     Cadeteria.Cadetes = GetCadetes();
-
-        //                     Conexion.Close();
-        //                     _logger.LogTrace("Obtención de Cadeteteria exitosa!");
-        //                 }
-        //             }
-        //         }
-        //     }catch(System.Exception ex)
-        //     {
-        //         _logger.LogDebug("Error intentando OBTENER Cadeteria ({error})", ex.Message);
-        //     }
-        //     return Cadeteria;
-        // }
         public List<Cadete> GetCadetes(){
             List<Cadete> Cadetes = new List<Cadete>();
             try
@@ -153,10 +123,20 @@ namespace tl2_tp4_2022_loboser.Repositories
                     Conexion.Open();
                     using (SqliteCommand Comando = Conexion.CreateCommand())
                     {
-                        _usuarioRepository.BajaUsuario(new Usuario(this.GetCadeteById(id)));
+                        Comando.CommandText = "UPDATE Pedido SET idCadeteAsignado='0' WHERE idCadeteAsignado='" + id + "';";
+                        Comando.ExecuteNonQuery();
 
                         Comando.CommandText = "DELETE FROM Cadete WHERE idCadete='" + id + "';";
                         Comando.ExecuteNonQuery();
+
+                        var usuario = _usuarioRepository.GetUsuarioByCadeteId(id);
+
+                        if (usuario.Id != 0)
+                        {
+                            usuario.IdCadete = 0;
+                            _usuarioRepository.BajaUsuario(usuario);
+                        }
+
                         
                         _logger.LogTrace("Baja de Cadete de id = {id} exitosa!", id);
 
@@ -177,8 +157,12 @@ namespace tl2_tp4_2022_loboser.Repositories
                     Conexion.Open();
                     using (SqliteCommand Comando = Conexion.CreateCommand())
                     {
+                        Comando.CommandText = "UPDATE Usuario SET nombreUsuario='" + Cadete.Nombre + "' WHERE idCadete='" + Cadete.Id + "';";
+                        Comando.ExecuteNonQuery();
+
                         Comando.CommandText = "UPDATE Cadete SET nombreCadete='" + Cadete.Nombre + "', direccionCadete='" + Cadete.Direccion + "', telefonoCadete='" + Cadete.Telefono + "' WHERE idCadete='" + Cadete.Id + "';";
                         Comando.ExecuteNonQuery();
+
                         _logger.LogTrace("Edición de Cadete {Nombre} exitosa!", Cadete.Nombre);
                         Conexion.Close();
                     }

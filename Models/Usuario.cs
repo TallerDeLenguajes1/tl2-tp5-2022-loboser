@@ -9,13 +9,17 @@ namespace tl2_tp4_2022_loboser.Models
 {
     public class Usuario
     {
-        private int idUsuario;
+        private int id;
+        private int idCliente;
+        private int idCadete;
         private string nombre;
         private string user;
         private string pass;
         private string rol;
         
-        public int IdUsuario { get => idUsuario; set => idUsuario = value; }
+        public int Id{ get => id; set => id = value; }
+        public int IdCliente { get => idCliente; set => idCliente = value; }
+        public int IdCadete { get => idCadete; set => idCadete = value; }
         public string Nombre { get => nombre; set => nombre = value; }
         public string User { get => user; set => user = value; }
         public string Pass { get => pass; set => pass = value; }
@@ -25,14 +29,28 @@ namespace tl2_tp4_2022_loboser.Models
         }
         public Usuario(Cadete cadete)
         {
+            this.idCadete = cadete.Id;
+            this.idCliente = 0;
             this.nombre = cadete.Nombre;
             this.user = cadete.Nombre.ToLower().Replace(" ", string.Empty);
             this.pass = cadete.Nombre.ToLower().Replace(" ", string.Empty);
             this.rol = "Cadete";
         }
-        public Usuario(int idUsuario, string nombre, string user, string pass, string rol)
+
+        public Usuario(Cliente cliente)
         {
-            this.idUsuario = idUsuario;
+            this.idCliente = cliente.Id;
+            this.idCadete = 0;
+            this.nombre = cliente.Nombre;
+            this.user = cliente.Nombre.ToLower().Replace(" ", string.Empty);
+            this.pass = cliente.Nombre.ToLower().Replace(" ", string.Empty);
+            this.rol = "Cliente";
+        }
+        public Usuario(int id,int idCadete,int idCliente, string nombre, string user, string pass, string rol)
+        {
+            this.id = id;
+            this.idCadete = idCadete;
+            this.idCliente = idCliente;
             this.nombre = nombre;
             this.user = user;
             this.pass = pass;

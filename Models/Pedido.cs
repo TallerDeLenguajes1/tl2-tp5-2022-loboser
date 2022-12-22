@@ -12,13 +12,13 @@ namespace tl2_tp4_2022_loboser.Models
         private string obs;
         private Cliente cliente;
         private string estado;
-        private int idCadeteAsignado;
+        private int idCadete;
         
         public int Nro { get => nro; set => nro = value; }
         public string Obs { get => obs; set => obs = value; }
         public Cliente Cliente { get => cliente; set => cliente = value; }
         public string Estado { get => estado; set => estado = value; }
-        public int IdCadeteAsignado { get => idCadeteAsignado; set => idCadeteAsignado = value; }
+        public int IdCadete { get => idCadete; set => idCadete= value; }
 
         public Pedido(){
         }
@@ -28,7 +28,7 @@ namespace tl2_tp4_2022_loboser.Models
                 Obs = obs;
                 Cliente = cliente;
                 Estado = "En proceso";
-                IdCadeteAsignado = 0;
+                IdCadete = 0;
         }
     }
 }

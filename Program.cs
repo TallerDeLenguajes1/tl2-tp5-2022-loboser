@@ -13,6 +13,7 @@ builder.Services.AddTransient<ICadeteriaRepository, CadeteriaRepository>();
 builder.Services.AddTransient<IPedidoRepository, PedidoRepository>();
 builder.Services.AddTransient<IClienteRepository, ClienteRepository>();
 builder.Services.AddTransient<IUsuarioRepository, UsuarioRepository>();
+
 builder.Services.AddDistributedMemoryCache();
 
 builder.Services.AddSession(options =>
@@ -44,6 +45,6 @@ app.UseSession();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Cadeteria}/{action=Index}/{id?}");
+    pattern: "{controller=Usuario}/{action=Index}/{id?}");
 
 app.Run();

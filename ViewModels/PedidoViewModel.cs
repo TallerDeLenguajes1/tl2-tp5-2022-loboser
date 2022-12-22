@@ -36,10 +36,10 @@ namespace tl2_tp4_2022_loboser.ViewModels
         public string Estado { get; set; }
 
         [Required]
-        public int IdCadeteAsignado { get; set; }
+        public int IdCadete { get; set; }
     
         [Required]
         [StringLength(100)]
-        public String NombreCadeteAsignado { get; set; }
+        public String NombreCadete { get; set; }
     }
 }

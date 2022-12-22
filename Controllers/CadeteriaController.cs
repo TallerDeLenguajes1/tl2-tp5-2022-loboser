@@ -1,3 +1,4 @@
+using System.Net;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -16,19 +17,42 @@ namespace tl2_tp4_2022_loboser.Controllers
     {
         private readonly ILogger<CadeteriaController> _logger;
         private readonly Repositories.ICadeteriaRepository _cadeteriaRepository;
+        private readonly IPedidoRepository _pedidoRepository;
         private readonly IUsuarioRepository _usuarioRepository;
         private readonly IMapper _mapper;
 
-        public CadeteriaController(ILogger<CadeteriaController> logger, ICadeteriaRepository cadeteriaRepository, IUsuarioRepository usuarioRepository, IMapper mapper)
+        public CadeteriaController(ILogger<CadeteriaController> logger, ICadeteriaRepository cadeteriaRepository, IPedidoRepository pedidoRepository, IUsuarioRepository usuarioRepository, IMapper mapper)
         {
             this._logger = logger;
             this._cadeteriaRepository = cadeteriaRepository;
+            this._pedidoRepository = pedidoRepository;
             this._usuarioRepository = usuarioRepository;
             this._mapper = mapper;
         }
 
         [HttpGet]
         public IActionResult Index()
+        {
+            if (HttpContext.Session.GetString("rol") == "Cadete")
+            {
+                var idCadete = Convert.ToInt32(HttpContext.Session.GetString("id"));
+                var cadeteVM = new CadetePedidosViewModel();
+
+                var pedidosDelCadete = _pedidoRepository.GetPedidosByCadete(idCadete);
+                var pedidosSinCadete= _pedidoRepository.GetPedidosByCadete(0);
+
+                cadeteVM.Id = Convert.ToInt32(HttpContext.Session.GetString("id"));
+                cadeteVM.Nombre = HttpContext.Session.GetString("nombre");
+                cadeteVM.PedidosDelCadete = _mapper.Map<List<PedidoViewModel>>(pedidosDelCadete);
+                cadeteVM.PedidosSinCadete = _mapper.Map<List<PedidoViewModel>>(pedidosSinCadete);
+
+                return View(cadeteVM);
+            }
+            return RedirectToAction("Cadetes");
+        }
+
+        [HttpGet]
+        public IActionResult Cadetes()
         {
             if (HttpContext.Session.GetString("rol") == "Admin")
             {
@@ -48,8 +72,6 @@ namespace tl2_tp4_2022_loboser.Controllers
             return RedirectToAction("VerPedidos", "Pedido", new{id = 0});
             
         }
-
-
         [HttpGet]
         public IActionResult AltaCadete()
         {
@@ -71,7 +93,7 @@ namespace tl2_tp4_2022_loboser.Controllers
                     var cadete = _mapper.Map<Cadete>(CadeteRecibido);
                     var usuario = new Usuario(cadete);
                     
-                    if (_usuarioRepository.GetUsuarioLikeUser(usuario.User).Nombre == null)
+                    if (_usuarioRepository.GetUsuarioByUser(usuario.User).Id == 0)
                     {
                         _usuarioRepository.AltaUsuario(usuario);
                         _cadeteriaRepository.AltaCadete(cadete);
@@ -108,36 +130,51 @@ namespace tl2_tp4_2022_loboser.Controllers
                 {
                     var cadete = _mapper.Map<Cadete>(Edit);
 
-                    var oldCadete = _cadeteriaRepository.GetCadeteById(Edit.Id);
-                    var oldUsuario = _usuarioRepository.GetUsuarioLikeUser(oldCadete.Nombre.ToLower().Replace(" ", string.Empty));
-
-                    if (oldUsuario.IdUsuario != 0 && _cadeteriaRepository.GetCadeteById(cadete.Id).Nombre != null)
+                    if (_cadeteriaRepository.GetCadeteById(cadete.Id).Id != 0)
                     {
-                        var usuario = new Usuario(cadete);
-                        usuario.IdUsuario = oldUsuario.IdUsuario;
-
-                        _usuarioRepository.EditarUsuario(usuario);
-                        _cadeteriaRepository.EditarCadete(cadete);
+                        _cadeteriaRepository.EditarCadete(cadete);      //Edita el Cadete y el Nombre del Usuario asociado a el
                     }
-                    
-                    return RedirectToAction("Index", "Cadeteria");
+                    return RedirectToAction("Index");
                 }
             }
             return RedirectToAction("VerPedidos", "Pedido", new{id = 0});
         }
 
         [HttpGet]
-        public IActionResult BajaCadete(int id){
+        public IActionResult BajaCadete(int id)
+        {
             if (HttpContext.Session.GetString("rol") == "Admin")
             {
-                if (_cadeteriaRepository.GetCadeteById(id).Nombre != null)
-                {
-                    _cadeteriaRepository.BajaCadete(id);
-                }
+                var cadete = _cadeteriaRepository.GetCadeteById(id);
 
-                return RedirectToAction("Index", "Cadeteria");
+                if (cadete.Id != 0)
+                {
+                    _cadeteriaRepository.BajaCadete(id);        //Elimina el Cadete y el Usuario asociado a el
+                }
+                return RedirectToAction("Index");
             }
             return RedirectToAction("VerPedidos", "Pedido", new{id = 0});
+        }
+
+        [HttpGet]
+        public IActionResult VerPedidosCadete(int id)
+        {
+            if (HttpContext.Session.GetString("rol") == "Admin")
+            {
+                var cadete = _cadeteriaRepository.GetCadeteById(id);
+
+                if (cadete.Nombre != null)
+                {
+                    ViewBag.Nombre = cadete.Nombre;
+                    ViewBag.Rol = "Admin";
+
+                    return View(_mapper.Map<List<PedidoViewModel>>(cadete.Pedidos));
+                }else
+                {
+                    return RedirectToAction("Index", "Cadeteria");
+                }
+            }
+            return RedirectToAction("Index","Usuario");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

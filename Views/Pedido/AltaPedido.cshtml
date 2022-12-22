@@ -12,12 +12,47 @@
     </header>
     <main>
         <form asp-controller="Pedido" asp-action="AltaPedido" method="post">
+            <input type="hidden" asp-for="Estado" value="En Proceso">
+            
+            @if (ViewBag.Rol == "Admin")
+            {
+                <div class="row mb-3">
+                    <label class="col-sm-3 col-form-label" asp-for="@Model.Clientes">Cliente</label>
+                    <div class="col-sm-6">
+                        <select class="form-select form-select-sm" name="ClienteId">
+                            @foreach (var cliente in Model.Clientes)
+                            {
+                                <option value="@cliente.Id">@cliente.Nombre</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <label class="col-sm-3 col-form-label" asp-for="@Model.Cadetes">Cadete</label>
+                    <div class="col-sm-6">
+                        <select class="form-select form-select-sm" name="IdCadeteAsignado">
+                            @foreach (var cadete in Model.Cadetes)
+                            {
+                                <option value="@cadete.Id">@cadete.Nombre</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <input type="hidden" asp-for="ClienteId" value="@ViewBag.Id">
+                <input type="hidden" asp-for="IdCadete" value="0">
+            }
+            
             <div class="row mb-3">
-                <label class="col-sm-3 col-form-label" asp-for="Obs">Observación:</label>
+                <label class="col-sm-3 col-form-label" asp-for="Obs">Observación</label>
                 <div class="col-sm-6">
                     <input class="form-control" type="text" asp-for="Obs" placeholder="Observación">
                 </div>
             </div>
+
             <div class="row mb-3">
                 <div class="offset-sm-3 col-sm-3 d-grid">
                     <input class="btn btn-primary" type="submit" value="Enviar">

@@ -1,42 +1,70 @@
-﻿@model List<tl2_tp4_2022_loboser.ViewModels.CadeteViewModel>
-
+﻿@model tl2_tp4_2022_loboser.ViewModels.CadetePedidosViewModel
 @{
-    ViewData["Title"] = "Lista de cadetes";
+    ViewData["Title"] = "Pedidos";
 }
 
 <body>
     <header>
-    <h1>@ViewData["Title"] </h1>
-    <h2>@ViewBag.NombreCadeteria +@ViewBag.TelefonoCadeteria</h2>
+        <h1>@ViewData["Title"] encargados | @Model.Nombre</h1>
     </header>
     <main>
         <table class="table table-bordered table-hover">
-            <thead class="table-dark">
-                <tr>
-                    <th>Id</th>
-                    <th>Nombre</th>
-                    <th>Direccion</th>
-                    <th>Telefono</th>
-                    <th></th>
-                </tr>
-            </thead>
+        <thead class="table-dark">
+            <tr>
+                <th>Nro</th>
+                <th>Observacion</th>
+                <th>Nombre</th>
+                <th>Direccion</th>
+                <th>Datos de referencia</th>
+                <th>Estado</th>
+                <th></th>
+            </tr>
+        </thead>
+        @foreach (var Pedido in Model.PedidosDelCadete)
+        {
+            <tr>
+                <td>@Pedido.Nro</td>
+                <td>@Pedido.Obs</td>
+                <td>@Pedido.ClienteNombre</td>
+                <td>@Pedido.ClienteDireccion</td>
+                <td>@Pedido.ClienteDatosReferenciaDireccion</td>
+                <td>@Pedido.Estado</td>
+                <td>
+                    <a class="btn btn-primary btn-sm" asp-controller="Pedido" asp-action="CambiarEstado" asp-route-nro="@Pedido.Nro">Cambiar Estado</a>
+                    <a class="btn btn-danger btn-sm" asp-controller="Pedido" asp-action="AsignarPedido" asp-route-nro="@Pedido.Nro">Desasignar</a>
+                </td>
+            </tr>
+        }
+        </table>
 
-            <tbody>
-                @foreach (var Cadete in Model)
+        @if (Model.PedidosSinCadete.Count()>0)
+        {
+            <h2>Pedidos sin Asignar</h2>
+            <table class="table table-bordered table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Nro</th>
+                        <th>Observacion</th>
+                        <th>Nombre</th>
+                        <th>Direccion</th>
+                        <th>Datos de referencia</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                @foreach (var Pedido in Model.PedidosSinCadete)
                 {
                     <tr>
-                        <td>@Cadete.Id</td>
-                        <td>@Cadete.Nombre</td>
-                        <td>@Cadete.Direccion</td>
-                        <td>@Cadete.Telefono</td>
+                        <td>@Pedido.Nro</td>
+                        <td>@Pedido.Obs</td>
+                        <td>@Pedido.ClienteNombre</td>
+                        <td>@Pedido.ClienteDireccion</td>
+                        <td>@Pedido.ClienteDatosReferenciaDireccion</td>
                         <td>
-                            <a class="btn btn-primary btn-sm" asp-controller="Cadeteria" asp-action="EditarCadete" asp-route-id="@Cadete.Id">Editar</a>
-                            <a class="btn btn-primary btn-sm" asp-controller="Pedido" asp-action="VerPedidos" asp-route-id="@Cadete.Id">Ver Pedidos</a>
-                            <a class="btn btn-danger btn-sm" asp-controller="Cadeteria" asp-action="BajaCadete" asp-route-id="@Cadete.Id">Eliminar</a>
+                            <a class="btn btn-primary btn-sm" asp-controller="Pedido" asp-action="AsignarPedido" asp-route-nro="@Pedido.Nro">Asignar</a>
                         </td>
                     </tr>
                 }
-            </tbody>
-        </table>
+            </table>
+        }
     </main>
 </body>

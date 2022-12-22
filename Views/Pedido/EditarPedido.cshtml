@@ -1,7 +1,7 @@
 @model tl2_tp4_2022_loboser.ViewModels.EditarPedidoViewModel
 
 @{
-    ViewData["Title"] = "EditarPedido";
+    ViewData["Title"] = "Editar Pedido";
 }
 
 <body>
@@ -12,8 +12,34 @@
         <form asp-controller="Pedido" asp-action="EditarPedido" method="post">
             <input type="hidden" asp-for="Nro" value="@Model.Nro">
             <input type="hidden" asp-for="Estado" value="@Model.Estado">
-            <input type="hidden" asp-for="ClienteId" value="@Model.ClienteId">
-            <input type="hidden" asp-for="IdCadeteAsignado" value="@Model.IdCadeteAsignado">
+            
+            @if (ViewBag.Rol == "Admin")
+            {
+                <div class="row mb-3">
+                    <label class="col-sm-3 col-form-label" asp-for="@Model.Clientes">Cliente:</label>
+                    <div class="col-sm-6">
+                        <select class="form-select form-select-sm" name="IdCliente">
+                            @foreach (var cliente in Model.Clientes)
+                            {
+                                <option value="@cliente.Id">@cliente.Nombre</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <label class="col-sm-3 col-form-label" asp-for="@Model.Cadetes">Cadete:</label>
+                    <div class="col-sm-6">
+                        <select class="form-select form-select-sm" name="IdCadeteAsignado">
+                            @foreach (var cadete in Model.Cadetes)
+                            {
+                                <option value="@cadete.Id">@cadete.Nombre</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+            }
+            
             @Html.HiddenFor(m=>m.Aux, new { Value = "@ViewBag.Aux"})
 
             <div class="row mb-3">

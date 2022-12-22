@@ -1,0 +1,42 @@
+@model List<tl2_tp4_2022_loboser.ViewModels.CadeteViewModel>
+
+@{
+    ViewData["Title"] = "Lista de cadetes";
+}
+
+<body>
+    <header>
+    <h1>@ViewData["Title"] </h1>
+    <h2>@ViewBag.NombreCadeteria +@ViewBag.TelefonoCadeteria</h2>
+    </header>
+    <main>
+        <table class="table table-bordered table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>Id</th>
+                    <th>Nombre</th>
+                    <th>Direccion</th>
+                    <th>Telefono</th>
+                    <th></th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (var Cadete in Model)
+                {
+                    <tr>
+                        <td>@Cadete.Id</td>
+                        <td>@Cadete.Nombre</td>
+                        <td>@Cadete.Direccion</td>
+                        <td>@Cadete.Telefono</td>
+                        <td>
+                            <a class="btn btn-primary btn-sm" asp-controller="Cadeteria" asp-action="EditarCadete" asp-route-id="@Cadete.Id">Editar</a>
+                            <a class="btn btn-primary btn-sm" asp-controller="Pedido" asp-action="VerPedidos" asp-route-id="@Cadete.Id">Ver Pedidos</a>
+                            <a class="btn btn-danger btn-sm" asp-controller="Cadeteria" asp-action="BajaCadete" asp-route-id="@Cadete.Id">Eliminar</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </main>
+</body>

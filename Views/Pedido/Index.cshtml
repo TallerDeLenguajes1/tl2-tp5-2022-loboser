@@ -2,10 +2,10 @@
 
 @{
     ViewData["Title"] = "Lista De Pedidos";
-    List<tl2_tp4_2022_loboser.ViewModels.PedidoViewModel> asignado = Model.Where(t => t.IdCadeteAsignado != 0 && t.ClienteId != 0).ToList();
-    List<tl2_tp4_2022_loboser.ViewModels.PedidoViewModel> sinCadete = Model.Where(t => t.IdCadeteAsignado == 0 && t.ClienteId != 0).ToList();
-    List<tl2_tp4_2022_loboser.ViewModels.PedidoViewModel> sinCliente = Model.Where(t => t.IdCadeteAsignado != 0 && t.ClienteId == 0).ToList();
-    List<tl2_tp4_2022_loboser.ViewModels.PedidoViewModel> sinAsignar = Model.Where(t => t.IdCadeteAsignado == 0 && t.ClienteId == 0).ToList();
+    List<tl2_tp4_2022_loboser.ViewModels.PedidoViewModel> asignado = Model.Where(t => t.IdCadete != 0 && t.ClienteId != 0).ToList();
+    List<tl2_tp4_2022_loboser.ViewModels.PedidoViewModel> sinCadete = Model.Where(t => t.IdCadete == 0 && t.ClienteId != 0).ToList();
+    List<tl2_tp4_2022_loboser.ViewModels.PedidoViewModel> sinCliente = Model.Where(t => t.IdCadete != 0 && t.ClienteId == 0).ToList();
+    List<tl2_tp4_2022_loboser.ViewModels.PedidoViewModel> sinAsignar = Model.Where(t => t.IdCadete == 0 && t.ClienteId == 0).ToList();
 }
 
 <body>
@@ -34,7 +34,7 @@
                         <tbody>
                             @foreach (var Pedido in asignado)
                             {
-                                @if (Pedido.IdCadeteAsignado != 0 && Pedido.ClienteId != 0)
+                                @if (Pedido.IdCadete != 0 && Pedido.ClienteId != 0)
                                 {
                                     <tr>
                                         <td>@Pedido.Nro</td>
@@ -42,7 +42,7 @@
                                         <td>@Pedido.ClienteNombre</td>
                                         <td>@Pedido.ClienteDireccion</td>
                                         <td>@Pedido.ClienteDatosReferenciaDireccion</td>
-                                        <td>@Pedido.NombreCadeteAsignado</td>
+                                        <td>@Pedido.NombreCadete</td>
                                         <td>@Pedido.Estado</td>
                                         <td>
                                             <a class="btn btn-primary btn-sm" asp-controller="Pedido" asp-action="AsignarACliente" asp-route-nro="@Pedido.Nro" asp-route-aux="Lista">Asignar Cliente</a>
@@ -79,7 +79,7 @@
                         <tbody>
                             @foreach (var Pedido in sinCadete)
                             {
-                                if (Pedido.IdCadeteAsignado == 0 && Pedido.ClienteId != 0)
+                                if (Pedido.IdCadete == 0 && Pedido.ClienteId != 0)
                                 {
                                     <tr>
                                         <td>@Pedido.Nro</td>
@@ -121,12 +121,12 @@
                         <tbody>
                             @foreach (var Pedido in sinCliente)
                             {
-                                if (Pedido.IdCadeteAsignado != 0 && Pedido.ClienteId == 0)
+                                if (Pedido.IdCadete != 0 && Pedido.ClienteId == 0)
                                 {
                                     <tr>
                                         <td>@Pedido.Nro</td>
                                         <td>@Pedido.Obs</td>
-                                        <td>@Pedido.NombreCadeteAsignado</td>
+                                        <td>@Pedido.NombreCadete</td>
                                         <td>@Pedido.Estado</td>
                                         <td>
                                             <a class="btn btn-primary btn-sm" asp-controller="Pedido" asp-action="AsignarACliente" asp-route-nro="@Pedido.Nro" asp-route-aux="Lista">Asignar Cliente</a>
@@ -160,7 +160,7 @@
                         <tbody>
                             @foreach (var Pedido in sinAsignar)
                             {
-                                if (Pedido.IdCadeteAsignado == 0 && Pedido.ClienteId == 0)
+                                if (Pedido.IdCadete == 0 && Pedido.ClienteId == 0)
                                 {
                                     <tr>
                                         <td>@Pedido.Nro</td>

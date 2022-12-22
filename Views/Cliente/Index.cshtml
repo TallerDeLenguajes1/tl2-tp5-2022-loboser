@@ -1,42 +1,35 @@
-﻿@model List<tl2_tp4_2022_loboser.ViewModels.ClienteViewModel>
-
+﻿@model List<tl2_tp4_2022_loboser.ViewModels.PedidoViewModel>
 @{
-    ViewData["Title"] = "Lista De Clientes";
+    ViewData["Title"] = "Tus Pedidos";
 }
 
 <body>
     <header>
-    <h1>@ViewData["Title"] </h1>
+        <h1>@ViewData["Title"] @ViewBag.Nombre</h1>
     </header>
     <main>
         <table class="table table-bordered table-hover">
-            <thead class="table-dark">
-                <tr>
-                    <th>Id</th>
-                    <th>Nombre</th>
-                    <th>Direccion</th>
-                    <th>Datos Referencia Direccion</th>
-                    <th>Telefono</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-            @foreach (var Cliente in Model)
-            {
-                <tr>
-                    <td>@Cliente.Id</td>
-                    <td>@Cliente.Nombre</td>
-                    <td>@Cliente.Direccion</td>
-                    <td>@Cliente.DatosReferenciaDireccion</td>
-                    <td>@Cliente.Telefono</td>
-                    <td>
-                        <a class="btn btn-primary btn-sm" asp-controller="Cliente" asp-action="EditarCliente" asp-route-id="@Cliente.Id">Editar</a>
-                        <a class="btn btn-primary btn-sm" asp-controller="Pedido" asp-action="VerPedidosCliente" asp-route-id="@Cliente.Id">Ver Pedidos</a>
-                        <a class="btn btn-danger btn-sm" asp-controller="Cliente" asp-action="BajaCliente" asp-route-id="@Cliente.Id">Eliminar</a>
-                    </td>
-                </tr>
-            }
-            </tbody>
+        <thead class="table-dark">
+            <tr>
+                <th>Nro</th>
+                <th>Nombre</th>
+                <th>Observacion</th>
+                <th>Direccion</th>
+                <th>Datos de referencia</th>
+                <th>Estado</th>
+            </tr>
+        </thead>
+        @foreach (var Pedido in Model)
+        {
+            <tr>
+                <td>@Pedido.Nro</td>
+                <td>@Pedido.Obs</td>
+                <td>@Pedido.ClienteNombre</td>
+                <td>@Pedido.ClienteDireccion</td>
+                <td>@Pedido.ClienteDatosReferenciaDireccion</td>
+                <td>@Pedido.Estado</td>
+            </tr>
+        }
         </table>
     </main>
 </body>

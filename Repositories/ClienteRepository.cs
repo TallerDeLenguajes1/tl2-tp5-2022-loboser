@@ -10,11 +10,13 @@ namespace tl2_tp4_2022_loboser.Repositories
     {
         private readonly string _cadenaConexion;
         private readonly ILogger<ClienteRepository> _logger;
+        private readonly IUsuarioRepository _usuarioRepository;
 
-        public ClienteRepository(IConexionRepository conexion, ILogger<ClienteRepository> logger)
+        public ClienteRepository(IConexionRepository conexion, ILogger<ClienteRepository> logger, IUsuarioRepository usuarioRepository)
         {
             this._cadenaConexion = conexion.GetConnectionString();
             this._logger = logger;
+            this._usuarioRepository = usuarioRepository;
         }
 
         public List<Cliente> GetClientes(){
@@ -150,9 +152,13 @@ namespace tl2_tp4_2022_loboser.Repositories
                     Conexion.Open();
                     using (SqliteCommand Comando = Conexion.CreateCommand())
                     {
+                        Comando.CommandText = "UPDATE Usuario SET nombreUsuario='" + cliente.Nombre + "' WHERE idCliente='" + cliente.Id + "';";
+                        Comando.ExecuteNonQuery();
+
                         Comando.CommandText = "UPDATE Cliente SET direccionCliente='" + cliente.Direccion + "', datosReferenciaDireccion='" + cliente.DatosReferenciaDireccion + "', nombreCliente='" + cliente.Nombre + "', telefonoCliente='" + cliente.Telefono + "' WHERE idCliente='" + cliente.Id + "';";
                         Comando.ExecuteNonQuery();
                     }
+                    _logger.LogTrace("Edición de Cliente {Nombre} exitosa!", cliente.Nombre);
                     Conexion.Close();
                 }
             }
@@ -171,10 +177,18 @@ namespace tl2_tp4_2022_loboser.Repositories
                     Conexion.Open();
                     using (SqliteCommand Comando = Conexion.CreateCommand())
                     {
-                        Comando.CommandText = "UPDATE Pedido SET idCliente='0' WHERE idCliente='" + id + "';";
+                        Comando.CommandText = "DELETE FROM Pedido WHERE idCliente='" + id + "';";
                         Comando.ExecuteNonQuery();
                         Comando.CommandText = "DELETE FROM Cliente WHERE idCliente='" + id + "';";
                         Comando.ExecuteNonQuery();  
+
+                        var usuario = _usuarioRepository.GetUsuarioByClienteId(id);
+                        if (usuario.Id != 0)
+                        {
+                            usuario.IdCliente = 0;
+                            _usuarioRepository.BajaUsuario(usuario);
+                        }
+                        
                     }
                     Conexion.Close();
                 }

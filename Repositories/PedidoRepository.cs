@@ -41,7 +41,7 @@ namespace tl2_tp4_2022_loboser.Repositories
                                 Pedido.Nro = Convert.ToInt32(Lector["nroPedido"].ToString());
                                 Pedido.Obs = Lector["Obs"].ToString();
                                 Pedido.Estado = Lector["Estado"].ToString();
-                                Pedido.IdCadeteAsignado = Convert.ToInt32(Lector["idCadeteAsignado"].ToString());
+                                Pedido.IdCadete = Convert.ToInt32(Lector["idCadete"].ToString());
 
                                 Pedido.Cliente = _clienteRepository.GetClienteById(Convert.ToInt32(Lector["idCliente"].ToString()));
 
@@ -68,7 +68,7 @@ namespace tl2_tp4_2022_loboser.Repositories
                 Conexion.Open();
                 using (SqliteCommand Comando = Conexion.CreateCommand())
                 {
-                    Comando.CommandText = "SELECT * FROM Pedido WHERE idCadeteAsignado='" + idCadete + "';";
+                    Comando.CommandText = "SELECT * FROM Pedido WHERE idCadete='" + idCadete + "';";
                     using (SqliteDataReader Lector = Comando.ExecuteReader())
                     {
                         while (Lector.Read())
@@ -78,7 +78,7 @@ namespace tl2_tp4_2022_loboser.Repositories
                             Pedido.Nro = Convert.ToInt32(Lector["nroPedido"].ToString());
                             Pedido.Obs = Lector["Obs"].ToString();
                             Pedido.Estado = Lector["Estado"].ToString();
-                            Pedido.IdCadeteAsignado = Convert.ToInt32(Lector["idCadeteAsignado"].ToString());
+                            Pedido.IdCadete = Convert.ToInt32(Lector["idCadete"].ToString());
 
                             Pedido.Cliente = _clienteRepository.GetClienteById(Convert.ToInt32(Lector["idCliente"].ToString()));
 
@@ -118,7 +118,7 @@ namespace tl2_tp4_2022_loboser.Repositories
                                 Pedido.Nro = Convert.ToInt32(Lector["nroPedido"].ToString());
                                 Pedido.Obs = Lector["Obs"].ToString();
                                 Pedido.Estado = Lector["Estado"].ToString();
-                                Pedido.IdCadeteAsignado = Convert.ToInt32(Lector["idCadeteAsignado"].ToString());
+                                Pedido.IdCadete = Convert.ToInt32(Lector["idCadete"].ToString());
 
                                 Pedido.Cliente = _clienteRepository.GetClienteById(Convert.ToInt32(Lector["idCliente"].ToString()));
 
@@ -156,7 +156,7 @@ namespace tl2_tp4_2022_loboser.Repositories
                                 Pedido.Nro = Convert.ToInt32(Lector["nroPedido"].ToString());
                                 Pedido.Obs = Lector["Obs"].ToString();
                                 Pedido.Estado = Lector["Estado"].ToString();
-                                Pedido.IdCadeteAsignado = Convert.ToInt32(Lector["idCadeteAsignado"].ToString());
+                                Pedido.IdCadete = Convert.ToInt32(Lector["idCadete"].ToString());
                                 
                                 Pedido.Cliente = _clienteRepository.GetClienteById(Convert.ToInt32(Lector["idCliente"].ToString()));
                                 _logger.LogTrace("Obtención del Pedido de Nro = {nro} exitosa!", nro);
@@ -181,7 +181,7 @@ namespace tl2_tp4_2022_loboser.Repositories
                     using (SqliteCommand Comando = Conexion.CreateCommand())
                     {
                         
-                        Comando.CommandText = "INSERT INTO Pedido(Obs, Estado, idCliente, idCadeteAsignado) VALUES('" + Pedido.Obs + "', '" +  Pedido.Estado + "', '0' , '0');";
+                        Comando.CommandText = "INSERT INTO Pedido(Obs, Estado, idCliente, idCadete) VALUES('" + Pedido.Obs + "', '" +  Pedido.Estado + "', '" + Pedido.Cliente.Id + "' , '" + Pedido.IdCadete + "');";
                         Comando.ExecuteNonQuery();
                         _logger.LogTrace("Alta de Pedido {obs} - {estado} de exitosa!", Pedido.Obs, Pedido.Estado);
                     }
@@ -226,7 +226,7 @@ namespace tl2_tp4_2022_loboser.Repositories
                     Conexion.Open();
                     using (SqliteCommand Comando = Conexion.CreateCommand())
                     {     
-                        Comando.CommandText = "UPDATE Pedido SET Obs='" + Pedido.Obs + "', idCliente ='" + Pedido.Cliente.Id + "', Estado='" + Pedido.Estado + "', idCadeteAsignado='" + Pedido.IdCadeteAsignado + "' WHERE nroPedido='" + Pedido.Nro + "';";
+                        Comando.CommandText = "UPDATE Pedido SET Obs='" + Pedido.Obs + "', idCliente ='" + Pedido.Cliente.Id + "', Estado='" + Pedido.Estado + "', idCadete='" + Pedido.IdCadete + "' WHERE nroPedido='" + Pedido.Nro + "';";
                         Comando.ExecuteNonQuery();
                         _logger.LogTrace("Edicion del Pedido de Nro = {nro} exitoso!", Pedido.Nro);
                     }
@@ -235,7 +235,7 @@ namespace tl2_tp4_2022_loboser.Repositories
             }
             catch (System.Exception ex)
             {
-                _logger.LogDebug("Error intentando EDITAR a el Pedido de NRO = {Nro}, con los datos {Obs} - {Estado} - idCliente: {idCliente} - idCadete {idCadete} ({error})", Pedido.Nro, Pedido.Obs, Pedido.Estado, Pedido.Cliente.Id, Pedido.IdCadeteAsignado, ex.Message);
+                _logger.LogDebug("Error intentando EDITAR a el Pedido de NRO = {Nro}, con los datos {Obs} - {Estado} - idCliente: {idCliente} - idCadete {idCadete} ({error})", Pedido.Nro, Pedido.Obs, Pedido.Estado, Pedido.Cliente.Id, Pedido.IdCadete, ex.Message);
             }
         }
     }

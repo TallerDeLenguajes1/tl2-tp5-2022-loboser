@@ -1,0 +1,104 @@
+@model List<tl2_tp4_2022_loboser.ViewModels.UsuarioViewModel>
+
+@{
+    ViewData["Title"] = "Lista de Usuarios";
+    var admins = Model.Where(t => t.Rol == "Admin").ToList();
+    var cadetes = Model.Where(t => t.Rol == "Cadete").ToList();
+    var clientes = Model.Where(t => t.Rol == "Cliente").ToList();
+}
+
+
+<body>
+    <header>
+        <h1>@ViewData["Title"]</h1>
+    </header>
+    <main>
+        <h2>Admins</h2>
+        <table class="table table-bordered table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>Id</th>
+                    <th>Nombre</th>
+                    <th>Nombre de Usuario</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (var admin in admins)
+                {
+                    <tr>
+                        <td>@admin.Id</td>
+                        <td>@admin.Nombre</td>
+                        <td>@admin.User</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        @if (cadetes.Count()>0)
+        {
+            <h2>Cadetes</h2>
+            <table class="table table-bordered table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>Id</th>
+                    <th>Nombre</th>
+                    <th>Nombre de Usuario</th>
+                    <th>Dirección</th>
+                    <th>Teléfono</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var cadete in cadetes)
+                {
+                    <tr>
+                        <td>@cadete.Id</td>
+                        <td>@cadete.Nombre</td>
+                        <td>@cadete.User</td>
+                        <td>@cadete.Direccion</td>
+                        <td>@cadete.Telefono</td>
+                        <td>
+                            <a class="btn btn-primary btn-sm" asp-controller="Usuario" asp-action="EditarUsuario" asp-route-id="@cadete.Id">Editar</a>
+                            <a class="btn btn-danger btn-sm" asp-controller="Usuario" asp-action="BajaUsuario" asp-route-id="@cadete.Id">Eliminar</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        }
+
+        @if (clientes.Count()>0)
+        {
+            <h2>Clientes</h2>
+            <table class="table table-bordered table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>Id</th>
+                    <th>Nombre</th>
+                    <th>Nombre de Usuario</th>
+                    <th>Dirección</th>
+                    <th>Teléfono</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var cliente in clientes)
+                {
+                    <tr>
+                        <td>@cliente.Id</td>
+                        <td>@cliente.Nombre</td>
+                        <td>@cliente.User</td>
+                        <td>@cliente.Direccion</td>
+                        <td>@cliente.Telefono</td>
+                        <td>
+                            <a class="btn btn-primary btn-sm" asp-controller="Usuario" asp-action="EditarUsuario" asp-route-id="@cliente.Id">Editar</a>
+                            <a class="btn btn-danger btn-sm" asp-controller="Usuario" asp-action="BajaUsuario" asp-route-id="@cliente.Id">Eliminar</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        }
+    </main>
+</body>

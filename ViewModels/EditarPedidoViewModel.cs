@@ -29,5 +29,9 @@ namespace tl2_tp4_2022_loboser.ViewModels
         [Required]
         [StringLength(7)]
         public string Aux { get; set; }
+
+        public List<CadeteViewModel> Cadetes {get; set;}
+
+        public List<ClienteViewModel> Clientes {get; set;}
     }
 }
