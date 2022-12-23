@@ -91,15 +91,25 @@ namespace tl2_tp4_2022_loboser.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    var cadete = _mapper.Map<Cadete>(CadeteRecibido);
-                    var usuario = new Usuario(cadete);
-                    
-                    if (_usuarioRepository.GetUsuarioByUser(usuario.User).Id == 0)
+                    if (_cadeteriaRepository.GetCadeteByTelefono(CadeteRecibido.Telefono).Id == 0)
                     {
-                        _usuarioRepository.AltaUsuario(usuario);
-                        _cadeteriaRepository.AltaCadete(cadete);
+                        var cadete = _mapper.Map<Cadete>(CadeteRecibido);
+                        var usuario = new Usuario(cadete);
+                        
+                        if (_usuarioRepository.GetUsuarioByUser(usuario.User).Id == 0)
+                        {
+                            _usuarioRepository.AltaUsuario(usuario);
+                            _cadeteriaRepository.AltaCadete(cadete);
+                        }
+                        else
+                        {
+                            TempData["Error"] = "Error! Ya existe un usuario con ese nombre de usuario...!";
+                        }
                     }
-
+                    else
+                    {
+                        TempData["Alert"] = "Error! Ya existe un cadete con ese numero de telefono...!";
+                    }
                     return RedirectToAction("Cadetes");
                 }
             }
@@ -135,6 +145,14 @@ namespace tl2_tp4_2022_loboser.Controllers
                     {
                         _cadeteriaRepository.EditarCadete(cadete);      //Edita el Cadete y el Nombre del Usuario asociado a el
                     }
+                    else
+                    {
+                        TempData["Error"] = "No existe el Cadete a Editar...!";
+                    }
+                }
+                else
+                {
+                    TempData["Error"] = "Error en la Edición de Cadete...!";
                 }
                 return RedirectToAction("Cadetes");
             }
@@ -151,6 +169,10 @@ namespace tl2_tp4_2022_loboser.Controllers
                 if (cadete.Id != 0)
                 {
                     _cadeteriaRepository.BajaCadete(id);        //Elimina el Cadete y el Usuario asociado a el
+                }
+                else
+                {
+                    TempData["Error"] = "No existe el Cadete a Eliminar...!";
                 }
                 return RedirectToAction("Cadetes");
             }

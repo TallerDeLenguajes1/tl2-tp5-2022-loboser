@@ -93,6 +93,39 @@ namespace tl2_tp4_2022_loboser.Repositories
             return Cadete;
         }
 
+        public Cadete GetCadeteByTelefono(string telefono){
+            Cadete Cadete = new Cadete();
+            try
+            {
+                using(SqliteConnection Conexion = new SqliteConnection(_cadenaConexion))
+                {
+                    Conexion.Open();
+                    using (SqliteCommand Comando = Conexion.CreateCommand())
+                    {
+                        Comando.CommandText = "SELECT * FROM Cadete WHERE telefonoCadete='" + telefono + "'";
+                        using (SqliteDataReader Lector = Comando.ExecuteReader())
+                        {
+                            if (Lector.Read())
+                            {
+                                Cadete.Id = Convert.ToInt32(Lector["idCadete"].ToString());
+                                Cadete.Nombre = Lector["nombreCadete"].ToString();
+                                Cadete.Direccion = Lector["direccionCadete"].ToString();
+                                Cadete.Telefono = Lector["telefonoCadete"].ToString();
+                                Cadete.Pedidos = _pedidoRepository.GetPedidosByCadete(Convert.ToInt32(Lector["idCadete"].ToString()));
+                                _logger.LogTrace("Obtención de Cadete de telefono = {telefono} exitosa!", telefono);
+                            }
+                            Conexion.Close();
+                        }
+                    }
+                }
+            }
+            catch (System.Exception ex)
+            {
+                _logger.LogDebug("Error intentando OBTENER a el Cadete de Id = {telefono} ({error})", telefono, ex.Message);
+            }
+            return Cadete;
+        }
+
         public void AltaCadete(Cadete Cadete)
         {
             try

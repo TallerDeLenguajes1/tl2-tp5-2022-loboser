@@ -98,6 +98,10 @@ namespace tl2_tp4_2022_loboser.Controllers
                     var pedido = _mapper.Map<Pedido>(PedidoRecibido);
                     _pedidoRepository.AltaPedido(pedido);
                 }
+                else
+                {
+                    TempData["Error"] = "Error en la subida de Pedido Exitosa...!";
+                }
             }
             return RedirectToAction("Redireccion", "Usuario");
         }
@@ -109,6 +113,10 @@ namespace tl2_tp4_2022_loboser.Controllers
             if (pedido.Nro != 0 && (HttpContext.Session.GetString("rol") == "Admin" || (HttpContext.Session.GetString("rol") == "Cliente" && pedido.Cliente.Id == Convert.ToInt32(HttpContext.Session.GetString("id")) && pedido.IdCadete == 0)))
             {
                 _pedidoRepository.BajaPedido(nro);
+            }
+            else
+            {
+                TempData["Error"] = "No existe el Pedido a Eliminar...!";
             }
             return RedirectToAction("Redireccion", "Usuario", new{idCadete = pedido.IdCadete, idCliente = pedido.Cliente.Id, aux = aux});
         }
@@ -141,7 +149,18 @@ namespace tl2_tp4_2022_loboser.Controllers
                 {
                     var pedido = _mapper.Map<Pedido>(Edit);
 
-                    _pedidoRepository.EditarPedido(pedido);
+                    if (_pedidoRepository.GetPedidoByNro(Edit.Nro).Nro != 0)
+                    {
+                        _pedidoRepository.EditarPedido(pedido);
+                    }
+                    else
+                    {
+                        TempData["Error"] = "No existe el Pedido a Editar...!";
+                    }
+                }
+                else
+                {
+                    TempData["Error"] = "Error! al editar el Pedido...!";
                 }
             }
             return RedirectToAction("Redireccion", "Usuario", new{idCadete = Edit.IdCadete, idCliente = Edit.ClienteId, aux = Edit.Aux});

@@ -35,6 +35,7 @@ namespace tl2_tp4_2022_loboser.Controllers
             if(HttpContext.Session.GetString("nombre") != null){
                 var nombre = HttpContext.Session.GetString("nombre");
                 HttpContext.Session.Clear();
+                TempData["Info"] = "Deslogeo Exitoso...!";
 
                 _logger.LogTrace("Deslogeo de {User} exitoso!", nombre);
             }
@@ -55,6 +56,7 @@ namespace tl2_tp4_2022_loboser.Controllers
                     HttpContext.Session.SetString("id", (usuario.IdCliente != 0)?usuario.IdCliente.ToString():usuario.IdCadete.ToString());
                     HttpContext.Session.SetString("nombre", usuario.Nombre);
                     HttpContext.Session.SetString("rol", usuario.Rol);
+
                     if (usuario.Rol == "Admin")
                     {
                         return RedirectToAction("Cadetes", "Cadeteria");
@@ -68,6 +70,8 @@ namespace tl2_tp4_2022_loboser.Controllers
                         return RedirectToAction("Index", "Cliente");
                     }
                 }
+                TempData["Error"] = "Usuario o Contraseña incorrectos...!";
+
             }
             return RedirectToAction("Index");
         }
@@ -176,6 +180,11 @@ namespace tl2_tp4_2022_loboser.Controllers
                     {
                         _usuarioRepository.EditarUsuario(usuario);      //Edita el Usuario y el Nombre del Cadete/Cliente asociado a el
                     }
+                    else
+                    {
+                        TempData["Error"] = "Error al Editar usuario...!";
+                        
+                    }
                     return RedirectToAction("Usuarios");
                 }
             }
@@ -193,6 +202,8 @@ namespace tl2_tp4_2022_loboser.Controllers
                 {
                     _usuarioRepository.BajaUsuario(usuario);        //Elimina el Usuario y el Cadete/Cliente asociado a el
                 }
+                TempData["Error"] = "No se encontró el usuario...!";
+
                 return RedirectToAction("Usuarios");
             }
             return RedirectToAction("Redireccion");

@@ -92,12 +92,12 @@ namespace tl2_tp4_2022_loboser.Controllers
                         }
                         else
                         {
-                            TempData["Alert"] = "No se pudo porque ya existe ese nombre de usuario...!";
+                            TempData["Alert"] = "Error! Ya existe un usuario con ese nombre de usuario...!";
                         }
                     }
                     else
                     {
-                        TempData["Alert"] = "No se pudo porque ya existe un cliente con ese numero de telefono...!";
+                        TempData["Alert"] = "Error! Ya existe un cliente con ese numero de telefono...!";
                     }
                     return RedirectToAction("Clientes");
                 }
@@ -136,8 +136,16 @@ namespace tl2_tp4_2022_loboser.Controllers
                     {
                         _clienteRepository.EditarCliente(cliente);      //Edita el Cadete y el Nombre del Usuario asociado a el
                     }
-                    return RedirectToAction("Clientes");
+                    else
+                    {
+                        TempData["Error"] = "No existe el Cliente a Editar...!";
+                    }
                 }
+                else
+                {
+                    TempData["Error"] = "Error en la Edición de Cliente...!";
+                }
+                return RedirectToAction("Clientes");
             }
             return RedirectToAction("Redireccion", "Usuario");
         }
@@ -152,6 +160,11 @@ namespace tl2_tp4_2022_loboser.Controllers
                 if (cliente.Id != 0)
                 {
                     _clienteRepository.BajaCliente(id);     //Elimina el Cliente y el Usuario asociado a el
+
+                }
+                else
+                {
+                    TempData["Error"] = "No existe el Cliente a Eliminar...!";
                 }
                 return RedirectToAction("Clientes");
             }

@@ -10,6 +10,7 @@ namespace tl2_tp4_2022_loboser.Repositories
         // Cadeteria GetCadeteria();
         List<Cadete> GetCadetes();
         Cadete GetCadeteById(int id);
+        Cadete GetCadeteByTelefono(string telefono);
         void AltaCadete(Cadete Cadete);
         void BajaCadete(int id);
         void EditarCadete(Cadete Cadete);
