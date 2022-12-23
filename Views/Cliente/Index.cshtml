@@ -1,6 +1,8 @@
 ﻿@model List<tl2_tp4_2022_loboser.ViewModels.PedidoViewModel>
 @{
     ViewData["Title"] = "Tus Pedidos";
+    var pedidosAsignados = Model.Where(t => t.IdCadete != 0).ToList();
+    var pedidosSinAsignar = Model.Where(t => t.IdCadete == 0).ToList();
 }
 
 <body>
@@ -8,28 +10,54 @@
         <h1>@ViewData["Title"] @ViewBag.Nombre</h1>
     </header>
     <main>
-        <table class="table table-bordered table-hover">
-        <thead class="table-dark">
-            <tr>
-                <th>Nro</th>
-                <th>Nombre</th>
-                <th>Observacion</th>
-                <th>Direccion</th>
-                <th>Datos de referencia</th>
-                <th>Estado</th>
-            </tr>
-        </thead>
-        @foreach (var Pedido in Model)
-        {
-            <tr>
-                <td>@Pedido.Nro</td>
-                <td>@Pedido.Obs</td>
-                <td>@Pedido.ClienteNombre</td>
-                <td>@Pedido.ClienteDireccion</td>
-                <td>@Pedido.ClienteDatosReferenciaDireccion</td>
-                <td>@Pedido.Estado</td>
-            </tr>
-        }
-        </table>
+        <section>
+            <article>
+                <table class="table table-bordered table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Nro</th>
+                        <th>Observacion</th>
+                        <th>Nombre del cadete asignado</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                @foreach (var Pedido in pedidosAsignados)
+                {
+                    <tr>
+                        <td>@Pedido.Nro</td>
+                        <td>@Pedido.Obs</td>
+                        <td>@Pedido.NombreCadete</td>
+                        <td>@Pedido.Estado</td>
+                    </tr>
+                }
+                </table>
+            </article>
+            <article>
+                <h2>Pedidos sin Asignar</h2>
+                <table class="table table-bordered table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Nro</th>
+                        <th>Observacion</th>
+                        <th>Estado</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                @foreach (var Pedido in pedidosSinAsignar)
+                {
+                    <tr>
+                        <td>@Pedido.Nro</td>
+                        <td>@Pedido.Obs</td>
+                        <td>@Pedido.Estado</td>
+                        <td>
+                            <a class="btn btn-primary btn-sm" asp-controller="Pedido" asp-action="EditarPedido" asp-route-nro="@Pedido.Nro" asp-route-aux="Cliente">Editar</a>
+                            <a class="btn btn-danger btn-sm" asp-controller="Pedido" asp-action="BajaPedido" asp-route-nro="@Pedido.Nro">Eliminar</a>
+                        </td>
+                    </tr>
+                }
+                </table>
+            </article>
+            <a class="btn btn-success btn-sm" asp-controller="Pedido" asp-action="AltaPedido">Crear Pedido</a>
+        </section>
     </main>
 </body>

@@ -13,6 +13,10 @@ namespace tl2_tp4_2022_loboser.ViewModels
 
         [Required]
         [StringLength(100)]
+        public string User { get; set; }
+
+        [Required]
+        [StringLength(100)]
         public string Nombre { get; set; }
 
         [Required]
@@ -28,9 +32,10 @@ namespace tl2_tp4_2022_loboser.ViewModels
         public string DatosReferenciaDireccion{ get; set; }
 
         public ClienteViewModel(){}
-        public ClienteViewModel(int id, string nombre, string direccion, string telefono, string datosReferenciaDireccion)
+        public ClienteViewModel(int id,string user, string nombre, string direccion, string telefono, string datosReferenciaDireccion)
         {
             this.Id = id;
+            this.User = user;
             this.Nombre = nombre;
             this.Direccion = direccion;
             this.Telefono = telefono;

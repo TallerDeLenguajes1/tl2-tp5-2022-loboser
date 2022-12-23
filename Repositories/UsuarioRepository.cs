@@ -106,7 +106,7 @@ namespace tl2_tp4_2022_loboser.Repositories
                     Conexion.Open();
                     using (SqliteCommand Comando = Conexion.CreateCommand())
                     {
-                        Comando.CommandText = "SELECT * FROM Usuario WHERE usuarioUsuario == '" + User + "';";
+                        Comando.CommandText = "SELECT * FROM Usuario WHERE usuarioUsuario = '" + User + "';";
                         using (SqliteDataReader Lector = Comando.ExecuteReader())
                         {
                             if (Lector.Read())
@@ -142,7 +142,7 @@ namespace tl2_tp4_2022_loboser.Repositories
                     Conexion.Open();
                     using (SqliteCommand Comando = Conexion.CreateCommand())
                     {
-                        Comando.CommandText = "SELECT * FROM Usuario WHERE id = '" + id + "';";
+                        Comando.CommandText = "SELECT * FROM Usuario WHERE idUsuario = '" + id + "';";
                         using (SqliteDataReader Lector = Comando.ExecuteReader())
                         {
                             if (Lector.Read())
@@ -317,7 +317,7 @@ namespace tl2_tp4_2022_loboser.Repositories
 
                         if (Usuario.IdCliente != 0)
                         {
-                            Comando.CommandText = "DELETE FROM Cliente WHERE idCliente='" + Usuario.IdCadete + "';";
+                            Comando.CommandText = "DELETE FROM Cliente WHERE idCliente='" + Usuario.IdCliente + "';";
                             Comando.ExecuteNonQuery();
                         }
 

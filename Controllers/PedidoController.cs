@@ -44,8 +44,8 @@ namespace tl2_tp4_2022_loboser.Controllers
                 }
 
                 return View(PedidosVM);
-            }
-            return RedirectToAction("VerPedidos", "Pedido", new{id = 0});
+            } 
+            return RedirectToAction("Redireccion", "Usuario");
         }
 
         [HttpGet]
@@ -57,7 +57,7 @@ namespace tl2_tp4_2022_loboser.Controllers
             {
                 Cambiar(pedido);
 
-                return RedirectToAction(aux, "Pedido", new {id = (aux=="VerPedidos")?pedido.IdCadete:pedido.Cliente.Id});
+                return RedirectToAction("Redireccion", "Usuario", new {idCadete = pedido.IdCadete, idCliente = pedido.Cliente.Id, aux = aux});
             }
             else if (HttpContext.Session.GetString("rol") == "Cadete" && pedido.Nro != 0)
             {
@@ -68,7 +68,7 @@ namespace tl2_tp4_2022_loboser.Controllers
                     Cambiar(pedido);
                 }
             }
-            return RedirectToAction("Index", "Cadeteria");
+            return RedirectToAction("Redireccion", "Usuario");
         }
         
         [HttpGet]
@@ -85,7 +85,7 @@ namespace tl2_tp4_2022_loboser.Controllers
 
                 return View(altaPedido);
             }
-            return RedirectToAction("VerPedidos", "Pedido", new{id = 0});
+            return RedirectToAction("Redireccion", "Usuario");
         }
 
         [HttpPost]
@@ -97,68 +97,54 @@ namespace tl2_tp4_2022_loboser.Controllers
                 {
                     var pedido = _mapper.Map<Pedido>(PedidoRecibido);
                     _pedidoRepository.AltaPedido(pedido);
-
-                    return RedirectToAction("Index", "Pedido");
                 }
             }
-            return RedirectToAction("VerPedidos", "Pedido", new{id = 0});
+            return RedirectToAction("Redireccion", "Usuario");
         }
 
         [HttpGet]
-        public IActionResult BajaPedido(int nro, string aux)
-        {
-            if (HttpContext.Session.GetString("rol") == "Admin")
+        public IActionResult BajaPedido(int nro, string aux)           // el cliente solo puede dar de baja a su pedido                                       
+        {                                                              // si el pedido no esta asignado a un cadete
+            var pedido = _pedidoRepository.GetPedidoByNro(nro);
+            if (pedido.Nro != 0 && (HttpContext.Session.GetString("rol") == "Admin" || (HttpContext.Session.GetString("rol") == "Cliente" && pedido.Cliente.Id == Convert.ToInt32(HttpContext.Session.GetString("id")) && pedido.IdCadete == 0)))
             {
-                var pedido = _pedidoRepository.GetPedidoByNro(nro);
-                if (pedido.Nro != 0)
-                {
-                    _pedidoRepository.BajaPedido(nro);
-                }
-
-                return RedirectToAction(aux, "Pedido", new {id = (aux=="VerPedidos")?pedido.IdCadete:pedido.Cliente.Id});
+                _pedidoRepository.BajaPedido(nro);
             }
-            return RedirectToAction("VerPedidos", "Pedido", new{id = 0});
+            return RedirectToAction("Redireccion", "Usuario", new{idCadete = pedido.IdCadete, idCliente = pedido.Cliente.Id, aux = aux});
         }
 
         [HttpGet]
         public IActionResult EditarPedido(int nro, string aux)
         {
-            if (HttpContext.Session.GetString("rol") == "Admin")
+            var pedido = _pedidoRepository.GetPedidoByNro(nro);         //El cliente solo puede editar el pedido si es suyo y si no fue asignado a un cadete
+
+            if (pedido.Nro != 0 && (HttpContext.Session.GetString("rol") == "Admin" || (HttpContext.Session.GetString("rol") == "Cliente" && pedido.Cliente.Id == Convert.ToInt32(HttpContext.Session.GetString("id")) && pedido.IdCadete == 0)))
             {
-                var pedido = _pedidoRepository.GetPedidoByNro(nro);
+                var editPedidoVM = _mapper.Map<EditarPedidoViewModel>(pedido);
+                editPedidoVM.Clientes = _mapper.Map<List<ClienteViewModel>>(_clienteRepository.GetClientes());
+                editPedidoVM.Cadetes = _mapper.Map<List<CadeteViewModel>>(_cadeteriaRepository.GetCadetes());
+                ViewBag.Aux = aux;
+                ViewBag.Rol = HttpContext.Session.GetString("rol");
 
-                if (pedido.Nro != 0)
-                {
-                    var editPedidoVM = _mapper.Map<EditarPedidoViewModel>(pedido);
-                    editPedidoVM.Clientes = _mapper.Map<List<ClienteViewModel>>(_clienteRepository.GetClientes());
-                    editPedidoVM.Cadetes = _mapper.Map<List<CadeteViewModel>>(_cadeteriaRepository.GetCadetes());
-                    ViewBag.Aux = aux;
-
-                    return View(editPedidoVM);
-                }else
-                {
-                    return RedirectToAction("AltaPedido");
-                }
+                return View(editPedidoVM);
             }
-            return RedirectToAction("VerPedidos", "Pedido", new{id = 0});
+
+            return RedirectToAction("Redireccion", "Usuario", new{idCadete = pedido.IdCadete, idCliente = pedido.Cliente.Id, aux = aux});
         }
 
         [HttpPost]
         public IActionResult EditarPedido(EditarPedidoViewModel Edit)
         {
-            if (HttpContext.Session.GetString("rol") == "Admin")
+            if (HttpContext.Session.GetString("rol") == "Admin" || (HttpContext.Session.GetString("rol") == "Cliente" && Edit.ClienteId == Convert.ToInt32(HttpContext.Session.GetString("id")) && Edit.IdCadete == 0))
             {
                 if (ModelState.IsValid)
                 {
                     var pedido = _mapper.Map<Pedido>(Edit);
 
                     _pedidoRepository.EditarPedido(pedido);
-
-                    return RedirectToAction(Edit.Aux, "Pedido", new {id = (Edit.Aux=="VerPedidos")?pedido.IdCadete:pedido.Cliente.Id});
                 }
-                return RedirectToAction("Index", "Pedido");
             }
-            return RedirectToAction("VerPedidos", "Pedido", new{id = 0});
+            return RedirectToAction("Redireccion", "Usuario", new{idCadete = Edit.IdCadete, idCliente = Edit.ClienteId, aux = Edit.Aux});
         }
         
         [HttpGet]
@@ -171,7 +157,6 @@ namespace tl2_tp4_2022_loboser.Controllers
             if (HttpContext.Session.GetString("rol") == "Admin")        //Solo usado para desasignar siendo admin
             {
                 Asignar(desasignar, 0, pedido);
-                return RedirectToAction(aux, "Pedido", new {id = (aux=="VerPedidos")?pedido.IdCadete:pedido.Cliente.Id});
             }
             else if (HttpContext.Session.GetString("rol") == "Cadete")         //Usado para asignar y desasignar pedidos
             {
@@ -181,9 +166,8 @@ namespace tl2_tp4_2022_loboser.Controllers
                 desasignar = cadete.Pedidos.Where(t => t.Nro == nro).Count()>0;
 
                 Asignar(desasignar, idCadete, pedido);  
-                return RedirectToAction("Index", "Cadeteria");
             }
-            return RedirectToAction("Index");
+            return RedirectToAction("Redireccion", "Usuario", new{idCadete = idCadete, idCliente = pedido.Cliente.Id, aux = aux});
         }
 
             [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
@@ -192,12 +176,12 @@ namespace tl2_tp4_2022_loboser.Controllers
             return View("Error!");
         }
 
-        private void Cambiar(Pedido pedido)
+        private void Cambiar(Pedido pedido)             //cambia de estado al pedido
         {
             pedido.Estado = (pedido.Estado == "En Proceso")?"Entregado":"En Proceso";
             _pedidoRepository.EditarPedido(pedido);
         }
-        private void Asignar(bool desasignar, int idCadete, Pedido pedido)
+        private void Asignar(bool desasignar, int idCadete, Pedido pedido)          //asigna o desasigna el pedido a un cadete
         {
             if (desasignar)
             {

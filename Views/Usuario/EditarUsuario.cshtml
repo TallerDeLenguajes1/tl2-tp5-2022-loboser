@@ -29,13 +29,13 @@
             <div class="row mb-3">
                 <label class="col-sm-3 col-form-label" asp-for="Pass">Contraseña</label>
                 <div class="col-sm-6">
-                    <input class="form-control" type="pass" asp-for="Pass" value="@Model.Pass" placeholder="Contraseña">
+                    <input class="form-control" type="password" asp-for="Pass" placeholder="Contraseña">
                 </div>
             </div>
             <div class="row mb-3">
                 <label class="col-sm-3 col-form-label" asp-for="ConfirmPass">Repetir Contraseña</label>
                 <div class="col-sm-6">
-                    <input class="form-control" type="pass" asp-for="ConfirmPass" value="@Model.ConfirmPass" placeholder="Repetir Contraseña">
+                    <input class="form-control" type="password" asp-for="ConfirmPass" placeholder="Repetir Contraseña">
                 </div>
             </div>
             <div class="row mb-3">
@@ -43,7 +43,7 @@
                     <input class="btn btn-primary" type="submit" value="Enviar">
                 </div>
                 <div class="col-sm-3 d-grid">
-                    <input class="btn btn-primary" type="reset" value="Borrar">
+                    <input class="btn btn-danger" type="reset" value="Borrar">
                 </div>
             </div>
         </form>

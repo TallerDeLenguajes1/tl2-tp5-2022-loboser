@@ -1,7 +1,7 @@
 @model List<tl2_tp4_2022_loboser.ViewModels.ClienteViewModel>
 
 @{
-    ViewData["Title"] = "Lista De Clientes";
+    ViewData["Title"] = "Lista de Clientes";
 }
 
 <body>
@@ -14,6 +14,7 @@
                 <tr>
                     <th>Id</th>
                     <th>Nombre</th>
+                    <th>Nombre de Usuario</th>
                     <th>Direccion</th>
                     <th>Datos Referencia Direccion</th>
                     <th>Telefono</th>
@@ -26,12 +27,13 @@
                 <tr>
                     <td>@Cliente.Id</td>
                     <td>@Cliente.Nombre</td>
+                    <td>@Cliente.User</td>
                     <td>@Cliente.Direccion</td>
                     <td>@Cliente.DatosReferenciaDireccion</td>
                     <td>@Cliente.Telefono</td>
                     <td>
                         <a class="btn btn-primary btn-sm" asp-controller="Cliente" asp-action="EditarCliente" asp-route-id="@Cliente.Id">Editar</a>
-                        <a class="btn btn-primary btn-sm" asp-controller="Pedido" asp-action="VerPedidosCliente" asp-route-id="@Cliente.Id">Ver Pedidos</a>
+                        <a class="btn btn-primary btn-sm" asp-controller="Cliente" asp-action="VerPedidosCliente" asp-route-id="@Cliente.Id">Ver Pedidos</a>
                         <a class="btn btn-danger btn-sm" asp-controller="Cliente" asp-action="BajaCliente" asp-route-id="@Cliente.Id">Eliminar</a>
                     </td>
                 </tr>

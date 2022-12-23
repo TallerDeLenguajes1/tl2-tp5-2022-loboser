@@ -1,3 +1,4 @@
+using System.Net;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -36,24 +37,29 @@ namespace tl2_tp4_2022_loboser.Controllers
             if (HttpContext.Session.GetString("rol") == "Cliente")
             {
                 var pedidos = _pedidoRepository.GetPedidosByCliente(Convert.ToInt32(HttpContext.Session.GetString("id")));
-                if (pedidos.Count()>0)
-                {
-                    ViewBag.Nombre = pedidos[0].Cliente.Nombre;
-                }
-                return View(_mapper.Map<List<PedidoViewModel>>(pedidos));
+                ViewBag.Nombre = HttpContext.Session.GetString("nombre");
+                var pedidosVM = _mapper.Map<List<PedidoViewModel>>(pedidos);
+                pedidosVM.ForEach(t => t.NombreCadete = _cadeteriaRepository.GetCadeteById(t.IdCadete).Nombre);
+
+                return View(pedidosVM);
             }
-            return RedirectToAction("VerPedidos", "Pedido", new{id = 0}); 
+            return RedirectToAction("Redireccion", "Usuario");
         }
 
         [HttpGet]
         public IActionResult Clientes(){
             if (HttpContext.Session.GetString("rol") == "Admin")
             {
-                var Clientes = _clienteRepository.GetClientes();
+                var clientesVM = _mapper.Map<List<ClienteViewModel>>(_clienteRepository.GetClientes());
+
+                if (clientesVM.Count>0)
+                {
+                    clientesVM.ForEach(t=>t.User = _usuarioRepository.GetUsuarioByClienteId(t.Id).User);
+                }
                 
-                return View(_mapper.Map<List<ClienteViewModel>>(Clientes));
+                return View(clientesVM);
             }
-            return RedirectToAction("Index"); 
+            return RedirectToAction("Redireccion", "Usuario");
         }
 
         [HttpGet]
@@ -63,7 +69,7 @@ namespace tl2_tp4_2022_loboser.Controllers
             {
                 return View();
             }
-            return RedirectToAction("Index");
+            return RedirectToAction("Redireccion", "Usuario");
         }
 
         [HttpPost]
@@ -93,10 +99,10 @@ namespace tl2_tp4_2022_loboser.Controllers
                     {
                         TempData["Alert"] = "No se pudo porque ya existe un cliente con ese numero de telefono...!";
                     }
-                    return RedirectToAction("ListaClientes");
+                    return RedirectToAction("Clientes");
                 }
             }
-            return RedirectToAction("Index");
+            return RedirectToAction("Redireccion", "Usuario");
         }
 
         [HttpGet]
@@ -111,10 +117,10 @@ namespace tl2_tp4_2022_loboser.Controllers
                     return View(_mapper.Map<EditarClienteViewModel>(cliente));
                 }
 
-                return RedirectToAction("ListaClientes");
+                return RedirectToAction("Clientes");
             }
             
-            return RedirectToAction("Index");
+            return RedirectToAction("Redireccion", "Usuario");
         }
 
         [HttpPost]
@@ -130,10 +136,10 @@ namespace tl2_tp4_2022_loboser.Controllers
                     {
                         _clienteRepository.EditarCliente(cliente);      //Edita el Cadete y el Nombre del Usuario asociado a el
                     }
-                    return RedirectToAction("Index");
+                    return RedirectToAction("Clientes");
                 }
             }
-            return RedirectToAction("VerPedidos", "Pedido", new{id = 0});
+            return RedirectToAction("Redireccion", "Usuario");
         }
 
         [HttpGet]
@@ -147,9 +153,9 @@ namespace tl2_tp4_2022_loboser.Controllers
                 {
                     _clienteRepository.BajaCliente(id);     //Elimina el Cliente y el Usuario asociado a el
                 }
-                return RedirectToAction("Index");
+                return RedirectToAction("Clientes");
             }
-            return RedirectToAction("VerPedidos", "Pedido", new{id = 0});
+            return RedirectToAction("Redireccion", "Usuario");
         }
 
         [HttpGet]
@@ -165,7 +171,7 @@ namespace tl2_tp4_2022_loboser.Controllers
 
                 return View(pedidos);
             }
-            return RedirectToAction("VerPedidos", "Pedido", new{id = 0});
+            return RedirectToAction("Redireccion", "Usuario");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

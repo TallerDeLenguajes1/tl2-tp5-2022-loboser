@@ -12,7 +12,7 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
                 <div class="container-fluid">
-                    <a class="navbar-brand" asp-area="" asp-controller="Cadeteria" asp-action="Index">Lista de Cadetes</a>
+                    <a class="navbar-brand" asp-area="" asp-controller="Cadeteria" asp-action="Cadetes">Lista de Cadetes</a>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                             aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
@@ -29,10 +29,13 @@
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Pedido" asp-action="AltaPedido">Alta Pedido</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Cliente" asp-action="Index">Lista De Clientes</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Cliente" asp-action="Clientes">Lista De Clientes</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Cliente" asp-action="AltaCliente">Alta Cliente</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Usuario" asp-action="Usuarios">Lista De Usuarios</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Usuario" asp-action="Registro">Registrarse</a>
@@ -47,10 +50,16 @@
     </header>
     <div class="container">
         <main role="main" class="pb-3">
-            @if (TempData["Alert"] != null)
+            @if (TempData["Info"] != null)
+            {
+                <div class="alert alert-success">
+                     @TempData["Info"]
+                </div>
+            }
+            @if (TempData["Error"] != null)
             {
                 <div class="alert alert-danger">
-                     @TempData["Alert"]
+                     @TempData["Error"]
                 </div>
             }
             @RenderBody()

@@ -24,7 +24,7 @@ namespace tl2_tp4_2022_loboser.ViewModels
         public int ClienteId { get; set; }
 
         [Required]
-        public int IdCadeteAsignado { get; set; }
+        public int IdCadete { get; set; }
 
         [Required]
         [StringLength(7)]

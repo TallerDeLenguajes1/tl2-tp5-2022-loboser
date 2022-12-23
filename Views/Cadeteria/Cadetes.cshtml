@@ -1,7 +1,7 @@
 @model List<tl2_tp4_2022_loboser.ViewModels.CadeteViewModel>
 
 @{
-    ViewData["Title"] = "Lista de cadetes";
+    ViewData["Title"] = "Lista de Cadetes";
 }
 
 <body>
@@ -15,6 +15,7 @@
                 <tr>
                     <th>Id</th>
                     <th>Nombre</th>
+                    <th>Nombre de Usuario</th>
                     <th>Direccion</th>
                     <th>Telefono</th>
                     <th></th>
@@ -27,11 +28,12 @@
                     <tr>
                         <td>@Cadete.Id</td>
                         <td>@Cadete.Nombre</td>
+                        <td>@Cadete.User</td>
                         <td>@Cadete.Direccion</td>
                         <td>@Cadete.Telefono</td>
                         <td>
                             <a class="btn btn-primary btn-sm" asp-controller="Cadeteria" asp-action="EditarCadete" asp-route-id="@Cadete.Id">Editar</a>
-                            <a class="btn btn-primary btn-sm" asp-controller="Pedido" asp-action="VerPedidos" asp-route-id="@Cadete.Id">Ver Pedidos</a>
+                            <a class="btn btn-primary btn-sm" asp-controller="Cadeteria" asp-action="VerPedidosCadete" asp-route-id="@Cadete.Id">Ver Pedidos</a>
                             <a class="btn btn-danger btn-sm" asp-controller="Cadeteria" asp-action="BajaCadete" asp-route-id="@Cadete.Id">Eliminar</a>
                         </td>
                     </tr>

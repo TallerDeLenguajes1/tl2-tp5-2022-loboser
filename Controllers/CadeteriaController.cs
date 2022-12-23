@@ -48,7 +48,7 @@ namespace tl2_tp4_2022_loboser.Controllers
 
                 return View(cadeteVM);
             }
-            return RedirectToAction("Cadetes");
+            return RedirectToAction("Redireccion", "Usuario");
         }
 
         [HttpGet]
@@ -62,16 +62,18 @@ namespace tl2_tp4_2022_loboser.Controllers
                 ViewBag.NombreCadeteria = Cadeteria.Nombre;
                 ViewBag.TelefonoCadeteria = Cadeteria.Telefono;
 
+                CadetesVM = _mapper.Map<List<CadeteViewModel>>(Cadeteria.Cadetes);
+
                 if (Cadeteria.Cadetes.Count()>0)
                 {
-                    CadetesVM = _mapper.Map<List<CadeteViewModel>>(Cadeteria.Cadetes);
+                    CadetesVM.ForEach(t => t.User = _usuarioRepository.GetUsuarioByCadeteId(t.Id).User);
                 } 
 
                 return View(CadetesVM);
             }
-            return RedirectToAction("VerPedidos", "Pedido", new{id = 0});
-            
+            return RedirectToAction("Redireccion", "Usuario");
         }
+
         [HttpGet]
         public IActionResult AltaCadete()
         {
@@ -79,8 +81,7 @@ namespace tl2_tp4_2022_loboser.Controllers
             {
                 return View();
             }
-            return RedirectToAction("VerPedidos", "Pedido", new{id = 0});
-            
+            return RedirectToAction("Redireccion", "Usuario");
         }
 
         [HttpPost]
@@ -99,10 +100,10 @@ namespace tl2_tp4_2022_loboser.Controllers
                         _cadeteriaRepository.AltaCadete(cadete);
                     }
 
-                    return RedirectToAction("Index", "Cadeteria");
+                    return RedirectToAction("Cadetes");
                 }
             }
-            return RedirectToAction("VerPedidos", "Pedido", new{id = 0});
+            return RedirectToAction("Redireccion", "Usuario");
         }
 
         [HttpGet]
@@ -116,9 +117,9 @@ namespace tl2_tp4_2022_loboser.Controllers
                 {
                     return View(_mapper.Map<EditarCadeteViewModel>(Cadete));
                 }
-                return RedirectToAction("Index", "Cadeteria");
+                return RedirectToAction("Cadetes");
             }
-            return RedirectToAction("VerPedidos", "Pedido", new{id = 0});
+            return RedirectToAction("Redireccion", "Usuario");
         }
 
         [HttpPost]
@@ -134,10 +135,10 @@ namespace tl2_tp4_2022_loboser.Controllers
                     {
                         _cadeteriaRepository.EditarCadete(cadete);      //Edita el Cadete y el Nombre del Usuario asociado a el
                     }
-                    return RedirectToAction("Index");
                 }
+                return RedirectToAction("Cadetes");
             }
-            return RedirectToAction("VerPedidos", "Pedido", new{id = 0});
+            return RedirectToAction("Redireccion", "Usuario");
         }
 
         [HttpGet]
@@ -151,9 +152,9 @@ namespace tl2_tp4_2022_loboser.Controllers
                 {
                     _cadeteriaRepository.BajaCadete(id);        //Elimina el Cadete y el Usuario asociado a el
                 }
-                return RedirectToAction("Index");
+                return RedirectToAction("Cadetes");
             }
-            return RedirectToAction("VerPedidos", "Pedido", new{id = 0});
+            return RedirectToAction("Redireccion", "Usuario");
         }
 
         [HttpGet]
@@ -166,15 +167,13 @@ namespace tl2_tp4_2022_loboser.Controllers
                 if (cadete.Nombre != null)
                 {
                     ViewBag.Nombre = cadete.Nombre;
-                    ViewBag.Rol = "Admin";
+                    ViewBag.Rol = HttpContext.Session.GetString("rol");
 
                     return View(_mapper.Map<List<PedidoViewModel>>(cadete.Pedidos));
-                }else
-                {
-                    return RedirectToAction("Index", "Cadeteria");
                 }
+                return RedirectToAction("Cadetes");
             }
-            return RedirectToAction("Index","Usuario");
+            return RedirectToAction("Redireccion", "Usuario");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

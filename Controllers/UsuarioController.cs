@@ -59,9 +59,13 @@ namespace tl2_tp4_2022_loboser.Controllers
                     {
                         return RedirectToAction("Cadetes", "Cadeteria");
                         
-                    }else
+                    }else if (usuario.Rol == "Cadeteria")
                     {
                         return RedirectToAction("Index", "Cadeteria");
+                    }
+                    else
+                    {
+                        return RedirectToAction("Index", "Cliente");
                     }
                 }
             }
@@ -95,17 +99,20 @@ namespace tl2_tp4_2022_loboser.Controllers
 
                         usuario.IdCliente = cliente.Id;
                         _usuarioRepository.AltaUsuario(usuario);
+                        TempData["Info"] = "Registro Exitoso...!";
                     }
                     else if (_usuarioRepository.GetUsuarioByUser(usuario.User).Id != 0)
                     {
-                        TempData["Alert"] = "No se pudo porque ya existe ese nombre de usuario...!";
+                        TempData["Error"] = "No se pudo porque ya existe ese nombre de usuario...!";
                     }else
                     {
-                        TempData["Alert"] = "No se pudo porque ya se registró un cliente con ese número de telefono...!";
+                        TempData["Error"] = "No se pudo porque ya se registró un cliente con ese número de telefono...!";
                     }
                 }
-                TempData["Alert"] = "Las Contraseñas no son las mismas...!";
-                return RedirectToAction("Registro");
+                else
+                {
+                    TempData["Error"] = "Las Contraseñas no son las mismas...!";
+                }
             }
             return RedirectToAction("Index");
         }
@@ -137,7 +144,7 @@ namespace tl2_tp4_2022_loboser.Controllers
                 return View(usuarios);
             }
             
-            return View("Index");
+            return RedirectToAction("Redireccion");
         }
 
         [HttpGet]
@@ -151,9 +158,9 @@ namespace tl2_tp4_2022_loboser.Controllers
                 {
                     return View(_mapper.Map<EditarUsuarioViewModel>(usuario));
                 }
-                return RedirectToAction("Index");
+                return RedirectToAction("Usuarios");
             }
-            return RedirectToAction("VerPedidos", "Pedido", new{id = 0});
+            return RedirectToAction("Redireccion");
         }
 
         [HttpPost]
@@ -169,10 +176,10 @@ namespace tl2_tp4_2022_loboser.Controllers
                     {
                         _usuarioRepository.EditarUsuario(usuario);      //Edita el Usuario y el Nombre del Cadete/Cliente asociado a el
                     }
-                    return RedirectToAction("Index");
+                    return RedirectToAction("Usuarios");
                 }
             }
-            return RedirectToAction("Index");
+            return RedirectToAction("Redireccion");
         }
 
         [HttpGet]
@@ -186,9 +193,30 @@ namespace tl2_tp4_2022_loboser.Controllers
                 {
                     _usuarioRepository.BajaUsuario(usuario);        //Elimina el Usuario y el Cadete/Cliente asociado a el
                 }
-                return RedirectToAction("Index");
+                return RedirectToAction("Usuarios");
             }
-            return RedirectToAction("VerPedidos", "Pedido", new{id = 0});
+            return RedirectToAction("Redireccion");
+        }
+
+        public IActionResult Redireccion(int idCadete,int idCliente, string aux)
+        {
+            if (HttpContext.Session.GetString("rol") == "Admin")
+            {
+                if (aux == "Cadete" || aux == "Cliente")
+                {
+                    return RedirectToAction("VerPedidos" + aux, (aux=="Cadete")?"Cadeteria":aux, new {id = (aux=="Cadete")?idCadete:idCliente});
+                }
+                return RedirectToAction("Index", "Pedido");
+            }
+            else if (HttpContext.Session.GetString("rol") == "Cadete")
+            {
+                return RedirectToAction("Index", "Cadeteria");
+            }
+            else if (HttpContext.Session.GetString("rol") == "Cliente")
+            {
+                return RedirectToAction("Index", "Cliente");
+            }
+            return View("Index");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
@@ -196,6 +224,5 @@ namespace tl2_tp4_2022_loboser.Controllers
         {
             return View("Error!");
         }
-        
     }
 }

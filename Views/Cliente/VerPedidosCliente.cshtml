@@ -27,10 +27,12 @@
                         <td>@Pedido.NombreCadete</td>
                         <td>@Pedido.Estado</td>
                         <td>
-                            <a class="btn btn-primary btn-sm" asp-controller="Pedido" asp-action="AsignarACadete" asp-route-nro="@Pedido.Nro" asp-route-aux="Cliente">Asignar Cadete</a>
                             <a class="btn btn-primary btn-sm" asp-controller="Pedido" asp-action="CambiarEstado" asp-route-nro="@Pedido.Nro" asp-route-aux="Cliente">Cambiar Estado</a>
                             <a class="btn btn-primary btn-sm" asp-controller="Pedido" asp-action="EditarPedido" asp-route-nro="@Pedido.Nro" asp-route-aux="Cliente">Editar Pedido</a>
-                            <a class="btn btn-danger btn-sm" asp-controller="Pedido" asp-action="AsignarPedidoACliente" asp-route-nro="@Pedido.Nro" asp-route-id="0" asp-route-aux="Cliente">Desasignar</a>
+                            @if (Pedido.IdCadete != 0)
+                            {
+                                <a class="btn btn-danger btn-sm" asp-controller="Pedido" asp-action="AsignarPedido" asp-route-nro="@Pedido.Nro" asp-route-id="0" asp-route-aux="Cliente">Desasignar</a>
+                            }
                             <a class="btn btn-danger btn-sm" asp-controller="Pedido" asp-action="BajaPedido" asp-route-nro="@Pedido.Nro" asp-route-aux="Cliente">Eliminar</a>
                         </td>
                     </tr>
