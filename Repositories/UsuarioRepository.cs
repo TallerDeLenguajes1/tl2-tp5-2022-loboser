@@ -313,11 +313,17 @@ namespace tl2_tp4_2022_loboser.Repositories
                         {
                             Comando.CommandText = "DELETE FROM Cadete WHERE idCadete='" + Usuario.IdCadete + "';";
                             Comando.ExecuteNonQuery();
+
+                            Comando.CommandText = "UPDATE Pedido SET idCadete='0' WHERE idCadete='" + Usuario.IdCadete + "';";
+                            Comando.ExecuteNonQuery();
                         }
 
                         if (Usuario.IdCliente != 0)
                         {
                             Comando.CommandText = "DELETE FROM Cliente WHERE idCliente='" + Usuario.IdCliente + "';";
+                            Comando.ExecuteNonQuery();
+
+                            Comando.CommandText = "DELETE FROM Pedido WHERE idCliente='" + Usuario.IdCliente + "';";
                             Comando.ExecuteNonQuery();
                         }
 

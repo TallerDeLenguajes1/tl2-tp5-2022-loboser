@@ -117,6 +117,7 @@ namespace tl2_tp4_2022_loboser.Controllers
                 {
                     TempData["Error"] = "Las Contraseñas no son las mismas...!";
                 }
+                return RedirectToAction("Registro");
             }
             return RedirectToAction("Index");
         }
@@ -162,6 +163,10 @@ namespace tl2_tp4_2022_loboser.Controllers
                 {
                     return View(_mapper.Map<EditarUsuarioViewModel>(usuario));
                 }
+                else
+                {
+                    TempData["Error"] = "El usuario no existe...!";
+                }
                 return RedirectToAction("Usuarios");
             }
             return RedirectToAction("Redireccion");
@@ -183,7 +188,6 @@ namespace tl2_tp4_2022_loboser.Controllers
                     else
                     {
                         TempData["Error"] = "Error al Editar usuario...!";
-                        
                     }
                     return RedirectToAction("Usuarios");
                 }
@@ -202,7 +206,10 @@ namespace tl2_tp4_2022_loboser.Controllers
                 {
                     _usuarioRepository.BajaUsuario(usuario);        //Elimina el Usuario y el Cadete/Cliente asociado a el
                 }
-                TempData["Error"] = "No se encontró el usuario...!";
+                else
+                {   
+                    TempData["Error"] = "No se encontró el usuario...!";
+                }
 
                 return RedirectToAction("Usuarios");
             }

@@ -32,6 +32,8 @@
                 }
                 </table>
             </article>
+            @if (pedidosSinAsignar.Count()>0)
+            {
             <article>
                 <h2>Pedidos sin Asignar</h2>
                 <table class="table table-bordered table-hover">
@@ -57,6 +59,7 @@
                 }
                 </table>
             </article>
+            }
             <a class="btn btn-success btn-sm" asp-controller="Pedido" asp-action="AltaPedido">Crear Pedido</a>
         </section>
     </main>
