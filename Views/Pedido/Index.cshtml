@@ -44,7 +44,8 @@
                                         <td>@Pedido.Estado</td>
                                         <td>
                                             <a class="btn btn-primary btn-sm" asp-controller="Pedido" asp-action="CambiarEstado" asp-route-nro="@Pedido.Nro" asp-route-aux="Lista">Cambiar Estado</a>
-                                            <a class="btn btn-primary btn-sm" asp-controller="Pedido" asp-action="EditarPedido" asp-route-nro="@Pedido.Nro" asp-route-aux="Lista">Editar Pedido</a>
+                                            <a class="btn btn-primary btn-sm" asp-controller="Pedido" asp-action="EditarPedido" asp-route-nro="@Pedido.Nro" asp-route-aux="Lista">Editar</a>
+                                            <a class="btn btn-danger btn-sm" asp-controller="Pedido" asp-action="AsignarPedido" asp-route-nro="@Pedido.Nro" asp-route-aux="Lista">Desasignar</a>
                                             <a class="btn btn-danger btn-sm" asp-controller="Pedido" asp-action="BajaPedido" asp-route-nro="@Pedido.Nro" asp-route-aux="Lista">Eliminar</a>
                                         </td>
                                     </tr>
