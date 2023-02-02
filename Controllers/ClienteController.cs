@@ -32,7 +32,7 @@ namespace tl2_tp4_2022_loboser.Controllers
             this._mapper = mapper;
         }
 
-        public IActionResult Index()
+        public IActionResult Index()        //Muestra al CLiente logueado una lista de sus pedidos
         {
             if (HttpContext.Session.GetString("rol") == "Cliente")
             {
@@ -47,7 +47,7 @@ namespace tl2_tp4_2022_loboser.Controllers
         }
 
         [HttpGet]
-        public IActionResult Clientes(){
+        public IActionResult Clientes(){            //Lista de Clientes
             if (HttpContext.Session.GetString("rol") == "Admin")
             {
                 var clientesVM = _mapper.Map<List<ClienteViewModel>>(_clienteRepository.GetClientes());

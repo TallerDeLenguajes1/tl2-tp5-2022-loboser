@@ -32,7 +32,7 @@ namespace tl2_tp4_2022_loboser.Controllers
         }
 
         [HttpGet]
-        public IActionResult Index()
+        public IActionResult Index()            //Lista de Pedidos
         {
             if (HttpContext.Session.GetString("rol") == "Admin")
             {
@@ -55,7 +55,7 @@ namespace tl2_tp4_2022_loboser.Controllers
 
             if (HttpContext.Session.GetString("rol") == "Admin" && pedido.Nro != 0)
             {
-                Cambiar(pedido);
+                CambiarEstado(pedido);
 
                 return RedirectToAction("Redireccion", "Usuario", new {idCadete = pedido.IdCadete, idCliente = pedido.Cliente.Id, aux = aux});
             }
@@ -65,7 +65,7 @@ namespace tl2_tp4_2022_loboser.Controllers
 
                 if (cadete.Pedidos.Where(t => t.Nro == nro).ToList().Count > 0)
                 {
-                    Cambiar(pedido);
+                    CambiarEstado(pedido);
                 }
             }
             return RedirectToAction("Redireccion", "Usuario");
@@ -195,7 +195,7 @@ namespace tl2_tp4_2022_loboser.Controllers
             return View("Error!");
         }
 
-        private void Cambiar(Pedido pedido)             //cambia de estado al pedido
+        private void CambiarEstado(Pedido pedido)             //cambia de estado al pedido
         {
             pedido.Estado = (pedido.Estado == "En Proceso")?"Entregado":"En Proceso";
             _pedidoRepository.EditarPedido(pedido);

@@ -31,7 +31,7 @@ namespace tl2_tp4_2022_loboser.Controllers
         }
 
         [HttpGet]
-        public IActionResult Index()
+        public IActionResult Index()        //Muestra al Cadete logeado una lista de sus pedidos y los pedidos sin asignar
         {
             if (HttpContext.Session.GetString("rol") == "Cadete")
             {
@@ -52,7 +52,7 @@ namespace tl2_tp4_2022_loboser.Controllers
         }
 
         [HttpGet]
-        public IActionResult Cadetes()
+        public IActionResult Cadetes()          //Lista de Cadetes
         {
             if (HttpContext.Session.GetString("rol") == "Admin")
             {

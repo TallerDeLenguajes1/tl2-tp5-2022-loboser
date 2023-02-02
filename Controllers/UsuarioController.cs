@@ -30,7 +30,7 @@ namespace tl2_tp4_2022_loboser.Controllers
             this._mapper = mapper;
         }
 
-        public IActionResult Index()
+        public IActionResult Index()        //Deslogeo y Logeo de usuario
         {
             if(HttpContext.Session.GetString("nombre") != null){
                 var nombre = HttpContext.Session.GetString("nombre");
@@ -123,7 +123,7 @@ namespace tl2_tp4_2022_loboser.Controllers
         }
 
         [HttpGet]
-        public IActionResult Usuarios()
+        public IActionResult Usuarios()             //Lista de Usuarios
         {
             if(HttpContext.Session.GetString("rol") == "Admin")
             {
