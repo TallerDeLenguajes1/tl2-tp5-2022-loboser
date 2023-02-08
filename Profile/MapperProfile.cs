@@ -8,6 +8,7 @@ namespace tl2_tp4_2022_loboser.Profiles{
         public MappingProfile()
         {
             CreateMap<Cadete, CadeteViewModel>().ReverseMap();
+            CreateMap<Cadete, CadetePedidosViewModel>().ReverseMap();
             CreateMap<Cadete, AltaCadeteViewModel>().ReverseMap();
             CreateMap<Cadete, EditarCadeteViewModel>().ReverseMap();
             

@@ -11,6 +11,8 @@ using tl2_tp4_2022_loboser.ViewModels;
 using tl2_tp4_2022_loboser.Repositories;
 using AutoMapper;
 
+#nullable disable
+
 namespace tl2_tp4_2022_loboser.Controllers
 {
     public class CadeteriaController : Controller
@@ -35,16 +37,10 @@ namespace tl2_tp4_2022_loboser.Controllers
         {
             if (HttpContext.Session.GetString("rol") == "Cadete")
             {
-                var idCadete = Convert.ToInt32(HttpContext.Session.GetString("id"));
-                var cadeteVM = new CadetePedidosViewModel();
-
-                var pedidosDelCadete = _pedidoRepository.GetPedidosByCadete(idCadete);
-                var pedidosSinCadete= _pedidoRepository.GetPedidosByCadete(0);
-
-                cadeteVM.Id = Convert.ToInt32(HttpContext.Session.GetString("id"));
-                cadeteVM.Nombre = HttpContext.Session.GetString("nombre");
-                cadeteVM.PedidosDelCadete = _mapper.Map<List<PedidoViewModel>>(pedidosDelCadete);
-                cadeteVM.PedidosSinCadete = _mapper.Map<List<PedidoViewModel>>(pedidosSinCadete);
+                var cadete = _cadeteriaRepository.GetCadeteById(Convert.ToInt32(HttpContext.Session.GetString("id")));
+                var cadeteVM = _mapper.Map<CadetePedidosViewModel>(cadete);
+                cadeteVM.PedidosDelCadete = _mapper.Map<List<PedidoViewModel>>(_pedidoRepository.GetPedidosByCadete(cadete.Id));
+                cadeteVM.PedidosSinCadete = _mapper.Map<List<PedidoViewModel>>(_pedidoRepository.GetPedidosByCadete(0));
 
                 return View(cadeteVM);
             }
@@ -56,15 +52,11 @@ namespace tl2_tp4_2022_loboser.Controllers
         {
             if (HttpContext.Session.GetString("rol") == "Admin")
             {
-                var Cadeteria = new Cadeteria(_cadeteriaRepository.GetCadetes());
-                var CadetesVM = new List<CadeteViewModel>();
+                ViewBag.NombreCadeteria = "Rapi";
+                ViewBag.TelefonoCadeteria = "543815127423";
+                var CadetesVM = _mapper.Map<List<CadeteViewModel>>(_cadeteriaRepository.GetCadetes());
 
-                ViewBag.NombreCadeteria = Cadeteria.Nombre;
-                ViewBag.TelefonoCadeteria = Cadeteria.Telefono;
-
-                CadetesVM = _mapper.Map<List<CadeteViewModel>>(Cadeteria.Cadetes);
-
-                if (Cadeteria.Cadetes.Count()>0)
+                if (CadetesVM.Count()>0)
                 {
                     CadetesVM.ForEach(t => t.User = _usuarioRepository.GetUsuarioByCadeteId(t.Id).User);
                 } 
