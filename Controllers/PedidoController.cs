@@ -205,6 +205,7 @@ namespace tl2_tp4_2022_loboser.Controllers
             if (desasignar)
             {
                 pedido.IdCadete = 0;
+                pedido.Estado = "En Proceso";
                 _pedidoRepository.EditarPedido(pedido);
             }
             else if(pedido.IdCadete == 0)
