@@ -57,21 +57,9 @@ namespace tl2_tp4_2022_loboser.Controllers
                     HttpContext.Session.SetString("nombre", usuario.Nombre);
                     HttpContext.Session.SetString("rol", usuario.Rol);
 
-                    if (usuario.Rol == "Admin")
-                    {
-                        return RedirectToAction("Cadetes", "Cadeteria");
-                        
-                    }else if (usuario.Rol == "Cadeteria")
-                    {
-                        return RedirectToAction("Index", "Cadeteria");
-                    }
-                    else
-                    {
-                        return RedirectToAction("Index", "Cliente");
-                    }
+                    return RedirectToAction("Redireccion");
                 }
                 TempData["Error"] = "Usuario o Contraseña incorrectos...!";
-
             }
             return RedirectToAction("Index");
         }
@@ -165,7 +153,7 @@ namespace tl2_tp4_2022_loboser.Controllers
                 }
                 else
                 {
-                    TempData["Error"] = "El usuario no existe...!";
+                    TempData["Error"] = "El Usuario no existe...!";
                 }
                 return RedirectToAction("Usuarios");
             }
@@ -179,15 +167,23 @@ namespace tl2_tp4_2022_loboser.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    var usuario = _mapper.Map<Usuario>(usuarioEdit);
-
-                    if (_usuarioRepository.GetUsuarioById(usuario.Id).Id != 0)
+                    if (usuarioEdit.Pass == usuarioEdit.ConfirmPass)
                     {
-                        _usuarioRepository.EditarUsuario(usuario);      //Edita el Usuario y el Nombre del Cadete/Cliente asociado a el
+                        var usuario = _mapper.Map<Usuario>(usuarioEdit);
+
+                        if (_usuarioRepository.GetUsuarioById(usuario.Id).Id != 0)
+                        {
+                            _usuarioRepository.EditarUsuario(usuario);      //Edita el Usuario y el Nombre del Cadete/Cliente asociado a el
+                        }
+                        else
+                        {
+                            TempData["Error"] = "El Usuario a Editar no Existe...!";
+                        }
                     }
                     else
                     {
-                        TempData["Error"] = "Error al Editar usuario...!";
+                        TempData["Error"] = "Las Contraseñas no son iguales...!";
+                        return RedirectToAction("EditarUsuario", new {id = usuarioEdit.Id});
                     }
                     return RedirectToAction("Usuarios");
                 }
