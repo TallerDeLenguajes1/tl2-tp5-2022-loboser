@@ -17,7 +17,8 @@ namespace tl2_tp4_2022_loboser.ViewModels
         public string IdCadete { get; set; }
 
         [Required]
-        [StringLength(13)]
+        [StringLength(12)]
+        [RegularExpression(@"[0-9]{10,12}$")]
         public string Telefono { get; set; }
 
         [Required]
